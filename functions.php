@@ -5,6 +5,11 @@
  * @since HTML5 Reset + PJAX 0.1
  */
 
+	// Detect ajax request (https://rosspenman.com/pushstate-part-2/)
+	$ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+			&& 
+			strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
 	// Options Framework (https://github.com/devinsays/options-framework-plugin)
 	if ( !function_exists( 'optionsframework_init' ) ) {
 		define( 'OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/_/inc/' );

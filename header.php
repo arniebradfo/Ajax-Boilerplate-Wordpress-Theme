@@ -4,7 +4,15 @@
  * @subpackage HTML5-Reset-Plus-PJAX
  * @since HTML5 Reset + PJAX 0.1
  */
-?><!doctype html>
+?>
+<?php 
+
+// if this is not an ajax call
+if (!$ajax):
+
+?>
+
+<!doctype html>
 
 <!--[if lt IE 7 ]> <html class="ie ie6 ie-lt10 ie-lt9 ie-lt8 ie-lt7 no-js" <?php language_attributes(); ?>> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie ie7 ie-lt10 ie-lt9 ie-lt8 no-js" <?php language_attributes(); ?>> <![endif]-->
@@ -138,5 +146,6 @@
 			<?php wp_nav_menu( array('theme_location' => 'primary') ); ?>
 		</nav>
 
+		<?php endif;// end ajax detection?>
 		<main><!-- Pjax content wrapper element -->
 

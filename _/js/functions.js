@@ -73,7 +73,12 @@
 		// transforms all the interal hyperlinks into ajax requests
 		// TODO: add exception for #id links.
 		// TODO: add support for subdomains.
-		$(document).on("click", "a, area", function() {
+		// TODO: add exception for /wp-admin
+		$(document).on("click", "a, area", function(e) {
+			// e.preventDefault();
+			alert("calling pjax");
+
+
 			var href = $(this).attr("href");
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
