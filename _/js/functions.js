@@ -11,7 +11,8 @@
 // remap jQuery to $
 (function ($) {
 
-	// SOURCE: https://rosspenman.com/pushstate-jquery/
+	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
+	// TODO: add hover prefetch option to increase performance
 	function plusPjax() {
 
 		// // //
@@ -29,10 +30,32 @@
 		initialLoad = function() {
 			// Do this on an inital page load of a regular http request.
 		},
+
+		ajaxProgress = function(progressDelay) {
+
+			// do this if ajaxCalled is done but ajax has not been delivered.
+			console.log("pjax is still loading after "+ progressDelay + " milliseconds");
+
+		}
+
+		ajaxCalled = function() {
+			// set how long ajaxCalled is expected to take (in milliseconds)
+			var progressDelay = 2;
+
+			// do this just before the ajax is requested
+			console.log("calling pjax");
+
+			// call ajaxProgress after timeout
+			progressTimer = setTimeout(ajaxProgress(progressDelay),progressDelay);
+		}
 		
-		ajaxEnd = function(html) {
+		ajaxDelivered = function(html) {
+			clearTimeout(progressTimer);
 
 			// Do this once the ajax request is returned.
+			console.log("pjax loaded!");
+
+			//TODO: add manual change to the active <nav> element
 
 			// change the <title> element in the <head>
 			document.title = html
@@ -41,7 +64,6 @@
 				.decodeHTML();
 
 			//
-			alert("pjax worked!");
 
 			// call the intial load function again
 			// TODO: split this out into smaller functions
@@ -49,7 +71,8 @@
 		},
 		
 		loadPage = function(href) {
-			$main.load(href + " main>*", ajaxEnd);
+			ajaxCalled();
+			$main.load(href + " main>*", ajaxDelivered);
 		};
 		
 
@@ -75,10 +98,7 @@
 		// TODO: add support for subdomains.
 		// TODO: add exception for /wp-admin
 		$(document).on("click", "a, area", function(e) {
-			// e.preventDefault();
-			alert("calling pjax");
-
-
+		
 			var href = $(this).attr("href");
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
