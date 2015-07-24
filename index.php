@@ -1,11 +1,12 @@
 <?php
 /**
  * @package WordPress
- * @subpackage HTML5-Reset-WordPress-Theme
- * @since HTML5 Reset 2.0
+ * @subpackage HTML5-Reset-Plus-PJAX
+ * @since HTML5 Reset + PJAX 0.1
  */
  get_header(); ?>
 
+<main><!-- Pjax content wrapper element -->
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
@@ -37,5 +38,7 @@
 	<?php endif; ?>
 
 <?php get_sidebar(); ?>
+
+</main>
 
 <?php get_footer(); ?>

@@ -1,8 +1,8 @@
 <?php
 /**
  * @package WordPress
- * @subpackage HTML5-Reset-WordPress-Theme
- * @since HTML5 Reset 2.0
+ * @subpackage HTML5-Reset-Plus-PJAX
+ * @since HTML5 Reset + PJAX 0.1
  */
  get_header(); ?>
 

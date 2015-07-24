@@ -1,6 +1,6 @@
-#  HTML5 Reset WordPress Theme
+#  HTML5 Reset+PJAX WordPress Theme
 
-HTML5 Reset is a simple set of *WordPress* best practices to get web projects off on the right foot.
+HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projects off on the right foot. It alos includes support for the combination of the .js history API and AJAX to enable faster loads and dynamic page transitions.
 
 ## Some of the features:
 
