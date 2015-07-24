@@ -10,6 +10,8 @@
 // if this is not an ajax call
 if (!$ajax):
 
+// TODO: alter <head> info on ajax call
+
 ?>
 
 <!doctype html>
@@ -146,6 +148,14 @@ if (!$ajax):
 			<?php wp_nav_menu( array('theme_location' => 'primary') ); ?>
 		</nav>
 
-		<?php endif;// end ajax detection?>
+		<?php 
+			endif;// end ajax detection
+
+			if ($ajax) {
+				echo '<title>'; wp_title(); echo '</title>';
+			}
+
+		?>
+
 		<main><!-- Pjax content wrapper element -->
 

@@ -12,7 +12,7 @@
 (function ($) {
 
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
-	// TODO: add hover prefetch option to increase performance
+	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
 
 		// // //
@@ -55,7 +55,7 @@
 			// Do this once the ajax request is returned.
 			console.log("pjax loaded!");
 
-			//TODO: add manual change to the active <nav> element
+			// TODO: add manual change to the wp .active class of the correct <nav> element
 
 			// change the <title> element in the <head>
 			document.title = html
@@ -66,7 +66,7 @@
 			//
 
 			// call the intial load function again
-			// TODO: split this out into smaller functions
+			// TODO: split initialLoad out from ajaxDelivered
 			initialLoad();
 		},
 		
@@ -84,7 +84,7 @@
 		initialLoad();
 		
 		// calls loadPage when the browser back button is pressed
-		// TODO: test browser implementation inconsistencies
+		// TODO: test browser implementation inconsistencies of popstate
 		$(window).on("popstate", function(e) {
 			// don't fire on the inital page load
 			if (e.originalEvent.state !== null) {
