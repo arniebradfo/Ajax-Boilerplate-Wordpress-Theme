@@ -27,9 +27,48 @@
 		// put the contents of the <main> tag into an object
 		var $main = $("main"),
 
-		initialLoad = function() {
-			// Do this on an inital page load of a regular http request.
-		},
+		updateCurrentNav = function(href) {
+
+			// remove all current-menu classes
+			$('.current-menu-item').removeClass('current-menu-item');
+			$('.current-menu-ancestor').removeClass('current-menu-ancestor');
+			$('.current-menu-parent').removeClass('current-menu-parent');
+
+			// remove all current-page classes
+			$('.current_page_item').removeClass('current_page_item');
+			$('.current-page-ancestor').removeClass('current-page-ancestor');
+			$('.current_page_ancestor').removeClass('current_page_ancestor');
+			$('.current-page-parent').removeClass('current-page-parent');
+			$('.current_page_parent').removeClass('current_page_parent');
+			
+			// deletes the the http and domain info ex: "http://domain.name/link/child/more" becomes "/link/child/more"
+			// TODO: add exception for home link wihtout trailing slash ex: http://domain.name
+			var hrefPath			= href.replace(/https?:\/\/[^\/]+/,"");
+
+			// matches the clicked link's parent link ex: "/link/child/more" matches "/link/child/"
+			var hrefPageParent		= hrefPath.match(/.+\/(?=[^\/]+\/?$)/);
+			
+			// matches the clicked link's ancestor link ex: "/link/child/more" matches "/link/"
+			// TODO: /link/not-child/ would also match the a.href*="/link/" selector. reengineer to avoid this.
+			var hrefPageAncestor	= hrefPath.match(/^\/[^\/]+\/(?=[^\/]+\/?)/);
+
+			// obkect containing the current link
+			var $newCurrentLink 	= $('a[href$="'+hrefPath+'"]').parent('.menu-item');
+
+			$newCurrentLink.addClass('current_page_item current-menu-item');
+			$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
+			$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
+
+			// an link that includes an ancestor url // that is not the current link // add class to its menu item parent
+			$('a[href*="'+hrefPageParent+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-parent current_page_parent');
+			$('a[href*="'+hrefPageAncestor+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
+
+			console.log("href is: " + href);
+			console.log("hrefPath is: " + hrefPath);
+			console.log("hrefPageAncestor is: " + hrefPageAncestor);
+			console.log("hrefPageParent is: " + hrefPageParent);
+
+		}
 
 		ajaxProgress = function(progressDelay) {
 
@@ -45,34 +84,30 @@
 			// do this just before the ajax is requested
 			console.log("calling pjax");
 
+
 			// call ajaxProgress after timeout
 			progressTimer = setTimeout(ajaxProgress(progressDelay),progressDelay);
 		}
 		
-		ajaxDelivered = function(html) {
+		ajaxDelivered = function(href) {
 			clearTimeout(progressTimer);
 
 			// Do this once the ajax request is returned.
 			console.log("pjax loaded!");
 
-			// TODO: add manual change to the wp .active class of the correct <nav> element
+			updateCurrentNav(href);
 
 			// change the <title> element in the <head>
-			document.title = html
-				.match(/<title>(.*?)<\/title>/)[1]
-				.trim()
-				.decodeHTML();
+			// document.title = html
+			// 	.match(/<title>(.*?)<\/title>/)[1]
+			// 	.trim()
+			// 	.decodeHTML();
 
-			//
-
-			// call the intial load function again
-			// TODO: split initialLoad out from ajaxDelivered
-			initialLoad();
 		},
 		
 		loadPage = function(href) {
 			ajaxCalled();
-			$main.load(href + " main>*", ajaxDelivered);
+			$main.load(href + " main>*", ajaxDelivered(href));
 		};
 		
 
@@ -80,8 +115,6 @@
 		// // //
 		// use our functions
 		// // //
-
-		initialLoad();
 		
 		// calls loadPage when the browser back button is pressed
 		// TODO: test browser implementation inconsistencies of popstate
@@ -98,7 +131,7 @@
 		// TODO: add support for subdomains.
 		// TODO: add exception for /wp-admin
 		$(document).on("click", "a, area", function(e) {
-		
+
 			var href = $(this).attr("href");
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {

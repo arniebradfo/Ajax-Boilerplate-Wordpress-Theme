@@ -5,14 +5,7 @@
  * @since HTML5 Reset + PJAX 0.1
  */
 ?>
-<?php 
-
-// if this is not an ajax call
-if (!$ajax):
-
-// TODO: alter <head> info on ajax call
-
-?>
+<?php if (!$ajax): // if this is not an ajax call ?>
 
 <!doctype html>
 
@@ -37,7 +30,9 @@ if (!$ajax):
 			echo '<meta name="robots" content="noindex, nofollow" />';
 	?>
 
+	<?php endif; // step out of ajax detection for the title?>
 	<title><?php wp_title( '|', true, 'right' ); ?></title>
+	<?php if (!$ajax): //... and step back in?>
 
 	<meta name="title" content="<?php wp_title( '|', true, 'right' ); ?>">
 
@@ -145,17 +140,47 @@ if (!$ajax):
 		</header>
 
 		<nav id="nav" role="navigation">
-			<?php wp_nav_menu( array('theme_location' => 'primary') ); ?>
+			<?php 
+
+				$primary_menu_name = 'primary';
+				wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
+
+			?>
 		</nav>
 
-		<?php 
-			endif;// end ajax detection
+		<?php else:	// ?>
 
-			if ($ajax) {
-				echo '<title>'; wp_title(); echo '</title>';
-			}
+			<!-- content that only comes through ajax -->
 
-		?>
+			<?php 
+
+				// $primary_menu_name = 'primary';
+				// $locations = get_nav_menu_locations();
+				// $menu_id = $locations[ $primary_menu_name ] ;
+
+				// 	// if (isset($locations[$primary_meun_name])) {
+
+
+				// 		$menu = wp_get_nav_menu_items($menu_id,array(
+				// 			'posts_per_page' => -1,
+				// 			'meta_key' => '_menu_item_object_id',
+				// 			'meta_value' => $post->ID // the currently displayed post
+				// 		));
+				// 	// }
+
+
+
+			?>
+
+		<?php	endif;	// end ajax detection?>
+		
 
 		<main><!-- Pjax content wrapper element -->
+		<p>
+		<?php 
+			// var_dump($menu[0]->ID); 
+			// echo($menu);
+			// echo($menu_id);
+		?>
+		</p>
 
