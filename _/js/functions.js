@@ -29,17 +29,8 @@
 
 		updateCurrentNav = function(href) {
 
-			// remove all current-menu classes
-			$('.current-menu-item').removeClass('current-menu-item');
-			$('.current-menu-ancestor').removeClass('current-menu-ancestor');
-			$('.current-menu-parent').removeClass('current-menu-parent');
-
-			// remove all current-page classes
-			$('.current_page_item').removeClass('current_page_item');
-			$('.current-page-ancestor').removeClass('current-page-ancestor');
-			$('.current_page_ancestor').removeClass('current_page_ancestor');
-			$('.current-page-parent').removeClass('current-page-parent');
-			$('.current_page_parent').removeClass('current_page_parent');
+			// remove all current- classes
+			$('.menu-item').removeClass('current-menu-item current-menu-ancestor current-menu-parent current_page_item current-page-ancestor current_page_ancestor current-page-parent current_page_parent');
 			
 			// deletes the the http and domain info ex: "http://domain.name/link/child/more" becomes "/link/child/more"
 			// TODO: add exception for home link wihtout trailing slash ex: http://domain.name
@@ -52,16 +43,19 @@
 			// TODO: /link/not-child/ would also match the a.href*="/link/" selector. reengineer to avoid this.
 			var hrefPageAncestor	= hrefPath.match(/^\/[^\/]+\/(?=[^\/]+\/?)/);
 
-			// obkect containing the current link
+			// object containing the current link
 			var $newCurrentLink 	= $('a[href$="'+hrefPath+'"]').parent('.menu-item');
 
+			//TODO: does .current_page_item fit this condition?
 			$newCurrentLink.addClass('current_page_item current-menu-item');
 			$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
 			$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
 
 			// an link that includes an ancestor url // that is not the current link // add class to its menu item parent
-			$('a[href*="'+hrefPageParent+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-parent current_page_parent');
-			$('a[href*="'+hrefPageAncestor+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
+			if (hrefPageParent){
+				$('a[href*="'+hrefPageParent+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-parent current_page_parent');
+				$('a[href*="'+hrefPageAncestor+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
+			}
 
 			console.log("href is: " + href);
 			console.log("hrefPath is: " + hrefPath);
