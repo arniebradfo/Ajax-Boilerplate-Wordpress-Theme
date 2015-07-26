@@ -17,6 +17,9 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 9. Make it work with google anylitics
 10. research best keywords for naming
 11. Possibly handle image loading differently
+12. refactor functions to the appropiate type: anonymous, public, etc...
+13. feature detect to allow gracefull degredation.
+
 
 ## Some of the features:
 
