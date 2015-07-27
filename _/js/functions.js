@@ -61,14 +61,12 @@
 			console.log("hrefPath is: " + hrefPath);
 			console.log("hrefPageAncestor is: " + hrefPageAncestor);
 			console.log("hrefPageParent is: " + hrefPageParent);
-
 		};
 
 		ajaxProgress = function(progressDelay) {
 
 			// do this if ajaxCalled is done but ajax has not been delivered.
 			console.log("pjax is still loading after "+ progressDelay + " milliseconds");
-
 		};
 
 		ajaxCalled = function() {
@@ -128,7 +126,20 @@
 		// TODO: add exception for /wp-admin
 		$(document).on("click", "a, area", function(e) {
 
+
+
 			var href = $(this).attr("href");
+			//console.log("href was: "+href);
+
+			if (!href.match(location.origin)) {
+				//console.log("there was not a match");
+				href = href.replace(/^[^\/]+(?=\/)/,location.origin);
+			}
+
+			//console.log("href is now: "+href);
+			//console.log("domain is: "+document.domain);
+			//console.log("location origin is: "+location.origin);
+
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
 				history.pushState({}, '', href);
