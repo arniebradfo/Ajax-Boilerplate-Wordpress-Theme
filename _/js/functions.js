@@ -25,7 +25,7 @@
 		};
 
 		// put the contents of the <main> tag into an object
-		var $main = $("main"),
+		var $main = $("main");
 
 		updateCurrentNav = function(href) {
 
@@ -62,14 +62,14 @@
 			console.log("hrefPageAncestor is: " + hrefPageAncestor);
 			console.log("hrefPageParent is: " + hrefPageParent);
 
-		}
+		};
 
 		ajaxProgress = function(progressDelay) {
 
 			// do this if ajaxCalled is done but ajax has not been delivered.
 			console.log("pjax is still loading after "+ progressDelay + " milliseconds");
 
-		}
+		};
 
 		ajaxCalled = function() {
 			// set how long ajaxCalled is expected to take (in milliseconds)
@@ -78,30 +78,32 @@
 			// do this just before the ajax is requested
 			console.log("calling pjax");
 
-
 			// call ajaxProgress after timeout
 			progressTimer = setTimeout(ajaxProgress(progressDelay),progressDelay);
-		}
+		};
 		
-		ajaxDelivered = function(href) {
+		ajaxDelivered = function(html) {
 			clearTimeout(progressTimer);
 
 			// Do this once the ajax request is returned.
 			console.log("pjax loaded!");
 
-			updateCurrentNav(href);
-
 			// change the <title> element in the <head>
-			// document.title = html
-			// 	.match(/<title>(.*?)<\/title>/)[1]
-			// 	.trim()
-			// 	.decodeHTML();
+			document.title = html
+				.match(/<title>(.*?)<\/title>/)[1]
+				.trim()
+				.decodeHTML();
 
-		},
+			return false;
+
+		};
 		
 		loadPage = function(href) {
 			ajaxCalled();
-			$main.load(href + " main>*", ajaxDelivered(href));
+			$main.load(href + " main>*", function(html){
+				ajaxDelivered(html);
+				updateCurrentNav(href);
+			});
 		};
 		
 
