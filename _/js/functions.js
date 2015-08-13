@@ -124,9 +124,7 @@
 		// TODO: add exception for #id links.
 		// TODO: add support for subdomains.
 		// TODO: add exception for /wp-admin
-		$(document).on("click", "a, area", function(e) {
-
-
+		$(document).on("click", "a, area", function() {
 
 			var href = $(this).attr("href");
 			//console.log("href was: "+href);
@@ -142,11 +140,15 @@
 
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
-				history.pushState({}, '', href);
-				loadPage(href);
-				// return false to diable default link behovior
-				return false;
+
+				if ( !href.match(/\/#/) && !href.match(/\/wp-/)) {
+					history.pushState({}, '', href);
+					loadPage(href);
+					// return false to diable default link behovior
+					return false;
+				}
 			}
+
 		});
 	}	
 

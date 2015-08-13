@@ -20,6 +20,7 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 12. refactor functions to the appropiate type: anonymous, public, etc...
 13. feature detect to allow gracefull degredation.
 14. send out events onCall onProgess and onDelivered
+15. ajax the comments section to live reload.
 
 
 ## Some of the features:
