@@ -31,24 +31,25 @@
 			// remove all current- classes
 			$('.menu-item').removeClass('current-menu-item current-menu-ancestor current-menu-parent current_page_item current-page-ancestor current_page_ancestor current-page-parent current_page_parent');
 			
-			// object containing the current link
-			var $newCurrentLink = $('.menu-item a[href="'+href+'"]').parent('.menu-item'),
+			
+			var $newCurrentLink = $('.menu-item a[href="'+href+'"]').parent('.menu-item'), // object containing the current link
 				$menuLinks = $('.menu-item a'),
 				hrefAncestorPaths = [],
 				hrefEdit = href;
 
-			//TODO: does .current_page_item fit this condition?
+			//TODO: figure out how to detect if something is a .current_page_item
 			$newCurrentLink.addClass('current_page_item current-menu-item');
 			$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
 			$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
 
-			// create an array of urls matching each ancestor
+			// create an array of url strings matching each possible ancestor
 			while ( hrefEdit != (location.origin + "/") ) {
 				hrefEdit = hrefEdit.replace(/[^\/]+\/?([#\?][^\/]*)?$/,"");
 				hrefAncestorPaths.push(hrefEdit);
 			}
 			hrefAncestorPaths.pop(); // delete the last entry that should be the location.origin+"/"
 
+			// loop through each menu item and add relevant page-ancestor classes
 			for (i = 0; i < $menuLinks.length; i++) { 
 
 				var hrefCurrent = $menuLinks.eq(i).attr("href");
@@ -62,43 +63,6 @@
 				}
 			}
 		};
-
-		// old version
-		// updateCurrentNav = function(href) {
-
-		// 	// remove all current- classes
-		// 	$('.menu-item').removeClass('current-menu-item current-menu-ancestor current-menu-parent current_page_item current-page-ancestor current_page_ancestor current-page-parent current_page_parent');
-			
-		// 	// deletes the the http and domain info ex: "http://domain.name/link/child/more" becomes "/link/child/more"
-		// 	// TODO: add exception for home link wihtout trailing slash ex: http://domain.name
-		// 	var hrefPath			= href.replace(/https?:\/\/[^\/]+/,"");
-
-		// 	// matches the clicked link's parent link ex: "/link/child/more" matches "/link/child/"
-		// 	var hrefPageParent		= hrefPath.match(/.+\/(?=[^\/]+\/?$)/);
-			
-		// 	// matches the clicked link's ancestor link ex: "/link/child/more" matches "/link/"
-		// 	// TODO: /link/not-child/ would also match the a.href*="/link/" selector. reengineer to avoid this.
-		// 	var hrefPageAncestor	= hrefPath.match(/^\/[^\/]+\/(?=[^\/]+\/?)/);
-
-		// 	// object containing the current link
-		// 	var $newCurrentLink 	= $('a[href="'+href+'"]').parent('.menu-item');	
-
-		// 	//TODO: does .current_page_item fit this condition?
-		// 	$newCurrentLink.addClass('current_page_item current-menu-item');
-		// 	$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
-		// 	$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
-
-		// 	// an link that includes an ancestor url // that is not the current link // add class to its menu item parent
-		// 	if (hrefPageParent){
-		// 		$('a[href*="'+hrefPageParent+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-parent current_page_parent');
-		// 		$('a[href*="'+hrefPageAncestor+'"]').not('a[href$="'+hrefPath+'"]').parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
-		// 	}
-
-		// 	console.log("href is: " + href);
-		// 	console.log("hrefPath is: " + hrefPath);
-		// 	console.log("hrefPageAncestor is: " + hrefPageAncestor);
-		// 	console.log("hrefPageParent is: " + hrefPageParent);
-		// };
 
 		ajaxProgress = function(progressDelay) {
 
