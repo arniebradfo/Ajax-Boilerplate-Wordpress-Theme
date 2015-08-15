@@ -5,13 +5,16 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 ## TODOs:
 1. Add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ ).
 2. X - Add manual change to the wp .active class of the correct <nav> element.
+	X - Add exception for the home page
+	X - work on ancestor matching
 3. X - Split initialLoad out from ajaxDelivered.
 4. Test browser implementation inconsistencies of popstate.
 5. Improve href matching:
-	- add exception for #id links.
-	- add support for subdomains.
-	- add exception for /wp-admin even if admin is a custom section.
-6. Write documentation.
+	X - add exception for #id links.
+	X - add support for subdomains. subdomain is included in document.domain
+	0 - add exception for /wp-admin even if admin is a custom url suffix.
+		will now work with the "wp-" prefix but if someone is trying to hide their login url, it should be in the .js on the front end. Write advisory that this will break.
+6. Write documentation. "stick with the syntax wp uses to write nav links"
 7. X - Alter <head> info on ajax call
 8. Research and reduce SEO problems with ajax
 9. Make it work with google anylitics
@@ -20,7 +23,8 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 12. refactor functions to the appropiate type: anonymous, public, etc...
 13. feature detect to allow gracefull degredation.
 14. send out events onCall onProgess and onDelivered
-15. ajax the comments section to live reload.
+15. ajax the comments section to live reload
+16. switch everything from jQuery to regular .js
 
 
 ## Some of the features:
