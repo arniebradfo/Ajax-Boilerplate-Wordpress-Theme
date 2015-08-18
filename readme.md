@@ -20,12 +20,13 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 	this should work fine because the stie will still function normally without js. all the links have accurate urls
 9. X - Make it work with google analytics
 10. research best keywords for naming
-11. Possibly handle image loading differently
+11. Possibly handle image loading differently? - image loading is out of scope
 12. refactor functions to the appropiate type: anonymous, public, etc...
 13. feature detect to allow gracefull degredation.
-14. 0 - send out events onCall onProgess and onDelivered
+14. 0 - send out events onCall, onProgess, and onDelivered
 15. ajax the comments section to live reload
 16. switch everything from jQuery to regular .js
+17. add support for wp admin bar edit button.
 
 
 ## Some of the features:

@@ -158,6 +158,30 @@
 		});
 	}	
 
+	function ajaxComments() {
+
+		// useful links
+
+		// if comments section exists
+
+		// attach divert to comment form submit 
+			// http://wpcrux.com/ajax-submit-wordpress-comments/
+		// when comment is submitted
+		// send data through ajax
+		// return data from php
+			// http://davidwalsh.name/wordpress-ajax-comments
+		// insert it into comments 
+
+		// create refresh comments link
+		// attach ajax call to link
+		// php to return the newest links
+		// when data is returned replace comments section
+
+		// attah divert to pagination
+		// somehow return only the correct page pagination with php
+		// replace comments ol section (alter/ display:none; the links)
+	}
+
 	/* trigger when page is ready */
 	$(document).ready(function (){
 
