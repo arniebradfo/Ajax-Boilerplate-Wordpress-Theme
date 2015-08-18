@@ -93,6 +93,10 @@
 				.trim()
 				.decodeHTML();
 
+			// google universial analytics tracking
+			// uncomment this to send a pageview connected to anayltics.js loaded in footer.php
+			// ga('send', 'pageview');
+
 			return false;
 
 		};
