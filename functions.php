@@ -6,9 +6,27 @@
  */
 
 	// Detect ajax request (https://rosspenman.com/pushstate-part-2/)
-	$ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+	$ajax = !empty( $_SERVER['HTTP_X_REQUESTED_WITH'] )
 			&& 
-			strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+			strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest';
+			
+	// http://davidwalsh.name/wordpress-ajax-comments
+	function ajaxComment( $comment_ID, $comment_status ) {
+		// If it's an AJAX-submitted comment
+		if ( $ajax ) {
+			// Get the comment data
+			$comment = get_comment( $comment_ID);
+			// Allow the email to the author to be sent
+			wp_notify_postauthor( $comment_ID, $comment->comment_type );
+			// Get the comment HTML from my custom comment HTML function
+			$commentContent = getCommentHTML( $comment );
+			// Kill the script, returning the comment HTML
+			// wp_die( $commentContent );
+			die( $commentContent );
+		}
+	}
+	// Send all comment submissions through my "ajaxComment" method
+	add_action('comment_post', 'ajaxComment', 20, 2);
 
 	// Options Framework (https://github.com/devinsays/options-framework-plugin)
 	if ( !function_exists( 'optionsframework_init' ) ) {

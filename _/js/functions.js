@@ -160,25 +160,61 @@
 
 	function ajaxComments() {
 
-		// useful links
-
 		// if comments section exists
+		// SOURCE: http://wpcrux.com/ajax-submit-wordpress-comments/
+		if ( $('#commentform') ) {
+			// attach divert to comment form submit 
 
-		// attach divert to comment form submit 
-			// http://wpcrux.com/ajax-submit-wordpress-comments/
+			var commentform = $('#commentform');
+			var statusdiv = $('#comment-status');
+			statusText = {
+				placeholder:  '<p class="ajax-placeholder">Processing...</p>',
+				invaid:       '<p class="ajax-error" >You might have left one of the fields blank, or be posting too quickly</p>',
+				success:      '<p class="ajax-success" >Thanks for your comment. We appreciate your response.</p>',
+				error:        '<p class="ajax-error" >Please wait a while before posting your next comment</p>',
+			};
+
+			commentform.submit( function(){
+				// Serialize and store form data
+				var formdata = commentform.serialize();
+				// Add a status message
+				statusdiv.html( statusText.placeholder );
+				// Extract action URL from commentform
+				var formurl=commentform.attr('action');
+				// Post Form with data
+				$.ajax({
+					type: 'post',
+					url: formurl,
+					data: formdata,
+					error: function( XMLHttpRequest, textStatus, errorThrown ) {
+						statusdiv.html(statusText.invaid);
+					},
+					success: function( data, textStatus ) {
+						if ( data == "success" ) {
+							statusdiv.html(statusText.success);
+						} else {
+							// TODO: what really happens in this case
+							statusdiv.html(statusText.error);
+						}
+						commentform.find('textarea[name=comment]').val('');
+					}
+				});
+				return false;
+			});
+		}
+
 		// when comment is submitted
 		// send data through ajax
 		// return data from php
-			// http://davidwalsh.name/wordpress-ajax-comments
 		// insert it into comments 
 
 		// create refresh comments link
 		// attach ajax call to link
 		// php to return the newest links
+			// have isCommentsAjax bool
 		// when data is returned replace comments section
 
 		// attah divert to pagination
-		// somehow return only the correct page pagination with php
 		// replace comments ol section (alter/ display:none; the links)
 	}
 
@@ -187,6 +223,7 @@
 
 		// call our pjax function
 		plusPjax();
+		ajaxComments();
 		// your functions go here
 
 	});

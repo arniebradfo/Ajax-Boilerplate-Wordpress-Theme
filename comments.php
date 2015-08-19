@@ -42,6 +42,8 @@
 
 <?php if ( comments_open() ) : ?>
 
+<div id="comment-status" ></div>
+
 <div id="respond">
 
 	<h2><?php comment_form_title( __('Leave a Reply','html5reset'), __('Leave a Reply to %s','html5reset') ); ?></h2>

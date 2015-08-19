@@ -41,3 +41,8 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 8. IE-specific classes for simple CSS-targeting
 9. iPhone/iPad/iTouch icon snippets, plus social/app meta tags for Twitter, Facebook, Windows 8
 10. Lots of other keen stuff
+
+## Credits:
+	comments ajax: http://wpcrux.com/ajax-submit-wordpress-comments/
+	comments php ajax reply: http://davidwalsh.name/wordpress-ajax-comments
+
