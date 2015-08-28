@@ -103,7 +103,7 @@
 		
 		loadPage = function(href) {
 			ajaxCalled();
-			$main.load(href + " main>*", function(html){
+			$main.load(href + "main > *", function(html){
 				ajaxDelivered(html);
 				updateCurrentNav(href);
 			});
@@ -147,7 +147,7 @@
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
 
-				if ( !href.match(/\/#/) && !href.match(/\/wp-/)) {
+				if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
 					history.pushState({}, '', href);
 					loadPage(href);
 					// return false to diable default link behovior
@@ -160,6 +160,14 @@
 
 	function ajaxComments() {
 
+		loadComments = function(href) {
+			// ajaxCommentsCalled();
+			$main.load(href + "main > *", function(html){
+				// ajaxComments(html);
+				// updateCurrentCommentsNav(href);
+			});
+		};
+
 		// if comments section exists
 		// SOURCE: http://wpcrux.com/ajax-submit-wordpress-comments/
 		if ( $('#commentform') ) {
@@ -167,7 +175,7 @@
 
 			var commentform = $('#commentform');
 			var statusdiv = $('#comment-status');
-			statusText = {
+			commentStatus = {
 				placeholder:  '<p class="ajax-placeholder">Processing...</p>',
 				invaid:       '<p class="ajax-error" >You might have left one of the fields blank, or be posting too quickly</p>',
 				success:      '<p class="ajax-success" >Thanks for your comment. We appreciate your response.</p>',
@@ -178,23 +186,39 @@
 				// Serialize and store form data
 				var formdata = commentform.serialize();
 				// Add a status message
-				statusdiv.html( statusText.placeholder );
+				statusdiv.html( commentStatus.placeholder );
 				// Extract action URL from commentform
-				var formurl=commentform.attr('action');
+				var formurl = commentform.attr('action');
 				// Post Form with data
 				$.ajax({
-					type: 'post',
+					method: "POST",
 					url: formurl,
 					data: formdata,
 					error: function( XMLHttpRequest, textStatus, errorThrown ) {
-						statusdiv.html(statusText.invaid);
+						statusdiv.html(commentStatus.invaid);
+						console.log(
+							'XMLHttpRequest: ' + XMLHttpRequest + 
+							',\ntextStatus: '    + textStatus + 
+							',\nerrorThrown: '   + errorThrown
+						);
 					},
 					success: function( data, textStatus ) {
-						if ( data == "success" ) {
-							statusdiv.html(statusText.success);
+						if ( data == "success" || textStatus == "success" ) {
+							statusdiv.html(commentStatus.success);
+							console.log(
+								'textStatus: '+ textStatus + '\n'+
+								'textStatus did == success, data:' + data
+							);
+							// TODO: detect if this is a reply and append to the correct comment
+							// need to also detect if reply has a sibiling and prepend appropriately
+							$(".commentlist").prepend(data);
 						} else {
 							// TODO: what really happens in this case
-							statusdiv.html(statusText.error);
+							console.log(
+								'textStatus: '+ textStatus +
+								',\n textStatus did NOT == success, data:' + data
+							);
+							statusdiv.html(commentStatus.error);
 						}
 						commentform.find('textarea[name=comment]').val('');
 					}
