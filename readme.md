@@ -25,11 +25,11 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 13. feature detect to allow gracefull degredation.
 14. 0 - send out events onCall, onProgess, and onDelivered
 15. ajax the comments section
-	- to live reload from a refresh button
-	X - to post to the DB without reloading the page
-	X - to update posted comments
+	- live reload from a refresh button
+	X - post to the DB without reloading the page
+	X - update posted comments
 	- detect a reply and append to the correct comment
-	- to navigate between comment pages
+	- navigate between comment pages
 16. switch everything from jQuery to regular .js
 17. add support for wp admin bar edit button.
 18. 0 - Test wp native DOING_AJAX constant? - only works in the admin section.
