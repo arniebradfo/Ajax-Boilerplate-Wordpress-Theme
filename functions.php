@@ -26,8 +26,8 @@
 				$url = str_replace('http://', '/', $permaurl);
 				$commentHasNoParent = ($commentdata['comment_parent'] == 0 ? true : false);
 
+				// <ul class="children">
 				if ( !$commentHasNoParent ): $output .='
-				<ul class="children">
 					<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-' . $commentdata['comment_ID'] . '">';
 					else: $output .='
 					<li class="comment byuser comment-author-admin bypostauthor even'.                      ' depth-2" id="comment-' . $commentdata['comment_ID'] . '">';
@@ -53,63 +53,12 @@
 							</div>
 						</div>
 					</li>';
-				if ( !$commentHasNoParent ): $output .='
-				</ul>' ;
-				endif;
+				// if ( !$commentHasNoParent ): $output .='
+				// </ul>' ;
+				// endif;
 				
 				echo $output;
 
-				// if ($commentdata['comment_parent'] == 0) {
-				// 	$output = 
-				// 	'<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-' . $commentdata['comment_ID'] . '">
-				// 		<div id="div-comment-' . $commentdata['comment_ID'] . '" class="comment-body">
-				// 			<div class="comment-author vcard">'.
-				// 				get_avatar($commentdata['comment_author_email'])
-				// 				.'<cite class="fn">' . $commentdata['comment_author'] . '</cite> <span class="says">says:</span>
-				// 			</div>
-				// 			<div class="comment-meta commentmetadata"><a href="http://localhost/WordPress_Code/?p=1#comment-'. $commentdata['comment_ID'] .'">' .
-				// 				get_comment_date( 'F j, Y \a\t g:i a', $commentdata['comment_ID']) .'</a>&nbsp;&nbsp;';
-				// 				if ( is_user_logged_in() ){
-				// 					$output .= '<a class="comment-edit-link" href="'. home_url() .'/wp-admin/comment.php?action=editcomment&amp;c='. $commentdata['comment_ID'] .'">
-				// 					(Edit)</a>';
-				// 				}
-				// 			$output .= '</div>
-				// 			<p>' . $commentdata['comment_content'] . '</p>
-				// 			<div class="reply">
-				// 				<a class="comment-reply-link" href="'. $url . '&amp;replytocom='. $commentdata['comment_ID'] .'#respond"
-				// 				onclick="return addComment.moveForm(&quot;div-comment-'. $commentdata['comment_ID'] .'&quot;, &quot;'. $commentdata['comment_ID'] . '&quot;, &quot;respond&quot;, &quot;1&quot;)">Reply</a>
-				// 			</div>
-				// 		</div>
-				// 	</li>' ;
-
-				// 	echo $output;
-				// } else {
-
-				// 	$output = '<ul class="children"> 
-				// 	<li class="comment byuser comment-author-admin bypostauthor even depth-2" id="comment-' . $commentdata['comment_ID'] . '">
-				// 	<div id="div-comment-' . $commentdata['comment_ID'] . '" class="comment-body">
-				// 	<div class="comment-author vcard">'.
-				// 	get_avatar($commentdata['comment_author_email'])
-				// 	.'<cite class="fn">' . $commentdata['comment_author'] . '</cite> <span class="says">says:</span> </div>
-
-				// 	<div class="comment-meta commentmetadata"><a href="http://localhost/WordPress_Code/?p=1#comment-'. $commentdata['comment_ID'] .'">' .
-				// 	get_comment_date( 'F j, Y \a\t g:i a', $commentdata['comment_ID']) .'</a>&nbsp;&nbsp;';
-				// 	if ( is_user_logged_in() ){
-				// 		$output .= '<a class="comment-edit-link" href="'. home_url() .'/wp-admin/comment.php?action=editcomment&amp;c='. $commentdata['comment_ID'] .'">
-				// 		(Edit)</a>';
-				// 	}
-
-				// 	$output .= '</div>
-				// 	<p>' . $commentdata['comment_content'] . '</p>
-				// 	<div class="reply">
-				// 	<a class="comment-reply-link" href="'. $url .'&amp;replytocom='. $commentdata['comment_ID'] .'#respond"
-				// 	onclick="return addComment.moveForm(&quot;div-comment-'. $commentdata['comment_ID'] .'&quot;, &quot;'. $commentdata['comment_ID'] . '&quot;, &quot;respond&quot;, &quot;1&quot;)">Reply</a>
-				// 	</div>
-				// 	</div>
-				// 	</li></ul>' ;
-
-				// 	echo $output;
-				// }
 
 				// $post = &get_post($commentdata['comment_post_ID']);
 				wp_notify_postauthor($comment_ID, $commentdata['comment_type']);

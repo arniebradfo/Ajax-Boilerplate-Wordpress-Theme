@@ -162,10 +162,10 @@
 
 		loadComments = function(href) {
 			// ajaxCommentsCalled();
-			$main.load(href + "main > *", function(html){
-				// ajaxComments(html);
-				// updateCurrentCommentsNav(href);
-			});
+			// $main.load(href + "main > *", function(html){
+			// 	// ajaxComments(html);
+			// 	// updateCurrentCommentsNav(href);
+			// });
 		};
 
 		// if comments section exists
@@ -177,15 +177,16 @@
 			var statusdiv = $('#comment-status');
 			commentStatus = {
 				placeholder:  '<p class="ajax-placeholder">Processing...</p>',
-				invaid:       '<p class="ajax-error" >You might have left one of the fields blank, or be posting too quickly</p>',
-				success:      '<p class="ajax-success" >Thanks for your comment. We appreciate your response.</p>',
-				error:        '<p class="ajax-error" >Please wait a while before posting your next comment</p>',
+				invaid:       '<p class="ajax-error" ><strong>ERROR:</strong> You might have left one of the fields blank, or be posting too quickly</p>',
+				success:      '<p class="ajax-success" ><strong>SUCCESS:</strong> Thanks for your comment. We appreciate your response.</p>',
+				error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>',
 			};
 
 			commentform.submit( function(){
 				// Serialize and store form data
 				var formdata = commentform.serialize();
-				// Add a status message
+				parentPost = formdata.match(/(?:&comment_parent=)\d+/g)[0].match(/\d+/g)[0];
+				// Add a status message while we wait for the response
 				statusdiv.html( commentStatus.placeholder );
 				// Extract action URL from commentform
 				var formurl = commentform.attr('action');
@@ -204,14 +205,37 @@
 					},
 					success: function( data, textStatus ) {
 						if ( data == "success" || textStatus == "success" ) {
-							statusdiv.html(commentStatus.success);
-							console.log(
-								'textStatus: '+ textStatus + '\n'+
-								'textStatus did == success, data:' + data
-							);
-							// TODO: detect if this is a reply and append to the correct comment
-							// need to also detect if reply has a sibiling and prepend appropriately
-							$(".commentlist").prepend(data);
+							// in case wordpress sends a formatted error page
+							if ( data.match(/id="[^"]*(error-page)[^"]*"/g)) {
+								commentStatus.wpError = data.match(/<p>.*<\/p>/g);
+								console.log( commentStatus.wpError );
+								statusdiv.html( commentStatus.wpError );
+							} else {
+								statusdiv.html(commentStatus.success);
+								// if the comment doesn't have a parent, i.e. is it a reply?
+								if ( parentPost == 0 ) {
+									$(".commentlist").prepend(data);
+								} else {
+									commentHasSiblings = $("#comment-"+parentPost+" > .children");
+									// does this reply have no sibling replies?
+									if ( commentHasSiblings[0] == undefined ){
+										data = '<ul class="children">'+data+'</ul>';
+										$("#comment-"+parentPost).append(data);
+									} else {
+										commentHasSiblings.append(data);
+									} 
+								}
+								// console.log(
+								// 	'formurl: '+ formurl + ',\n' +							
+								// 	'formdata: '+ formdata + ',\n' +
+								// 	'parentPost: '+ parentPost + ',\n' +
+								// 	'textStatus: '+ textStatus + ',\n' +
+								// 	'textStatus did == success,\n' + 
+								// 	'data:\n' + 
+								// 	data
+								// );
+								// console.log($("#comment-"+parentPost+" > .children")[0]);
+							}
 						} else {
 							// TODO: what really happens in this case
 							console.log(
