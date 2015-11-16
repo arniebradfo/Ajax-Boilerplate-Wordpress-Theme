@@ -5,7 +5,7 @@
  * @since HTML5 Reset + PJAX 0.1
  */
 ?>
-<?php if (!$ajax): // if this is not an ajax call ?>
+<?php if (!$GLOBALS['is_ajax']): // if this is not an ajax call ?>
 
 <!doctype html>
 
@@ -31,8 +31,12 @@
 	?>
 
 	<?php endif; // step out of ajax detection for the title?>
-	<title><?php wp_title( '|', true, 'right' ); ?></title>
-	<?php if (!$ajax): //... and step back in?>
+	<title><?php 
+		wp_title( '|', true, 'right' ); 
+		// $is_ajax_defined = strval($GLOBALS['is_ajax']);
+		// echo '$GLOBALS["is_ajax"] = '. $is_ajax_defined;
+	?></title>
+	<?php if (!$GLOBALS['is_ajax']): //... and step back in?>
 
 	<meta name="title" content="<?php wp_title( '|', true, 'right' ); ?>">
 

@@ -6,13 +6,11 @@
  */
 
 	// Detect ajax request (https://rosspenman.com/pushstate-part-2/)
-	$ajax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
-			&& 
-			strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+	$GLOBALS['is_ajax'] = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false ;
 
 	// http://www.inkthemes.com/ajax-comment-wordpress/
 	function ajaxify_comments_jaya($comment_ID, $comment_status) {
-		if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+		if ($GLOBALS['is_ajax']) {
 			//If AJAX Request Then
 			switch ($comment_status) {
 				case '0':

@@ -8,75 +8,62 @@
 // sample CSS: html[data-useragent*='Chrome/13.0'] { ... }
 
 // remap jQuery to $
-// (function ($) {
-(function() {
-
-	// normalizes adding event listeners/handlers (http://stackoverflow.com/questions/10149963/adding-event-listener-cross-browser)
-	function addEvent(elem, event, fn) {
-		//console.log('addEvent was called on '+elem+' with function '+fn);
-
-		if (elem.addEventListener) {
-			elem.addEventListener(event, fn, false);
-		} else if (elem.attachEvent) {
-			elem.attachEvent("on" + event, function() {
-				// set the this pointer same as addEventListener when fn is called
-				return(fn.call(elem, window.event));   
-			});
-		}
-	}
+(function ($) {
 
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
 	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
-		// console.log('plusPjax was called');
 
 		// // //
 		// define functions and objects
 		// // //
 
-		var d = document;
+		// decode html entities in a string
+		// REMOVE - I don't understand what this si supposed to do
+		String.prototype.decodeHTML = function() {
+			return $("<div>", {html: "" + this}).html();
+		};
 
 		// put the contents of the <main> tag into an object
-		var main = d.getElementsByTagName('main')[0];
+		var $main = $("main");
 
-		// TODO: do this with a nav element from the server
-		// updateCurrentNav = function(href) {
+		updateCurrentNav = function(href) {
 
-		// 	// remove all current- classes
-		// 	$('.menu-item').removeClass('current-menu-item current-menu-ancestor current-menu-parent current_page_item current-page-ancestor current_page_ancestor current-page-parent current_page_parent');
+			// remove all current- classes
+			$('.menu-item').removeClass('current-menu-item current-menu-ancestor current-menu-parent current_page_item current-page-ancestor current_page_ancestor current-page-parent current_page_parent');
 			
 			
-		// 	var $newCurrentLink = $('.menu-item a[href="'+href+'"]').parent('.menu-item'), // object containing the current link
-		// 		$menuLinks = $('.menu-item a'),
-		// 		hrefAncestorPaths = [],
-		// 		hrefEdit = href;
+			var $newCurrentLink = $('.menu-item a[href="'+href+'"]').parent('.menu-item'), // object containing the current link
+				$menuLinks = $('.menu-item a'),
+				hrefAncestorPaths = [],
+				hrefEdit = href;
 
-		// 	//TODO: figure out how to detect if something is a .current_page_item
-		// 	$newCurrentLink.addClass('current_page_item current-menu-item');
-		// 	$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
-		// 	$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
+			//TODO: figure out how to detect if something is a .current_page_item
+			$newCurrentLink.addClass('current_page_item current-menu-item');
+			$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
+			$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
 
-		// 	// create an array of url strings matching each possible ancestor
-		// 	while ( hrefEdit != (location.origin + "/") ) {
-		// 		hrefEdit = hrefEdit.replace(/[^\/]+\/?([#\?][^\/]*)?$/,"");
-		// 		hrefAncestorPaths.push(hrefEdit);
-		// 	}
-		// 	hrefAncestorPaths.pop(); // delete the last entry that should be the location.origin+"/"
+			// create an array of url strings matching each possible ancestor
+			while ( hrefEdit != (location.origin + "/") ) {
+				hrefEdit = hrefEdit.replace(/[^\/]+\/?([#\?][^\/]*)?$/,"");
+				hrefAncestorPaths.push(hrefEdit);
+			}
+			hrefAncestorPaths.pop(); // delete the last entry that should be the location.origin+"/"
 
-		// 	// loop through each menu item and add relevant page-ancestor classes
-		// 	for (i = 0; i < $menuLinks.length; i++) { 
+			// loop through each menu item and add relevant page-ancestor classes
+			for (i = 0; i < $menuLinks.length; i++) { 
 
-		// 		var hrefCurrent = $menuLinks.eq(i).attr("href");
-		// 		// parent
-		// 		if ( hrefCurrent === hrefAncestorPaths[0] ){
-		// 			$menuLinks.eq(i).parent('.menu-item').addClass('current-page-parent current_page_parent');
-		// 		}
-		// 		// ancestor
-		// 		if ( hrefAncestorPaths.indexOf(hrefCurrent) >= 0 ){
-		// 			$menuLinks.eq(i).parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
-		// 		}
-		// 	}
-		// };
+				var hrefCurrent = $menuLinks.eq(i).attr("href");
+				// parent
+				if ( hrefCurrent === hrefAncestorPaths[0] ){
+					$menuLinks.eq(i).parent('.menu-item').addClass('current-page-parent current_page_parent');
+				}
+				// ancestor
+				if ( hrefAncestorPaths.indexOf(hrefCurrent) >= 0 ){
+					$menuLinks.eq(i).parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
+				}
+			}
+		};
 
 		ajaxProgress = function(progressDelay) {
 
@@ -99,10 +86,14 @@
 			clearTimeout(progressTimer);
 
 			// Do this once the ajax request is returned.
-			console.log('pjax loaded!');
+			console.log("pjax loaded!");
 
 			// change the <title> element in the <head>
-			document.title = /<title>(.*?)<\/title>/g.exec(html)[1];
+			document.title = html
+				.match(/<title>(.*?)<\/title>/)[1]
+				.trim()
+				//.decodeHTML()
+				;
 
 			// google universial analytics tracking
 			// uncomment this to send a pageview connected to anayltics.js loaded in footer.php
@@ -112,30 +103,14 @@
 
 		};
 		
-		// // jQuery ajax call
-		// loadPage = function(href) {
-		// 	ajaxCalled();
-		// 	$main.load(href + " main > *", function(html){
-		// 		ajaxDelivered(html);
-		// 		updateCurrentNav(href);
-		// 	});
-		// };
-		
-		function wp_loadPage(href) {
+		loadPage = function(href) {
 			ajaxCalled();
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					html = xhttp.responseText;
-					main.innerHTML = html;
-					ajaxDelivered(html);
-					// updateCurrentNav(href);
-				}
-			};
-			xhttp.open("GET", href, true);
-			xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-			xhttp.send();
-		}
+			$main.load(href + " main > *", function(html){
+				ajaxDelivered(html);
+				updateCurrentNav(href);
+			});
+		};
+		
 
 
 		// // //
@@ -144,28 +119,21 @@
 		
 		// calls loadPage when the browser back button is pressed
 		// TODO: test browser implementation inconsistencies of popstate
-		window.onpopstate = function(event) {
+		$(window).on("popstate", function(e) {
 			// don't fire on the inital page load
-			if (event.state !== null) {
-				wp_loadPage(location.href);
+			if (e.originalEvent.state !== null) {
+				loadPage(location.href);
 			}
-		};
+		});
+
 
 		// transforms all the interal hyperlinks into ajax requests
 		// TODO: add exception for #id links.
 		// TODO: add support for subdomains. - subdomain is included in document.domain
 		// TODO: add exception for /wp-admin
-		// $(document).on("click", "a, area", function() {
-		addEvent(d, 'click', function(e) {
-			
-			var e = window.e || e;
+		$(document).on("click", "a, area", function() {
 
-			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
-				return;
-			}
-			e.preventDefault();
-
-			var href = e.target.href;
+			var href = $(this).attr("href");
 			//console.log("href was: "+href);
 
 			// TODO: is this nessasary?
@@ -183,15 +151,13 @@
 
 				if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
 					history.pushState({}, '', href);
-					wp_loadPage(href);
+					loadPage(href);
 					// return false to diable default link behovior
 					return false;
 				}
 			}
 
 		});
-
-		return true;
 	}	
 
 	function ajaxComments() {
@@ -302,16 +268,14 @@
 		// replace comments ol section (alter/ display:none; the links)
 	}
 
-	// /* trigger when page is ready */
-	// $(document).ready(function (){
-	// 	// call our pjax function
-	// 	plusPjax();
-	// 	ajaxComments();
-	// 	// your functions go here
-	// });
-	
-	// find a better way to call this?
-	plusPjax();
-	
-})();
-//}(window.jQuery || window.$));
+	/* trigger when page is ready */
+	$(document).ready(function (){
+
+		// call our pjax function
+		plusPjax();
+		ajaxComments();
+		// your functions go here
+
+	});
+
+}(window.jQuery || window.$));
