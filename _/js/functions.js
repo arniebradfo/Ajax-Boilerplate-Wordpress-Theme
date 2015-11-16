@@ -19,6 +19,7 @@
 		// // //
 
 		// decode html entities in a string
+		// REMOVE - I don't understand what this si supposed to do
 		String.prototype.decodeHTML = function() {
 			return $("<div>", {html: "" + this}).html();
 		};
@@ -91,7 +92,8 @@
 			document.title = html
 				.match(/<title>(.*?)<\/title>/)[1]
 				.trim()
-				.decodeHTML();
+				//.decodeHTML()
+				;
 
 			// google universial analytics tracking
 			// uncomment this to send a pageview connected to anayltics.js loaded in footer.php
@@ -103,7 +105,7 @@
 		
 		loadPage = function(href) {
 			ajaxCalled();
-			$main.load(href + "main > *", function(html){
+			$main.load(href + " main > *", function(html){
 				ajaxDelivered(html);
 				updateCurrentNav(href);
 			});
