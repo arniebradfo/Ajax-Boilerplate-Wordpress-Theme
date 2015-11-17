@@ -132,7 +132,6 @@
 	<?php wp_head(); ?>
 
 </head>
-
 <body <?php body_class(); ?>>
 
 	<!-- not needed? up to you: http://camendesign.com/code/developpeurs_sans_frontieres -->
@@ -145,38 +144,24 @@
 
 		<nav id="nav" role="navigation">
 			<?php 
-
 				$primary_menu_name = 'primary';
 				wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
-
 			?>
 		</nav>
 
-		<?php else:	// ?>
+		<?php else:	// content that only comes through ajax ?>
 
-			<!-- content that only comes through ajax -->
-
-			<?php 
-
-				// $primary_menu_name = 'primary';
-				// $locations = get_nav_menu_locations();
-				// $menu_id = $locations[ $primary_menu_name ] ;
-
-				// 	// if (isset($locations[$primary_meun_name])) {
-
-
-				// 		$menu = wp_get_nav_menu_items($menu_id,array(
-				// 			'posts_per_page' => -1,
-				// 			'meta_key' => '_menu_item_object_id',
-				// 			'meta_value' => $post->ID // the currently displayed post
-				// 		));
-				// 	// }
-
-
-
+		<nav id="wp-all-registered-nav-menus">
+			<?php
+				$menus = get_registered_nav_menus();
+				foreach ( $menus as $location => $description ) { 
+					wp_nav_menu( array('theme_location' => $location) ); 
+					// echo $location . ': ' . $description . "\r";
+				}
 			?>
+		</nav>
 
-		<?php	endif;	// end ajax detection?>
+		<?php	endif;	// end ajax detection ?>
 		
 
 		<main><!-- Pjax content wrapper element -->

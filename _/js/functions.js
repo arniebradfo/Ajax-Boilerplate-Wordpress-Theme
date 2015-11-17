@@ -101,14 +101,29 @@
 			// Do this once the ajax request is returned.
 			console.log('pjax loaded!');
 
-			// change the <title> element in the <head>
-			document.title = /<title>(.*?)<\/title>/g.exec(html)[1];
+			var workspace = d.createElement("div");
+			workspace.innerHTML = html;
+
+			// update the doc title
+			d.title = workspace.getElementsByTagName('title')[0];
+
+			// update the content
+			main.innerHTML = workspace.getElementsByTagName('main')[0].innerHTML;
+
+			// update the the class list of all menu items
+			menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
+			for (var i = 0; i < menuItems.length; ++i) {
+				var item = menuItems[i];  // Calling myNodeList.item(i) isn't necessary in JavaScript
+				d.getElementById(item.id).className = item.className;
+			}
 
 			// google universial analytics tracking
-			// uncomment this to send a pageview connected to anayltics.js loaded in footer.php
-			// ga('send', 'pageview');
+			// send a pageview connected to anayltics.js loaded in footer.php
+			if (typeof ga == 'function') {
+				ga('send', 'pageview');
+			}
 
-			return false;
+			return true;
 
 		};
 		
@@ -126,10 +141,7 @@
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					html = xhttp.responseText;
-					main.innerHTML = html;
-					ajaxDelivered(html);
-					// updateCurrentNav(href);
+					ajaxDelivered(xhttp.responseText);
 				}
 			};
 			xhttp.open("GET", href, true);
@@ -155,7 +167,6 @@
 		// TODO: add exception for #id links.
 		// TODO: add support for subdomains. - subdomain is included in document.domain
 		// TODO: add exception for /wp-admin
-		// $(document).on("click", "a, area", function() {
 		addEvent(d, 'click', function(e) {
 			
 			var e = window.e || e;
@@ -163,7 +174,6 @@
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
 				return;
 			}
-			e.preventDefault();
 
 			var href = e.target.href;
 			//console.log("href was: "+href);
@@ -180,15 +190,15 @@
 
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
-
 				if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
+					e.preventDefault();
 					history.pushState({}, '', href);
 					wp_loadPage(href);
 					// return false to diable default link behovior
-					return false;
+					return true;
 				}
 			}
-
+			return false;
 		});
 
 		return true;
@@ -312,6 +322,6 @@
 	
 	// find a better way to call this?
 	plusPjax();
-	
+
 })();
 //}(window.jQuery || window.$));
