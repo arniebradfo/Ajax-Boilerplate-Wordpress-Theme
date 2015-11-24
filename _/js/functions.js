@@ -18,9 +18,9 @@
 		if (elem.addEventListener) {
 			elem.addEventListener(event, fn, false);
 		} else if (elem.attachEvent) {
-			elem.attachEvent("on" + event, function() {
+			elem.attachEvent('on' + event, function() {
 				// set the this pointer same as addEventListener when fn is called
-				return(fn.call(elem, window.event));   
+				return(fn.call(elem, window.event));
 			});
 		}
 	}
@@ -35,80 +35,62 @@
 		// // //
 
 		var d = document;
+		var main = d.getElementsByTagName('main')[0]; // put the contents of the <main> tag into an object
 
-		// put the contents of the <main> tag into an object
-		var main = d.getElementsByTagName('main')[0];
-
-		// TODO: do this with a nav element from the server
-		// updateCurrentNav = function(href) {
-
-		// 	// remove all current- classes
-		// 	$('.menu-item').removeClass('current-menu-item current-menu-ancestor current-menu-parent current_page_item current-page-ancestor current_page_ancestor current-page-parent current_page_parent');
-			
-			
-		// 	var $newCurrentLink = $('.menu-item a[href="'+href+'"]').parent('.menu-item'), // object containing the current link
-		// 		$menuLinks = $('.menu-item a'),
-		// 		hrefAncestorPaths = [],
-		// 		hrefEdit = href;
-
-		// 	//TODO: figure out how to detect if something is a .current_page_item
-		// 	$newCurrentLink.addClass('current_page_item current-menu-item');
-		// 	$newCurrentLink.parents('.menu-item-has-children').addClass('current-menu-ancestor');
-		// 	$newCurrentLink.parent().closest('.menu-item-has-children').addClass('current-menu-parent');
-
-		// 	// create an array of url strings matching each possible ancestor
-		// 	while ( hrefEdit != (location.origin + "/") ) {
-		// 		hrefEdit = hrefEdit.replace(/[^\/]+\/?([#\?][^\/]*)?$/,"");
-		// 		hrefAncestorPaths.push(hrefEdit);
-		// 	}
-		// 	hrefAncestorPaths.pop(); // delete the last entry that should be the location.origin+"/"
-
-		// 	// loop through each menu item and add relevant page-ancestor classes
-		// 	for (i = 0; i < $menuLinks.length; i++) { 
-
-		// 		var hrefCurrent = $menuLinks.eq(i).attr("href");
-		// 		// parent
-		// 		if ( hrefCurrent === hrefAncestorPaths[0] ){
-		// 			$menuLinks.eq(i).parent('.menu-item').addClass('current-page-parent current_page_parent');
-		// 		}
-		// 		// ancestor
-		// 		if ( hrefAncestorPaths.indexOf(hrefCurrent) >= 0 ){
-		// 			$menuLinks.eq(i).parent('.menu-item').addClass('current-page-ancestor current_page_ancestor');
-		// 		}
-		// 	}
+		ajaxLoadStart = function() {
+			// After the XMLHttpRequest object has been created, but before the open() method has been called
+			console.log('ajax load has not yet been initalized');
+			return true;
+		};
+		// ajaxTimeout = function(timeoutDelay) {
+		// 	// do this if ajaxCalled is done but ajax has not been delivered.
+		// 	console.log("ajax was still loading after "+ timeoutDelay + " milliseconds."+
+		// 		      "\nThe ajax load timed out and has been aborted.");
 		// };
-
-		ajaxProgress = function(progressDelay) {
-
-			// do this if ajaxCalled is done but ajax has not been delivered.
-			console.log("pjax is still loading after "+ progressDelay + " milliseconds");
+		ajaxServerConnectionEstablished = function() {
+			// The open method has been invoked successfully
+			console.log('Connection Established');
+			return true;
 		};
-
-		ajaxCalled = function() {
-			// set how long ajaxCalled is expected to take (in milliseconds)
-			var progressDelay = 2;
-
-			// do this just before the ajax is requested
-			console.log("calling pjax");
-
-			// call ajaxProgress after timeout
-			progressTimer = setTimeout(ajaxProgress(progressDelay),progressDelay);
+		ajaxRequestRecieved = function() {
+			// The send method has been invoked and the HTTP response headers have been received
+			console.log('Request Recieved');
+			return true;
 		};
-		
-		ajaxDelivered = function(html) {
-			clearTimeout(progressTimer);
+		ajaxProcessingRequest = function() {
+			// HTTP response content begins to load
+			console.log('Processing Request');
+			return true;
+		};
+		ajaxAborted = function(timoutTimer) {
+			var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
+			console.log( 'ajax load was aborted.\n'+timoutText );
+			return true;
+		};
+		ajaxFinished = function() {
+			// called when ajax is finished, pass or fail.
+			console.log( 'ajax is done...' );
+			return true;
+		};		
+		ajaxFailed = function(status, statusText, href) {
+			// called when the response is recieved with an error
+			errorStatusText = statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
+			console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
+			location.href = href;
+			return true;
+		};
+		ajaxDelivered = function(responseText, responseXML, responseType) {
 
 			// Do this once the ajax request is returned.
-			console.log('pjax loaded!');
+			console.log('ajax loaded!');
+			//console.log(responseText);
+			console.log(responseXML);
+			console.log(responseType);
 
-			var workspace = d.createElement("div");
-			workspace.innerHTML = html;
-
-			// update the doc title
-			d.title = workspace.getElementsByTagName('title')[0];
-
-			// update the content
-			main.innerHTML = workspace.getElementsByTagName('main')[0].innerHTML;
+			var workspace       = d.createElement("div");
+			workspace.innerHTML = responseText;
+			d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
+			main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
 
 			// update the the class list of all menu items
 			menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
@@ -117,38 +99,44 @@
 				d.getElementById(item.id).className = item.className;
 			}
 
-			// google universial analytics tracking
-			// send a pageview connected to anayltics.js loaded in footer.php
-			if (typeof ga == 'function') {
-				ga('send', 'pageview');
+			if (typeof ga == 'function') {	// google universial analytics tracking 
+				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
 			}
 
 			return true;
-
 		};
-		
-		// // jQuery ajax call
-		// loadPage = function(href) {
-		// 	ajaxCalled();
-		// 	$main.load(href + " main > *", function(html){
-		// 		ajaxDelivered(html);
-		// 		updateCurrentNav(href);
-		// 	});
-		// };
-		
+
 		function wp_loadPage(href) {
-			ajaxCalled();
+
 			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					ajaxDelivered(xhttp.responseText);
+			addEvent( xhttp, 'readystatechange', function() {
+				switch (xhttp.readyState){
+					// case 0: ajaxLoadStart(); break; // I think this is fired when the constructor is called, before this block is set
+					case 1: ajaxServerConnectionEstablished(); break;
+					case 2: ajaxRequestRecieved(); break;
+					case 3: ajaxProcessingRequest(); break;
+					case 4:
+						if (xhttp.status >= 200 && xhttp.status < 300) {
+							ajaxDelivered(xhttp.responseText, xhttp.responseXML, xhttp.responseType);
+							break;
+						} else {
+							ajaxFailed(xhttp.status, xhttp.statusText, href);
+							break;
+						}
 				}
-			};
+			});
+
+			var timoutTimer = 10000; // (in milliseconds) Set the amout of time until the ajax request times out.
+			xhttp.timeout = timoutTimer; 
+			addEvent( xhttp, 'loadstart', ajaxLoadStart); 
+			addEvent( xhttp, 'abort',     ajaxAborted); 
+			addEvent( xhttp, 'timeout',   function(){ ajaxAborted(timoutTimer); }); 
+			addEvent( xhttp, 'loadend',   ajaxFinished); 
+
 			xhttp.open("GET", href, true);
 			xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 			xhttp.send();
 		}
-
 
 		// // //
 		// use our functions
@@ -156,12 +144,12 @@
 		
 		// calls loadPage when the browser back button is pressed
 		// TODO: test browser implementation inconsistencies of popstate
-		window.onpopstate = function(event) {
+		addEvent(window, 'popstate', function(event) {
 			// don't fire on the inital page load
 			if (event.state !== null) {
 				wp_loadPage(location.href);
 			}
-		};
+		});
 
 		// transforms all the interal hyperlinks into ajax requests
 		// TODO: add exception for #id links.
@@ -169,7 +157,7 @@
 		// TODO: add exception for /wp-admin
 		addEvent(d, 'click', function(e) {
 			
-			var e = window.e || e;
+			var e = window.e || e; // http://stackoverflow.com/questions/3493033/what-is-the-meaning-of-this-var-evt-eventwindow-event
 
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
 				return;
