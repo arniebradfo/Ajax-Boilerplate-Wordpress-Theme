@@ -38,6 +38,7 @@ HTML5 Reset+PJAX is a simple set of *WordPress* best practices to get web projec
 17. add support for wp admin bar edit button.
 18. 0 - Test wp native DOING_AJAX constant? - only works in the admin section.
 19. add settings object
+20. skip the sidebar
 
 
 ## Some of the features:

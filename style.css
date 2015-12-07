@@ -10,6 +10,8 @@ Version: 0.1
 /* Ok, this is where the fun starts.
 -------------------------------------------------------------------------------*/
 
+*{transition: all 0.5s ease;}
+
 /* A Linux- and Windows-friendly sans-serif font stack: http://prospects.mhurrell.co.uk/post/updating-the-helvetica-font-stack */
 body {font: 13px Helmet, Freesans, sans-serif;}
 

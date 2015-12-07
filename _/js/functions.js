@@ -9,12 +9,12 @@
 
 // remap jQuery to $
 // (function ($) {
+
 (function() {
 
 	// normalizes adding event listeners/handlers (http://stackoverflow.com/questions/10149963/adding-event-listener-cross-browser)
 	function addEvent(elem, event, fn) {
 		//console.log('addEvent was called on '+elem+' with function '+fn);
-
 		if (elem.addEventListener) {
 			elem.addEventListener(event, fn, false);
 		} else if (elem.attachEvent) {
@@ -24,130 +24,211 @@
 			});
 		}
 	}
+	// Add the forEach method to Array elements if absent
+	if (!Array.prototype.forEach) {
+		Array.prototype.forEach = function(fn, scope) {
+			'use strict';
+			var i, len;
+			for (i = 0, len = this.length; i < len; ++i) {
+				if (i in this) {
+					fn.call(scope, this[i], i, this);
+				}
+			}
+		};
+	}
+	// Extrapolate the Array forEach method to NodeList elements if absent */
+	if (!NodeList.prototype.forEach) {
+		NodeList.prototype.forEach = Array.prototype.forEach;
+	}
+	// Extrapolate the Array forEach method to HTMLFormControlsCollection elements if absent
+	if (!HTMLFormControlsCollection.prototype.forEach) {
+		HTMLFormControlsCollection.prototype.forEach = Array.prototype.forEach;
+	}
+	// Convert form elements to query string or JavaScript object.
+	HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: If the serialization should be returned as an object.
+		'use strict';
+		var form = this;
+		var elements;
+		var add = function(name, value) {
+			value = encodeURIComponent(value);
+			if (asObject) {
+				elements[name] = value;
+			} else {
+				elements.push(name + '=' + value);
+			}
+		};
+		if (asObject) {
+			elements = {};
+		} else {
+			elements = [];
+		}
+		form.elements.forEach(function(element) {
+			switch (element.nodeName) {
+				case 'BUTTON':
+					/* Omit this elements */
+					break;
+				default:
+					switch (element.type) {
+						case 'submit':
+						case 'button':
+							/* Omit this types */
+							break;
+						default:
+							add(element.name, element.value);
+							break;
+					}
+					break;
+			}
+		});
+
+		if (asObject) {
+			return elements;
+		}
+
+		return elements.join('&');
+	};
+
+	function ajaxLoad(obj) {
+		
+		var xhttp = new XMLHttpRequest();
+		addEvent( xhttp, 'readystatechange', function() {
+			switch (xhttp.readyState){
+				// case 0: ajaxLoadStart(); break; // I think this is fired when the constructor is called, before this block is set
+				case 1: if(typeof obj.connected  === 'function'){ obj.connected(); } break;
+				case 2: if(typeof obj.requested  === 'function'){ obj.requested(); } break;
+				case 3: if(typeof obj.processing === 'function'){ obj.processing(); } break;
+				case 4:
+					if (xhttp.status >= 200 && xhttp.status < 300) {
+						if(typeof obj.delivered === 'function'){
+							obj.delivered(xhttp.responseText, xhttp.statusText);
+						}
+						break;
+					} else {
+						if(typeof obj.failed === 'function'){
+							obj.failed(xhttp.status, xhttp.statusText, obj.href);								
+						}
+						break;
+					}
+			}
+		});
+		xhttp.timeout = typeof obj.timeoutTimer === 'number' ? obj.timeoutTimer : 0 ; // (in milliseconds) Set the amout of time until the ajax request times out.
+		if (typeof obj.started === 'function'){
+			addEvent( xhttp, 'loadstart', function(){ obj.started(); });
+		}
+		if (typeof obj.aborted === 'function'){
+			addEvent( xhttp, 'abort',     function(){ obj.aborted(); });
+			addEvent( xhttp, 'timeout',   function(){ obj.aborted(timoutTimer); }); 
+		}
+		if (typeof obj.finished === 'function'){
+			addEvent( xhttp, 'loadend',   function(){ obj.finished(); }); 
+		}
+
+		var httpMethod = typeof obj.httpMethod === 'string' ? obj.httpMethod.toUpperCase() : 'GET' ;
+		console.log('httpMethod: '+httpMethod);
+		if (httpMethod === 'GET' 
+		||  httpMethod === 'POST' 
+		||  httpMethod === 'PUT'
+		){
+			xhttp.open(httpMethod, obj.href, true);
+		} else {
+			return false;
+		}
+
+		xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		if ( typeof obj.data === 'string' ){
+			xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhttp.send(obj.data);
+		} else {
+			xhttp.send();
+		}
+
+		return true;
+	}
 
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
 	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
 		// console.log('plusPjax was called');
 
-		// // //
-		// define functions and objects
-		// // //
-
 		var d = document;
 		var main = d.getElementsByTagName('main')[0]; // put the contents of the <main> tag into an object
 
-		ajaxLoadStart = function() {
-			// After the XMLHttpRequest object has been created, but before the open() method has been called
-			console.log('ajax load has not yet been initalized');
-			return true;
-		};
-		// ajaxTimeout = function(timeoutDelay) {
-		// 	// do this if ajaxCalled is done but ajax has not been delivered.
-		// 	console.log("ajax was still loading after "+ timeoutDelay + " milliseconds."+
-		// 		      "\nThe ajax load timed out and has been aborted.");
-		// };
-		ajaxServerConnectionEstablished = function() {
-			// The open method has been invoked successfully
-			console.log('Connection Established');
-			return true;
-		};
-		ajaxRequestRecieved = function() {
-			// The send method has been invoked and the HTTP response headers have been received
-			console.log('Request Recieved');
-			return true;
-		};
-		ajaxProcessingRequest = function() {
-			// HTTP response content begins to load
-			console.log('Processing Request');
-			return true;
-		};
-		ajaxAborted = function(timoutTimer) {
-			var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
-			console.log( 'ajax load was aborted.\n'+timoutText );
-			return true;
-		};
-		ajaxFinished = function() {
-			// called when ajax is finished, pass or fail.
-			console.log( 'ajax is done...' );
-			return true;
-		};		
-		ajaxFailed = function(status, statusText, href) {
-			// called when the response is recieved with an error
-			errorStatusText = statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
-			console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
-			location.href = href;
-			return true;
-		};
-		ajaxDelivered = function(responseText, responseXML, responseType) {
+		var ajaxGetPage = {
+			httpMethod: 'GET',
+			timeoutTimer: 10000,
+			started: function() {
+				// After the XMLHttpRequest object has been created, but before the open() method has been called
+				// console.log('ajax load has not yet been initalized');
+				return true;
+			},
+			connected: function() {
+				// The open method has been invoked successfully
+				// console.log('Connection Established');
+				return true;
+			},
+			requested: function() {
+				// The send method has been invoked and the HTTP response headers have been received
+				// console.log('Request Recieved');
+				return true;
+			},
+			processing: function() {
+				// HTTP response content begins to load
+				// console.log('Processing Request');
+				return true;
+			},
+			aborted: function(timoutTimer) {
+				var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
+				console.log( 'ajax load was aborted.\n'+timoutText );
+				return true;
+			},
+			finished: function() {
+				// called when ajax is finished, pass or fail.
+				// console.log( 'ajax is done...' );
+				return true;
+			},
+			failed: function(status, statusText, href) {
+				// called when the response is recieved with an error
+				errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
+				console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
+				location.href = href;
+				return true;
+			},
+			delivered: function(responseText, statusText) {
+				// Do this once the ajax request is returned.
+				console.log('ajax loaded!');
+				//console.log(responseText);
+				// console.log(responseXML);
+				console.log(statusText);
 
-			// Do this once the ajax request is returned.
-			console.log('ajax loaded!');
-			//console.log(responseText);
-			console.log(responseXML);
-			console.log(responseType);
+				var workspace       = d.createElement("div");
+				workspace.innerHTML = responseText;
+				d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
+				main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
 
-			var workspace       = d.createElement("div");
-			workspace.innerHTML = responseText;
-			d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
-			main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
-
-			// update the the class list of all menu items
-			menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
-			for (var i = 0; i < menuItems.length; ++i) {
-				var item = menuItems[i];  // Calling myNodeList.item(i) isn't necessary in JavaScript
-				d.getElementById(item.id).className = item.className;
-			}
-
-			if (typeof ga == 'function') {	// google universial analytics tracking 
-				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
-			}
-
-			return true;
-		};
-
-		function wp_loadPage(href) {
-
-			var xhttp = new XMLHttpRequest();
-			addEvent( xhttp, 'readystatechange', function() {
-				switch (xhttp.readyState){
-					// case 0: ajaxLoadStart(); break; // I think this is fired when the constructor is called, before this block is set
-					case 1: ajaxServerConnectionEstablished(); break;
-					case 2: ajaxRequestRecieved(); break;
-					case 3: ajaxProcessingRequest(); break;
-					case 4:
-						if (xhttp.status >= 200 && xhttp.status < 300) {
-							ajaxDelivered(xhttp.responseText, xhttp.responseXML, xhttp.responseType);
-							break;
-						} else {
-							ajaxFailed(xhttp.status, xhttp.statusText, href);
-							break;
-						}
+				// update the the class list of all menu items
+				menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
+				for (var i = 0; i < menuItems.length; ++i) {
+					var item = menuItems[i];  // Calling myNodeList.item(i) isn't necessary in JavaScript
+					d.getElementById(item.id).className = item.className;
 				}
-			});
 
-			var timoutTimer = 10000; // (in milliseconds) Set the amout of time until the ajax request times out.
-			xhttp.timeout = timoutTimer; 
-			addEvent( xhttp, 'loadstart', ajaxLoadStart); 
-			addEvent( xhttp, 'abort',     ajaxAborted); 
-			addEvent( xhttp, 'timeout',   function(){ ajaxAborted(timoutTimer); }); 
-			addEvent( xhttp, 'loadend',   ajaxFinished); 
+				// TODO: Test this
+				if (typeof(ga) === typeof(Function)) {	// google universial analytics tracking 
+					ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
+				}
 
-			xhttp.open("GET", href, true);
-			xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-			xhttp.send();
-		}
+				return true;
+			}
+		};
 
-		// // //
-		// use our functions
-		// // //
-		
 		// calls loadPage when the browser back button is pressed
 		// TODO: test browser implementation inconsistencies of popstate
-		addEvent(window, 'popstate', function(event) {
+		addEvent(window, 'popstate', function(e) {
 			// don't fire on the inital page load
 			if (event.state !== null) {
-				wp_loadPage(location.href);
+				var optionsSurrogate = ajaxGetPage;
+				optionsSurrogate.href = location.href;
+				ajaxLoad(optionsSurrogate);
 			}
 		});
 
@@ -176,39 +257,33 @@
 			//console.log("domain is: "+document.domain);
 			//console.log("location origin is: "+location.origin);
 
-
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
 				if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
 					e.preventDefault();
 					history.pushState({}, '', href);
-					wp_loadPage(href);
-					// return false to diable default link behovior
-					return true;
+					var optionsSurrogate = ajaxGetPage;
+					optionsSurrogate.href = href;
+					ajaxLoad(optionsSurrogate);
+				} else {
+					return false;					
 				}
 			}
-			return false;
 		});
 
 		return true;
-	}	
+	}
 
 	function ajaxComments() {
 
-		loadComments = function(href) {
-			// ajaxCommentsCalled();
-			// $main.load(href + "main > *", function(html){
-			// 	// ajaxComments(html);
-			// 	// updateCurrentCommentsNav(href);
-			// });
-		};
+		var d = document;
 
 		// if comments section exists
 		// SOURCE: http://wpcrux.com/ajax-submit-wordpress-comments/
-		if ( $('#commentform') ) {
+		if ( d.getElementById('commentform') ) {
 			// attach divert to comment form submit 
 
-			var commentform = $('#commentform');
-			var statusdiv = $('#comment-status');
+			var commentform = d.getElementById('commentform');
+			var statusdiv = d.getElementById('comment-status');
 			commentStatus = {
 				placeholder:  '<p class="ajax-placeholder">Processing...</p>',
 				invaid:       '<p class="ajax-error" ><strong>ERROR:</strong> You might have left one of the fields blank, or be posting too quickly</p>',
@@ -216,100 +291,82 @@
 				error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>',
 			};
 
-			commentform.submit( function(){
+			addEvent(commentform, 'submit', function(e){
+				e.preventDefault();
+				submitComment();
+				console.log('the comment was submitted');
+				console.log('commentform = '+ commentform);
+				console.log('statusdiv = '+ statusdiv);
+			});
+
+			submitComment = function(){
+				// Extract action URL from commentform
+				var formurl = commentform.action;
+				console.log('formurl: '+formurl);
 				// Serialize and store form data
 				var formdata = commentform.serialize();
-				parentPost = formdata.match(/(?:&comment_parent=)\d+/g)[0].match(/\d+/g)[0];
+				formdata = formdata.replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
+				console.log(formdata);
+
 				// Add a status message while we wait for the response
-				statusdiv.html( commentStatus.placeholder );
-				// Extract action URL from commentform
-				var formurl = commentform.attr('action');
-				// Post Form with data
-				$.ajax({
-					method: "POST",
-					url: formurl,
+				statusdiv.innerHTML= commentStatus.placeholder ;
+
+				// parentPost = formdata.match(/(?:&comment_parent=)\d+/g)[0].match(/\d+/g)[0];
+
+				// // Post Form with data
+				ajaxLoad({
+					httpMethod: 'POST',
+					href: formurl,
 					data: formdata,
-					error: function( XMLHttpRequest, textStatus, errorThrown ) {
-						statusdiv.html(commentStatus.invaid);
+					// comment=fhjdkashjfd&comment_post_ID=2&comment_parent=0&_wp_unfiltered_html_comment=80f432e91b
+					// comment=fhjdsa&comment_post_ID=4&comment_parent=0&_wp_unfiltered_html_comment=ff9917f0c2
+					failed: function(status, statusText, href) {
+						statusdiv.innerHTML = commentStatus.invaid;
 						console.log(
-							'XMLHttpRequest: ' + XMLHttpRequest + 
-							',\ntextStatus: '    + textStatus + 
-							',\nerrorThrown: '   + errorThrown
+							'status: ' +status+',\n'+
+							'statusText: '+statusText+',\n'+
+							'href: '+href
 						);
 					},
-					success: function( data, textStatus ) {
-						if ( data == "success" || textStatus == "success" ) {
+					delivered: function( data, textStatus ) {
 							// in case wordpress sends a formatted error page
-							if ( data.match(/id="[^"]*(error-page)[^"]*"/g)) {
-								commentStatus.wpError = data.match(/<p>.*<\/p>/g);
-								console.log( commentStatus.wpError );
-								statusdiv.html( commentStatus.wpError );
+							var workspace       = d.createElement("div");
+							workspace.innerHTML = data;
+
+							if (workspace.querySelector('#error-page')){
+								commentStatus.wpError = workspace.getElementsByTagName('p')[0].innerHTML;
+								console.log( 'commentStatus: '+ commentStatus.wpError );
+								statusdiv.innerHTML = commentStatus.wpError;
 							} else {
-								statusdiv.html(commentStatus.success);
+								statusdiv.innerHtml = commentStatus.success;
+
+								console.log('data: '+data);
 								// if the comment doesn't have a parent, i.e. is it a reply?
-								if ( parentPost == 0 ) {
-									$(".commentlist").prepend(data);
-								} else {
-									commentHasSiblings = $("#comment-"+parentPost+" > .children");
-									// does this reply have no sibling replies?
-									if ( commentHasSiblings[0] == undefined ){
-										data = '<ul class="children">'+data+'</ul>';
-										$("#comment-"+parentPost).append(data);
-									} else {
-										commentHasSiblings.append(data);
-									} 
-								}
-								// console.log(
-								// 	'formurl: '+ formurl + ',\n' +							
-								// 	'formdata: '+ formdata + ',\n' +
-								// 	'parentPost: '+ parentPost + ',\n' +
-								// 	'textStatus: '+ textStatus + ',\n' +
-								// 	'textStatus did == success,\n' + 
-								// 	'data:\n' + 
-								// 	data
-								// );
-								// console.log($("#comment-"+parentPost+" > .children")[0]);
+								// if ( parentPost == '0' ) {
+								// 	$(".commentlist").prepend(data);
+								// } else {
+								// 	commentHasSiblings = $("#comment-"+parentPost+" > .children");
+								// 	// does this reply have no sibling replies?
+								// 	if ( commentHasSiblings[0] == 'undefined' ){
+								// 		data = '<ul class="children">'+data+'</ul>';
+								// 		$("#comment-"+parentPost).append(data);
+								// 	} else {
+								// 		commentHasSiblings.append(data);
+								// 	} 
+								// }
 							}
-						} else {
-							// TODO: what really happens in this case
-							console.log(
-								'textStatus: '+ textStatus +
-								',\n textStatus did NOT == success, data:' + data
-							);
-							statusdiv.html(commentStatus.error);
-						}
-						commentform.find('textarea[name=comment]').val('');
+						commentform.querySelector('textarea[name=comment]').value='';
 					}
 				});
 				return false;
-			});
+			};
 		}
 
-		// when comment is submitted
-		// send data through ajax
-		// return data from php
-		// insert it into comments 
-
-		// create refresh comments link
-		// attach ajax call to link
-		// php to return the newest links
-			// have isCommentsAjax bool
-		// when data is returned replace comments section
-
-		// attah divert to pagination
-		// replace comments ol section (alter/ display:none; the links)
 	}
-
-	// /* trigger when page is ready */
-	// $(document).ready(function (){
-	// 	// call our pjax function
-	// 	plusPjax();
-	// 	ajaxComments();
-	// 	// your functions go here
-	// });
 	
 	// find a better way to call this?
 	plusPjax();
+	ajaxComments();
 
 })();
 //}(window.jQuery || window.$));
