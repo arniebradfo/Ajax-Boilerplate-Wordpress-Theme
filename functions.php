@@ -22,6 +22,7 @@
 					$permaurl = get_permalink( $post->ID );
 					$url = str_replace('http://', '/', $permaurl);
 					$commentHasNoParent = ($commentdata['comment_parent'] == 0 ? true : false);
+					$output = '';
 
 					if ( !$commentHasNoParent ){
 						$output .='	<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-' . $commentdata['comment_ID'] . '">';
@@ -29,7 +30,7 @@
 						$output .=' <li class="comment byuser comment-author-admin bypostauthor even'.                      ' depth-2" id="comment-' . $commentdata['comment_ID'] . '">';
 					}
 					$output .='			<div id="div-comment-' . $commentdata['comment_ID'] . '" class="comment-body">';
-					$output .='				<div class="comment-author vcard">'.
+					$output .='				<div class="comment-author vcard">';
 					$output .=					get_avatar( $commentdata['comment_author_email'], 32 );
 					$output .='					<cite class="fn">' . $commentdata['comment_author'] . '</cite> ';
 					$output .='					<span class="says">says:</span>';
@@ -60,7 +61,6 @@
 			exit;
 		}
 	}
-
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
 			
 	// // http://davidwalsh.name/wordpress-ajax-comments
@@ -157,11 +157,12 @@
 		function core_mods() {
 			if ( !is_admin() ) {
 				wp_deregister_script( 'jquery' );
-				wp_register_script( 'jquery', ( "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ), false);
-				wp_enqueue_script( 'jquery' );
+				// wp_register_script( 'jquery', ( "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ), false);
+				// wp_enqueue_script( 'jquery' );
 			}
 		}
 		add_action( 'wp_enqueue_scripts', 'core_mods' );
+
 	}
 
 	// Clean up the <head>, if you so desire.

@@ -88,6 +88,11 @@
 		return elements.join('&');
 	};
 
+	// opposite of Object.appendChild
+	Object.prototype.prependChild = function(child) {
+		this.insertBefore( child, this.firstChild );
+	};
+
 	function ajaxLoad(obj) {
 		
 		var xhttp = new XMLHttpRequest();
@@ -236,9 +241,10 @@
 		// TODO: add exception for #id links.
 		// TODO: add support for subdomains. - subdomain is included in document.domain
 		// TODO: add exception for /wp-admin
-		addEvent(d, 'click', function(e) {
+		addEvent(d, 'click', function(event) {
 			
-			var e = window.e || e; // http://stackoverflow.com/questions/3493033/what-is-the-meaning-of-this-var-evt-eventwindow-event
+			var e = window.event || event; // http://stackoverflow.com/questions/3493033/what-is-the-meaning-of-this-var-evt-eventwindow-event
+			// var e = event != 'undefined' ? event : window.event; // this seems more safe...
 
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
 				return;
@@ -278,7 +284,6 @@
 		var d = document;
 
 		// if comments section exists
-		// SOURCE: http://wpcrux.com/ajax-submit-wordpress-comments/
 		if ( d.getElementById('commentform') ) {
 			// attach divert to comment form submit 
 
@@ -294,71 +299,74 @@
 			addEvent(commentform, 'submit', function(e){
 				e.preventDefault();
 				submitComment();
-				console.log('the comment was submitted');
-				console.log('commentform = '+ commentform);
-				console.log('statusdiv = '+ statusdiv);
+				// console.log('the comment was submitted');
+				// console.log('commentform = '+ commentform);
+				// console.log('statusdiv = '+ statusdiv);
 			});
 
 			submitComment = function(){
 				// Extract action URL from commentform
 				var formurl = commentform.action;
-				console.log('formurl: '+formurl);
-				// Serialize and store form data
-				var formdata = commentform.serialize();
-				formdata = formdata.replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
-				console.log(formdata);
+				// console.log('formurl: '+formurl);
 
-				// Add a status message while we wait for the response
-				statusdiv.innerHTML= commentStatus.placeholder ;
+				// Serialize and store form data
+				var formdata = commentform.serialize().replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
+				// console.log(formdata);
 
 				// parentPost = formdata.match(/(?:&comment_parent=)\d+/g)[0].match(/\d+/g)[0];
-
+				var parentPostId = /&comment_parent=(\d+)/.exec(formdata)[1];
+				// console.log('parentPostId: '+parentPostId);
 				// // Post Form with data
 				ajaxLoad({
 					httpMethod: 'POST',
 					href: formurl,
 					data: formdata,
-					// comment=fhjdkashjfd&comment_post_ID=2&comment_parent=0&_wp_unfiltered_html_comment=80f432e91b
-					// comment=fhjdsa&comment_post_ID=4&comment_parent=0&_wp_unfiltered_html_comment=ff9917f0c2
+					started: function(){
+						// Add a status message while we wait for the response
+						statusdiv.innerHTML = commentStatus.placeholder;
+					},
 					failed: function(status, statusText, href) {
 						statusdiv.innerHTML = commentStatus.invaid;
-						console.log(
-							'status: ' +status+',\n'+
-							'statusText: '+statusText+',\n'+
-							'href: '+href
-						);
+						// console.log(
+						// 	'status: ' +status+',\n'+
+						// 	'statusText: '+statusText+',\n'+
+						// 	'href: '+href
+						// );
+						return false;
 					},
-					delivered: function( data, textStatus ) {
-							// in case wordpress sends a formatted error page
-							var workspace       = d.createElement("div");
-							workspace.innerHTML = data;
+					delivered: function( commentLI, textStatus ) {
+						console.log(commentLI);
 
-							if (workspace.querySelector('#error-page')){
-								commentStatus.wpError = workspace.getElementsByTagName('p')[0].innerHTML;
-								console.log( 'commentStatus: '+ commentStatus.wpError );
-								statusdiv.innerHTML = commentStatus.wpError;
+						var wrapperUL       = d.createElement('ul');
+						wrapperUL.className = 'children';
+						// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
+						wrapperUL.innerHTML = commentLI;
+
+						// in case wordpress sends a formatted error page
+						if (wrapperUL.querySelector('#error-page')){
+							commentStatus.wpError = wrapperUL.getElementsByTagName('p')[0].innerHTML;
+							console.log( 'commentStatus: '+ commentStatus.wpError );
+							statusdiv.innerHTML = commentStatus.wpError;
+							return false;
+						} else {
+							statusdiv.innerHtml = commentStatus.success;
+							console.log('wrapperUL: '+wrapperUL);
+							// if the comment doesn't have a parent, i.e. is it a reply?
+							if ( parentPostId == '0' ) {
+								d.getElementsByClassName('commentlist')[0].prependChild(wrapperUL.children[0]);
 							} else {
-								statusdiv.innerHtml = commentStatus.success;
-
-								console.log('data: '+data);
-								// if the comment doesn't have a parent, i.e. is it a reply?
-								// if ( parentPost == '0' ) {
-								// 	$(".commentlist").prepend(data);
-								// } else {
-								// 	commentHasSiblings = $("#comment-"+parentPost+" > .children");
-								// 	// does this reply have no sibling replies?
-								// 	if ( commentHasSiblings[0] == 'undefined' ){
-								// 		data = '<ul class="children">'+data+'</ul>';
-								// 		$("#comment-"+parentPost).append(data);
-								// 	} else {
-								// 		commentHasSiblings.append(data);
-								// 	} 
-								// }
+							 	var childrenUL = d.querySelector('#comment-'+parentPostId+' > ul.children');
+							 	if (childrenUL !== null) {
+							 		childrenUL.prependChild(wrapperUL.children[0]);
+							 	} else {
+							 		d.getElementById('comment-'+parentPostId).prependChild(wrapperUL);
+						 		}
 							}
-						commentform.querySelector('textarea[name=comment]').value='';
+							commentform.querySelector('textarea[name=comment]').value = '';
+						}
 					}
 				});
-				return false;
+				return true;
 			};
 		}
 
@@ -367,6 +375,7 @@
 	// find a better way to call this?
 	plusPjax();
 	ajaxComments();
+
 
 })();
 //}(window.jQuery || window.$));
