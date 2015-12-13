@@ -7,6 +7,8 @@
 
 	// Detect ajax request (https://rosspenman.com/pushstate-part-2/)
 	$GLOBALS['is_ajax'] = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false ;
+	// detect differet types of wordpress ajax requests by setting a header in the js call
+	// $GLOBALS['is_ajax_comment_post'] = (!empty($_SERVER['HTTP_WP_REQUEST_TYPE']) && strtolower($_SERVER['HTTP_WP_REQUEST_TYPE']) == 'commentpost') ? true : false ;
 
 	// http://www.inkthemes.com/ajax-comment-wordpress/
 	function ajaxify_comments_jaya($comment_ID, $comment_status) {
@@ -62,25 +64,6 @@
 		}
 	}
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
-			
-	// // http://davidwalsh.name/wordpress-ajax-comments
-	// // THIS DOESN'T WORK: die() always sends an internal server error message
-	// function ajaxComment( $comment_ID, $comment_status ) {
-	// 	// If it's an AJAX-submitted comment
-	// 	if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
-	// 		// Get the comment data
-	// 		$comment = get_comment( $comment_ID);
-	// 		// Allow the email to the author to be sent
-	// 		wp_notify_postauthor( $comment_ID, $comment->comment_type );
-	// 		// Get the comment HTML from my custom comment HTML function
-	// 		$commentContent = getCommentHTML( $comment );
-	// 		// Kill the script, returning the comment HTML
-	// 		wp_die( $commentContent );
-	// 		// die( $commentContent );
-	// 	}
-	// }
-	// // Send all comment submissions through my "ajaxComment" method
-	// add_action('comment_post', 'ajaxComment', 20, 2);
 
 	// Options Framework (https://github.com/devinsays/options-framework-plugin)
 	if ( !function_exists( 'optionsframework_init' ) ) {

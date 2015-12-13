@@ -87,7 +87,6 @@
 
 		return elements.join('&');
 	};
-
 	// opposite of Object.appendChild
 	Object.prototype.prependChild = function(child) {
 		this.insertBefore( child, this.firstChild );
@@ -129,14 +128,20 @@
 		}
 
 		var httpMethod = typeof obj.httpMethod === 'string' ? obj.httpMethod.toUpperCase() : 'GET' ;
-		console.log('httpMethod: '+httpMethod);
+		// console.log('httpMethod: '+httpMethod);
 		if (httpMethod === 'GET' 
 		||  httpMethod === 'POST' 
-		||  httpMethod === 'PUT'
-		){
+		||  httpMethod === 'PUT' ){
 			xhttp.open(httpMethod, obj.href, true);
 		} else {
 			return false;
+		}
+
+		if (typeof obj.requestHeaders === 'object'){
+			obj.requestHeaders.forEach( function(el) {
+				xhttp.setRequestHeader(el.header, el.value);
+				// console.log('header: '+el.header+'\nvalue: '+el.value);
+			});
 		}
 
 		xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -161,6 +166,7 @@
 		var ajaxGetPage = {
 			httpMethod: 'GET',
 			timeoutTimer: 10000,
+			// requestHeaders:[{header:'This-Is-A-Custom-Header', value: 'customValue' }],
 			started: function() {
 				// After the XMLHttpRequest object has been created, but before the open() method has been called
 				// console.log('ajax load has not yet been initalized');
@@ -200,11 +206,6 @@
 			},
 			delivered: function(responseText, statusText) {
 				// Do this once the ajax request is returned.
-				console.log('ajax loaded!');
-				//console.log(responseText);
-				// console.log(responseXML);
-				console.log(statusText);
-
 				var workspace       = d.createElement("div");
 				workspace.innerHTML = responseText;
 				d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
@@ -218,10 +219,11 @@
 				}
 
 				// TODO: Test this
-				if (typeof(ga) === typeof(Function)) {	// google universial analytics tracking 
+				if (typeof ga === 'function') {	// google universial analytics tracking 
 					ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
 				}
 
+				attachAjaxComments(); // comments section will be new - need to rebind events to new elements
 				return true;
 			}
 		};
@@ -279,102 +281,95 @@
 		return true;
 	}
 
-	function ajaxComments() {
-
+	function attachAjaxComments(){
 		var d = document;
+		var commentform = d.getElementById('commentform');
+		var statusdiv = d.getElementById('comment-status');
+		addEvent(commentform, 'submit', function(e){
+			e.preventDefault();
+			submitComment(commentform, statusdiv);
+		});
+	}
 
-		// if comments section exists
-		if ( d.getElementById('commentform') ) {
-			// attach divert to comment form submit 
-
-			var commentform = d.getElementById('commentform');
-			var statusdiv = d.getElementById('comment-status');
-			commentStatus = {
-				placeholder:  '<p class="ajax-placeholder">Processing...</p>',
-				invaid:       '<p class="ajax-error" ><strong>ERROR:</strong> You might have left one of the fields blank, or be posting too quickly</p>',
-				success:      '<p class="ajax-success" ><strong>SUCCESS:</strong> Thanks for your comment. We appreciate your response.</p>',
-				error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>',
-			};
-
-			addEvent(commentform, 'submit', function(e){
-				e.preventDefault();
-				submitComment();
-				// console.log('the comment was submitted');
-				// console.log('commentform = '+ commentform);
-				// console.log('statusdiv = '+ statusdiv);
-			});
-
-			submitComment = function(){
-				// Extract action URL from commentform
-				var formurl = commentform.action;
-				// console.log('formurl: '+formurl);
-
-				// Serialize and store form data
-				var formdata = commentform.serialize().replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
-				// console.log(formdata);
-
-				// parentPost = formdata.match(/(?:&comment_parent=)\d+/g)[0].match(/\d+/g)[0];
-				var parentPostId = /&comment_parent=(\d+)/.exec(formdata)[1];
-				// console.log('parentPostId: '+parentPostId);
-				// // Post Form with data
-				ajaxLoad({
-					httpMethod: 'POST',
-					href: formurl,
-					data: formdata,
-					started: function(){
-						// Add a status message while we wait for the response
-						statusdiv.innerHTML = commentStatus.placeholder;
-					},
-					failed: function(status, statusText, href) {
-						statusdiv.innerHTML = commentStatus.invaid;
-						// console.log(
-						// 	'status: ' +status+',\n'+
-						// 	'statusText: '+statusText+',\n'+
-						// 	'href: '+href
-						// );
-						return false;
-					},
-					delivered: function( commentLI, textStatus ) {
-						console.log(commentLI);
-
-						var wrapperUL       = d.createElement('ul');
-						wrapperUL.className = 'children';
-						// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
-						wrapperUL.innerHTML = commentLI;
-
-						// in case wordpress sends a formatted error page
-						if (wrapperUL.querySelector('#error-page')){
-							commentStatus.wpError = wrapperUL.getElementsByTagName('p')[0].innerHTML;
-							console.log( 'commentStatus: '+ commentStatus.wpError );
-							statusdiv.innerHTML = commentStatus.wpError;
-							return false;
+	function submitComment(commentform, statusdiv){
+		var d = document;
+		// Extract action URL from commentform
+		var formurl = commentform.action;
+		// Serialize and store form data
+		var formdata = commentform.serialize().replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
+		var parentCommentId = /&comment_parent=(\d+)/.exec(formdata)[1];
+		var commentStatus = {
+			// TODO: add better error messages
+			placeholder:  '<p class="ajax-placeholder">Processing...</p>',
+			invaid:       '<p class="ajax-error" ><strong>ERROR:</strong> You might have left one of the fields blank, or be posting too quickly</p>',
+			success:      '<p class="ajax-success" ><strong>SUCCESS:</strong> Thanks for your comment. We appreciate your response.</p>',
+			error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>',
+		};
+		// Post Form with data
+		ajaxLoad({
+			httpMethod: 'POST',
+			href: formurl,
+			data: formdata,
+			// requestHeaders: [ {header: 'WP-Request-Type', value: 'CommentPost'} ],
+			started: function(){
+				// Add a status message while we wait for the response
+				statusdiv.innerHTML = commentStatus.placeholder;
+			},
+			failed: function(status, statusText, href) {
+				statusdiv.innerHTML = commentStatus.invaid;
+				return false;
+			},
+			// replace the entire comments section
+			// delivered: function( commentOutput, textStatus){
+			// 	var workspace = d.createElement('div');
+			// 	workspace.innerHTML = commentOutput;
+			// 	d.querySelector('#comments-section').innerHTML = workspace.querySelector('#comments-section').innerHTML;
+			// 	// TODO: need someway to permanently set click diverts on submit buttons
+			// }
+			delivered: function( commentLI, textStatus ) {
+				var wrapperUL       = d.createElement('ul');
+				wrapperUL.className = 'children';
+				// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
+				wrapperUL.innerHTML = commentLI;
+				// in case wordpress sends a formatted error page
+				if (wrapperUL.querySelector('#error-page')){
+					// TODO: test this
+					commentStatus.wpError = wrapperUL.getElementsByTagName('p')[0].innerHTML;
+					console.log( 'commentStatus: '+ commentStatus.wpError );
+					statusdiv.innerHTML = commentStatus.wpError;
+					return false;
+				} else {
+					// if the comment doesn't have a parent, i.e. is it a reply?
+					if ( parentCommentId == '0' ) {
+						var commentlist = d.getElementsByClassName('commentlist')[0];
+						console.log(commentlist);
+						if ( commentlist ){
+							commentlist.prependChild(wrapperUL.children[0]);						
 						} else {
-							statusdiv.innerHtml = commentStatus.success;
-							console.log('wrapperUL: '+wrapperUL);
-							// if the comment doesn't have a parent, i.e. is it a reply?
-							if ( parentPostId == '0' ) {
-								d.getElementsByClassName('commentlist')[0].prependChild(wrapperUL.children[0]);
-							} else {
-							 	var childrenUL = d.querySelector('#comment-'+parentPostId+' > ul.children');
-							 	if (childrenUL !== null) {
-							 		childrenUL.prependChild(wrapperUL.children[0]);
-							 	} else {
-							 		d.getElementById('comment-'+parentPostId).prependChild(wrapperUL);
-						 		}
-							}
-							commentform.querySelector('textarea[name=comment]').value = '';
+							console.log('there is nowhere to put the comment');
+							statusdiv.innerHTML = commentStatus.error;
+							return false; 
 						}
+					} else {
+					 	var childrenUL = d.querySelector('#comment-'+parentCommentId+' > ul.children');
+					 	if (childrenUL !== null) {
+					 		childrenUL.appendChild(wrapperUL.children[0]);
+					 	} else {
+					 		d.getElementById('comment-'+parentCommentId).appendChild(wrapperUL);
+				 		}
 					}
-				});
-				return true;
-			};
-		}
-
+					statusdiv.innerHTML = commentStatus.success;
+					commentform.querySelector('textarea[name=comment]').value = '';
+				}
+			}
+		});
+		return true;
 	}
 	
+	// attach element outside of this
 	// find a better way to call this?
 	plusPjax();
-	ajaxComments();
+	attachAjaxComments();
 
 
 })();

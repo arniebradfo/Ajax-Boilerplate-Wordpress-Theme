@@ -9,23 +9,19 @@
 </main><!-- Pjax content wrapper element -->
 
 <?php
-
-// if this is not an ajax call
-if (!$GLOBALS['is_ajax']):
-
+	// if this is not an ajax call
+	if (!$GLOBALS['is_ajax']):
 ?>
 
-		<footer id="footer" class="source-org vcard copyright" role="contentinfo">
-			<nav id="nav" role="navigation">
-				<?php 
-					$secondary_menu_name = 'secondary';
-					wp_nav_menu( array('theme_location' => $secondary_menu_name) ); 
-				?>
-			</nav>
-			<small>&copy;<?php echo date("Y"); echo " "; bloginfo('name'); ?></small>
-		</footer>
-
-	</div>
+	<footer id="footer" class="source-org vcard copyright" role="contentinfo">
+		<nav id="nav" role="navigation">
+			<?php 
+				$secondary_menu_name = 'secondary';
+				wp_nav_menu( array('theme_location' => $secondary_menu_name) ); 
+			?>
+		</nav>
+		<small>&copy;<?php echo date("Y"); echo " "; bloginfo('name'); ?></small>
+	</footer>
 
 	<?php wp_footer(); ?>
 
