@@ -8,15 +8,15 @@
 
 <?php 
 	// if this is an ajax request posting a comment
-	// if( $GLOBALS['is_ajax'] && $GLOBALS['is_ajax_comment_post'] ){
-	// 	// return just the comments section of the forwarded page
-	// 	if (have_posts()) : while (have_posts()) : the_post();
+	if ($GLOBALS['is_ajax'] && $GLOBALS['is_ajax_get_comments_section']){
+		// return only the comments section of the current context
+		if (have_posts()) : while (have_posts()) : the_post();
 
-	// 		comments_template();
+			comments_template();
 
-	// 	endwhile; endif;
-	// 	exit;
-	// }
+		endwhile; endif;
+		exit;
+	}
 ?>
 
 <?php if (!$GLOBALS['is_ajax']): // if this is not an ajax call ?>

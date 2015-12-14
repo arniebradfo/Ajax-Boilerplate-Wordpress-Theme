@@ -158,15 +158,14 @@
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
 	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
-		// console.log('plusPjax was called');
 
 		var d = document;
-		var main = d.getElementsByTagName('main')[0]; // put the contents of the <main> tag into an object
+		var main = d.getElementsByTagName('main')[0];
 
 		var ajaxGetPage = {
 			httpMethod: 'GET',
 			timeoutTimer: 10000,
-			// requestHeaders:[{header:'This-Is-A-Custom-Header', value: 'customValue' }],
+			requestHeaders:[{header:'WP-Request-Type', value: 'GetPage' }],
 			started: function() {
 				// After the XMLHttpRequest object has been created, but before the open() method has been called
 				// console.log('ajax load has not yet been initalized');
@@ -217,6 +216,7 @@
 					var item = menuItems[i];  // Calling myNodeList.item(i) isn't necessary in JavaScript
 					d.getElementById(item.id).className = item.className;
 				}
+				console.log('ajax loaded!');
 
 				// TODO: Test this
 				if (typeof ga === 'function') {	// google universial analytics tracking 
@@ -228,10 +228,61 @@
 			}
 		};
 
+		var ajaxGetCommentsSection = {
+			httpMethod: 'GET',
+			timeoutTimer: 10000,
+			requestHeaders: [{header:'WP-Request-Type', value:'GetCommentsSection'}],
+			started: function(){
+				console.log('the comment section has started loading');
+			},
+			delivered: function(responseText, statusText) {
+				var workspace = d.createElement('div');
+				workspace.innerHTML = responseText;
+				console.log(workspace);
+
+				// replace comments section
+				d.getElementsByClassName('commentlist')[0].innerHTML = workspace.querySelector('.commentlist').innerHTML;
+
+				// replace response area if nessasary
+				if (!d.getElementById('respond')){
+					var commentsSection = d.getElementById('comments-section'),
+						newRespond      = workspace.querySelector('#respond');
+					if (commentsSection && newRespond){
+						commentsSection.appendChild(newRespond);
+					}
+				}
+
+				var newNextPosts = workspace.querySelector('.next-posts'),
+					newPrevPosts = workspace.querySelector('.prev-posts'),
+					NextPosts = d.querySelectorAll('.next-posts'),
+					PrevPosts = d.querySelectorAll('.prev-posts'),
+					newCommentNavigation = function(newPosts, oldPosts, prepend) {
+					if (newPosts.firstChild && oldPosts){
+						// replace href
+						oldPosts.forEach(function(el){
+							if(el.firstChild){
+								el.firstChild.href = newPosts.firstChild.href;
+							} else {
+								el.innerHTML = newPosts.innerHTML;
+							}
+						});
+					} else {
+						// delete div
+						oldPosts.forEach(function(el){
+							el.removeChild(el.firstChild);
+						});
+					}
+				};
+				newCommentNavigation(newNextPosts, NextPosts, true );
+				newCommentNavigation(newPrevPosts, PrevPosts, false);
+			}
+		};
+
 		// calls loadPage when the browser back button is pressed
 		// TODO: test browser implementation inconsistencies of popstate
 		addEvent(window, 'popstate', function(e) {
 			// don't fire on the inital page load
+			// TODO: make sure back button paginates comments??
 			if (event.state !== null) {
 				var optionsSurrogate = ajaxGetPage;
 				optionsSurrogate.href = location.href;
@@ -249,31 +300,38 @@
 			// var e = event != 'undefined' ? event : window.event; // this seems more safe...
 
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
-				return;
+				return false;
 			}
-
 			var href = e.target.href;
 			//console.log("href was: "+href);
 
 			// TODO: is this nessasary?
-			if (!href.match(location.origin)) {
-				//console.log("there was not a match");
-				href = href.replace(/^[^\/]+(?=\/)/,location.origin);
-			}
+			// if (!href.match(location.origin)) {
+			// 	//console.log("there was not a match");
+			// 	href = href.replace(/^[^\/]+(?=\/)/,location.origin);
+			// }
 
 			//console.log("href is now: "+href);
 			//console.log("domain is: "+document.domain);
 			//console.log("location origin is: "+location.origin);
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
-				if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
-					e.preventDefault();
-					history.pushState({}, '', href);
-					var optionsSurrogate = ajaxGetPage;
+
+				e.preventDefault();
+				history.pushState({}, '', href);
+				var optionsSurrogate;
+				// if the comment 
+				if (e.toElement.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
+					optionsSurrogate = ajaxGetCommentsSection;
+					optionsSurrogate.href = href;
+					ajaxLoad(optionsSurrogate);
+					// TODO: fix internal links to other pages with #
+				} else if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
+					optionsSurrogate = ajaxGetPage;
 					optionsSurrogate.href = href;
 					ajaxLoad(optionsSurrogate);
 				} else {
-					return false;					
+					return false;	
 				}
 			}
 		});
@@ -285,10 +343,12 @@
 		var d = document;
 		var commentform = d.getElementById('commentform');
 		var statusdiv = d.getElementById('comment-status');
-		addEvent(commentform, 'submit', function(e){
-			e.preventDefault();
-			submitComment(commentform, statusdiv);
-		});
+		if (commentform) {
+			addEvent(commentform, 'submit', function(e){
+				e.preventDefault();
+				submitComment(commentform, statusdiv);
+			});
+		}
 	}
 
 	function submitComment(commentform, statusdiv){
@@ -310,7 +370,7 @@
 			httpMethod: 'POST',
 			href: formurl,
 			data: formdata,
-			// requestHeaders: [ {header: 'WP-Request-Type', value: 'CommentPost'} ],
+			requestHeaders: [ {header: 'WP-Request-Type', value: 'PostComment'} ],
 			started: function(){
 				// Add a status message while we wait for the response
 				statusdiv.innerHTML = commentStatus.placeholder;
@@ -342,7 +402,6 @@
 					// if the comment doesn't have a parent, i.e. is it a reply?
 					if ( parentCommentId == '0' ) {
 						var commentlist = d.getElementsByClassName('commentlist')[0];
-						console.log(commentlist);
 						if ( commentlist ){
 							commentlist.prependChild(wrapperUL.children[0]);						
 						} else {
