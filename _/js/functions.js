@@ -291,9 +291,7 @@
 		});
 
 		// transforms all the interal hyperlinks into ajax requests
-		// TODO: add exception for #id links.
 		// TODO: add support for subdomains. - subdomain is included in document.domain
-		// TODO: add exception for /wp-admin
 		addEvent(d, 'click', function(event) {
 			
 			var e = window.event || event; // http://stackoverflow.com/questions/3493033/what-is-the-meaning-of-this-var-evt-eventwindow-event
@@ -303,17 +301,6 @@
 				return false;
 			}
 			var href = e.target.href;
-			//console.log("href was: "+href);
-
-			// TODO: is this nessasary?
-			// if (!href.match(location.origin)) {
-			// 	//console.log("there was not a match");
-			// 	href = href.replace(/^[^\/]+(?=\/)/,location.origin);
-			// }
-
-			//console.log("href is now: "+href);
-			//console.log("domain is: "+document.domain);
-			//console.log("location origin is: "+location.origin);
 
 			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
 
