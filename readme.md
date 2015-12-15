@@ -1,5 +1,6 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
+
 ## TODOs:
 - Add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ ).
 - Test browser implementation inconsistencies of popstate.
@@ -10,27 +11,27 @@
 - feature detect to allow gracefull degredation.
 
 - regualar navigation
-	- fix internal links to other pages with #
-	- add support for subdomains. - subdomain is included in document.domai
+	- add support for subdomains. - subdomain is included in document.domain
 
 - ajax the comments section:
 	- live reload from a refresh button
 	- better error descriptors
 	- add support for worpress returning an error page due to incorrect credentials
-	- make surevcomment li have correct even odd classes
+	- make sure comment li have correct even odd classes
 	- make sure new lis have correct levels of depth ?
 	- make sure back button paginates comments
 - add support for wp admin bar edit button.
 - add settings object
 	+ wp-admin rename
 - ajax skip load on the sidebar/widgets
-
+- 
 
 ## DONES to keep:
 - Research and reduce SEO problems with ajax
 	this should work fine because the stie will still function normally without js. 
 	all the links have accurate urls
 	the site map will still work normally with site crawlers 
+	
 
 ## Credits:
 	comments ajax: http://wpcrux.com/ajax-submit-wordpress-comments/

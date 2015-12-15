@@ -298,27 +298,29 @@
 			// var e = event != 'undefined' ? event : window.event; // this seems more safe...
 
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
+				// if the click event was not on a linked element
 				return false;
 			}
 			var href = e.target.href;
+			var anchorLink = new RegExp(window.location.origin+window.location.pathname+'#', 'g' );
 
-			if (href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) {
+			if ((href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
+			&& !href.match(anchorLink) // href isnt an anchor to the current page
+			&& href != window.location.href // href isn't a link to the current page
+			&& !href.match(/\/wp-/g) ){ // href doesn't go to the wp-admin backend
 
 				e.preventDefault();
 				history.pushState({}, '', href);
 				var optionsSurrogate;
-				// if the comment 
+				// if the link is in the comment-navigation
 				if (e.toElement.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
 					optionsSurrogate = ajaxGetCommentsSection;
 					optionsSurrogate.href = href;
 					ajaxLoad(optionsSurrogate);
-					// TODO: fix internal links to other pages with #
-				} else if ( !href.match(/\/.*[#?]/g) && !href.match(/\/wp-/g)) {
+				} else {
 					optionsSurrogate = ajaxGetPage;
 					optionsSurrogate.href = href;
 					ajaxLoad(optionsSurrogate);
-				} else {
-					return false;	
 				}
 			}
 		});
