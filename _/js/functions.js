@@ -88,6 +88,7 @@
 		return elements.join('&');
 	};
 	// opposite of Object.appendChild
+	// TODO: change this to NodeList or something more specific than Object
 	Object.prototype.prependChild = function(child) {
 		this.insertBefore( child, this.firstChild );
 	};
@@ -109,7 +110,7 @@
 						break;
 					} else {
 						if(typeof obj.failed === 'function'){
-							obj.failed(obj.href, xhttp.status, xhttp.statusText);								
+							obj.failed(obj.href, xhttp.status, xhttp.statusText, xhttp.responseText);								
 						}
 						break;
 					}
@@ -200,7 +201,7 @@
 				// console.log( 'ajax is done...' );
 				return true;
 			},
-			failed: function(href, status, statusText ) {
+			failed: function(href, statusText, status, statusText ) {
 				// called when the response is recieved with an error
 				errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
 				console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
@@ -284,7 +285,7 @@
 
 		// calls loadPage when the browser back button is pressed
 		// TODO: test browser implementation inconsistencies of popstate
-		addEvent(window, 'popstate', function(e) {
+		addEvent(window, 'popstate', function(event) {
 			// don't fire on the inital page load
 			// TODO: make sure back button paginates comments??
 			if (event.state !== null) {
@@ -306,10 +307,10 @@
 				return false;
 			}
 			var href = e.target.href;
-			var currentPageSource = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
+			var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
 
 			if ((href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
-			&& !href.match(currentPageSource) // href isnt a parameterized link of the current page
+			&& !href.match(currentPageWithParameters) // href isnt a parameterized link of the current page
 			&& href != window.location.href // href isn't a link to the current page
 			&& !href.match(/\/wp-/g)  // href doesn't go to the wp-admin backend
 			&& !href.match(/\/feed/g) ){ // is not an rss feed of somekind
@@ -370,9 +371,20 @@
 			started: function(){
 				statusdiv.innerHTML = commentStatus.placeholder;
 			},
-			failed: function(href, status, statusText) {
-				statusdiv.innerHTML = commentStatus.error;
-				return false;
+			failed: function(href, responseText, status, statusText) {
+				var errorWrapper       = d.createElement('div');
+				errorWrapper.innerHTML = responseText;
+				console.log(errorWrapper);
+
+				var wpErrorTitle = errorWrapper.querySelector('title');
+				if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){
+					// in case wordpress sends a formatted error page
+					statusdiv.innerHTML = '<p><strong>ERROR '+status+': </strong>'+errorWrapper.getElementsByTagName('p')[0].innerHTML+'</p>';
+					return true;
+				} else {		
+					statusdiv.innerHTML = '<p><strong>ERROR '+status+': </strong>'+statusText+'</p>';
+					return false;
+				}
 			},
 			aborted: function(href, timoutTimer) {
 				statusdiv.innerHTML = commentStatus.aborted;				

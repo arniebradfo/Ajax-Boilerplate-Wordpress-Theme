@@ -8,6 +8,8 @@
 
 </main><!-- Pjax content wrapper element -->
 
+<?php get_sidebar(); ?>
+
 <?php
 	// if this is not an ajax call
 	if (!$GLOBALS['is_ajax']):

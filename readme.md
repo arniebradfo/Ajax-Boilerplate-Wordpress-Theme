@@ -2,13 +2,16 @@
 
 
 ## AJAX TODOs:
+- load js in functions.php
+
 - ajax the comments section:
 	- make sure all comment classes are implemented properly
-	- make sure back button paginates comments
 	- add ctrl-enter to post comment
-	- make sure 409 duplicate comment error is reported in the status div
 
-- ajax skip load on the sidebar/widgets
+- NAVIGATION:
+	+ research the history object api
+	+ post pagination should do what?
+	+ make sure back button paginates comments
 
 - Refactor
 	+ refactor functions to the appropiate type: anonymous, public, etc...

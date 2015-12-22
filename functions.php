@@ -150,7 +150,17 @@
 			}
 		}
 		add_action( 'wp_enqueue_scripts', 'core_mods' );
+	}
 
+	// Load Custom Scripts
+	if ( !function_exists( 'load_custom_scripts' ) ) {
+		function load_custom_scripts() {
+			if ( !is_admin() ) {
+				wp_register_script( 'ajaxjs', ( dirname( __FILE__ )."/_/js/functions.js" ), false);
+				wp_enqueue_script( 'ajaxjs' );
+			}
+		}
+		// add_action( 'wp_enqueue_scripts', 'load_custom_scripts' );
 	}
 
 	// Clean up the <head>, if you so desire.
