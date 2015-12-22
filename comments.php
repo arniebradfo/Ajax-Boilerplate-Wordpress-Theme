@@ -16,27 +16,27 @@
 	
 	<h2 id="comments"><?php comments_number(__('No Responses','html5reset'), __('One Response','html5reset'), __('% Responses','html5reset') );?></h2>
 
-	<div class="navigation  comment-navigation">
+	<nav class="navigation  comment-navigation">
 		<div class="next-posts"><?php previous_comments_link() ?></div>
 		<div class="prev-posts"><?php next_comments_link() ?></div>
-	</div>
+	</nav>
 
 	<ol class="commentlist">
 		<?php wp_list_comments(); ?>
 	</ol>
 
-	<div class="navigation  comment-navigation">
+	<nav class="navigation  comment-navigation">
 		<div class="next-posts"><?php previous_comments_link() ?></div>
 		<div class="prev-posts"><?php next_comments_link() ?></div>
-	</div>
+	</nav>
 	
  <?php else : // this is displayed if there are no comments so far ?>
 
 	<?php if ( comments_open() ) : ?>
 		<!-- If comments are open, but there are no comments. -->
-		<div class="navigation comment-navigation"></div>
+		<nav class="navigation comment-navigation"></nav>
 		<ol class="commentlist"></ol>
-		<div class="navigation comment-navigation"></div>
+		<nav class="navigation comment-navigation"></nav>
 
 	 <?php else : // comments are closed ?>
 		<p><?php _e('Comments are closed.','html5reset'); ?></p>

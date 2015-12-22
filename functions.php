@@ -190,10 +190,10 @@
 
 	// Navigation - update coming from twentythirteen
 	function post_navigation() {
-		echo '<div class="navigation">';
+		echo '<nav class="navigation">';
 		echo '	<div class="next-posts">'.get_next_posts_link('&laquo; Older Entries').'</div>';
 		echo '	<div class="prev-posts">'.get_previous_posts_link('Newer Entries &raquo;').'</div>';
-		echo '</div>';
+		echo '</nav>';
 	}
 
 	// Posted On
