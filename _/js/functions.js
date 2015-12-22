@@ -109,7 +109,7 @@
 						break;
 					} else {
 						if(typeof obj.failed === 'function'){
-							obj.failed(xhttp.status, xhttp.statusText, obj.href);								
+							obj.failed(obj.href, xhttp.status, xhttp.statusText);								
 						}
 						break;
 					}
@@ -120,8 +120,8 @@
 			addEvent( xhttp, 'loadstart', function(){ obj.started(); });
 		}
 		if (typeof obj.aborted === 'function'){
-			addEvent( xhttp, 'abort',     function(){ obj.aborted(); });
-			addEvent( xhttp, 'timeout',   function(){ obj.aborted(timoutTimer); }); 
+			addEvent( xhttp, 'abort',     function(){ obj.aborted(obj.href); });
+			addEvent( xhttp, 'timeout',   function(){ obj.aborted(obj.href, timoutTimer); }); 
 		}
 		if (typeof obj.finished === 'function'){
 			addEvent( xhttp, 'loadend',   function(){ obj.finished(); }); 
@@ -164,7 +164,7 @@
 
 		var ajaxGetPage = {
 			httpMethod: 'GET',
-			timeoutTimer: 10000,
+			timeoutTimer: 5000,
 			requestHeaders:[{header:'WP-Request-Type', value: 'GetPage' }],
 			started: function() {
 				// After the XMLHttpRequest object has been created, but before the open() method has been called
@@ -186,17 +186,21 @@
 				// console.log('Processing Request');
 				return true;
 			},
-			aborted: function(timoutTimer) {
+			aborted: function(href, timoutTimer) {
 				var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
 				console.log( 'ajax load was aborted.\n'+timoutText );
-				return true;
+				if (href){
+					location.href = href;
+					return true;
+				}
+				return false;
 			},
 			finished: function() {
 				// called when ajax is finished, pass or fail.
 				// console.log( 'ajax is done...' );
 				return true;
 			},
-			failed: function(status, statusText, href) {
+			failed: function(href, status, statusText ) {
 				// called when the response is recieved with an error
 				errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
 				console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
@@ -230,7 +234,7 @@
 
 		var ajaxGetCommentsSection = {
 			httpMethod: 'GET',
-			timeoutTimer: 10000,
+			timeoutTimer: 5000,
 			requestHeaders: [{header:'WP-Request-Type', value:'GetCommentsSection'}],
 			started: function(){
 				console.log('the comment section has started loading');
@@ -302,12 +306,13 @@
 				return false;
 			}
 			var href = e.target.href;
-			var anchorLink = new RegExp(window.location.origin+window.location.pathname+'#', 'g' );
+			var currentPageSource = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
 
 			if ((href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
-			&& !href.match(anchorLink) // href isnt an anchor to the current page
+			&& !href.match(currentPageSource) // href isnt a parameterized link of the current page
 			&& href != window.location.href // href isn't a link to the current page
-			&& !href.match(/\/wp-/g) ){ // href doesn't go to the wp-admin backend
+			&& !href.match(/\/wp-/g)  // href doesn't go to the wp-admin backend
+			&& !href.match(/\/feed/g) ){ // is not an rss feed of somekind
 
 				e.preventDefault();
 				history.pushState({}, '', href);
@@ -352,39 +357,37 @@
 			placeholder:  '<p class="ajax-placeholder">Processing...</p>',
 			invaid:       '<p class="ajax-error" ><strong>ERROR:</strong> You might have left one of the fields blank, or be posting too quickly</p>',
 			success:      '<p class="ajax-success" ><strong>SUCCESS:</strong> Thanks for your comment. We appreciate your response.</p>',
-			error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>',
+			aborted:      '<p class="ajax-success" ><strong>TIMEOUT:</strong> There was no response from the server. Please refresh the page to see if your comment Posted.</p>',
+			error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>'
 		};
 		// Post Form with data
 		ajaxLoad({
 			httpMethod: 'POST',
 			href: formurl,
 			data: formdata,
+			timeoutTimer: 5000,
 			requestHeaders: [ {header: 'WP-Request-Type', value: 'PostComment'} ],
 			started: function(){
-				// Add a status message while we wait for the response
 				statusdiv.innerHTML = commentStatus.placeholder;
 			},
-			failed: function(status, statusText, href) {
-				statusdiv.innerHTML = commentStatus.invaid;
+			failed: function(href, status, statusText) {
+				statusdiv.innerHTML = commentStatus.error;
 				return false;
 			},
-			// replace the entire comments section
-			// delivered: function( commentOutput, textStatus){
-			// 	var workspace = d.createElement('div');
-			// 	workspace.innerHTML = commentOutput;
-			// 	d.querySelector('#comments-section').innerHTML = workspace.querySelector('#comments-section').innerHTML;
-			// 	// TODO: need someway to permanently set click diverts on submit buttons
-			// }
+			aborted: function(href, timoutTimer) {
+				statusdiv.innerHTML = commentStatus.aborted;				
+			},
 			delivered: function( commentLI, textStatus ) {
 				var wrapperUL       = d.createElement('ul');
 				wrapperUL.className = 'children';
-				// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
 				wrapperUL.innerHTML = commentLI;
-				// in case wordpress sends a formatted error page
-				if (wrapperUL.querySelector('#error-page')){
-					// TODO: test this
+				// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
+				console.log(wrapperUL);
+
+				var wpErrorTitle = wrapperUL.querySelector('title');
+				if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){
+					// in case wordpress sends a formatted error page
 					commentStatus.wpError = wrapperUL.getElementsByTagName('p')[0].innerHTML;
-					console.log( 'commentStatus: '+ commentStatus.wpError );
 					statusdiv.innerHTML = commentStatus.wpError;
 					return false;
 				} else {

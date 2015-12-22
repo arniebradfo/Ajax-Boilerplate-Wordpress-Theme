@@ -25,14 +25,17 @@
 					// print_r( $commentdata);
 					$permaurl = get_permalink( $post->ID );
 					$url = str_replace('http://', '/', $permaurl);
-					$commentHasNoParent = ($commentdata['comment_parent'] == 0 ? true : false);
-					$output = '';
 
-					if ( !$commentHasNoParent ){
-						$output .='	<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-' . $commentdata['comment_ID'] . '">';
-					} else {
-						$output .=' <li class="comment byuser comment-author-admin bypostauthor even'.                      ' depth-2" id="comment-' . $commentdata['comment_ID'] . '">';
+					$comment_depth = 1;
+					$comment_ancestor_ID = $commentdata['comment_parent']; 
+					while ($comment_ancestor_ID != 0){
+						$comment_depth++;
+						$comment_ancestor_ID = get_comment( $comment_ancestor_ID, ARRAY_A )['comment_parent']; 
 					}
+
+					$output = '';
+					// TODO: find out what all these classes do and implement them properly
+					$output .='	<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-'.$comment_depth.'" id="comment-' . $commentdata['comment_ID'] . '">';
 					$output .='			<div id="div-comment-' . $commentdata['comment_ID'] . '" class="comment-body">';
 					$output .='				<div class="comment-author vcard">';
 					$output .=					get_avatar( $commentdata['comment_author_email'], 32 );
