@@ -188,14 +188,6 @@
 		add_action( 'widgets_init', 'html5reset_widgets_init' );
 	}
 
-	// Navigation - update coming from twentythirteen
-	function post_navigation() {
-		echo '<nav class="navigation">';
-		echo '	<div class="next-posts">'.get_next_posts_link('&laquo; Older Entries').'</div>';
-		echo '	<div class="prev-posts">'.get_previous_posts_link('Newer Entries &raquo;').'</div>';
-		echo '</nav>';
-	}
-
 	// Posted On
 	function posted_on() {
 		printf( __( '<span class="sep">Posted </span><a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s" pubdate>%4$s</time></a> by <span class="byline author vcard">%5$s</span>', '' ),

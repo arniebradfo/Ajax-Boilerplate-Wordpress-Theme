@@ -10,8 +10,6 @@
 
 		<h2><?php _e('Search Results','html5reset'); ?></h2>
 
-		<?php post_navigation(); ?>
-
 		<?php while (have_posts()) : the_post(); ?>
 
 			<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
@@ -29,8 +27,6 @@
 			</article>
 
 		<?php endwhile; ?>
-
-		<?php post_navigation(); ?>
 
 	<?php else : ?>
 

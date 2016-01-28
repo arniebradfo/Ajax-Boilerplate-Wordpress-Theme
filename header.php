@@ -154,13 +154,14 @@
 		<header id="header" role="banner">
 			<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
 			<div class="description"><?php bloginfo( 'description' ); ?></div>
-			<nav class="nav" role="navigation">
-				<?php 
-					$primary_menu_name = 'primary';
-					wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
-				?>
-			</nav>
 		</header>
+
+		<nav class="nav" role="navigation">
+			<?php 
+				$primary_menu_name = 'primary';
+				wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
+			?>
+		</nav>
 
 		<?php else:	// content that only comes through ajax ?>
 
@@ -174,15 +175,6 @@
 			?>
 		</nav>
 
-		<?php	endif;	// end ajax detection ?>
+		<?php endif; // end ajax detection ?>
 		
-
 		<main><!-- Pjax content wrapper element -->
-		<p>
-		<?php 
-			// var_dump($menu[0]->ID); 
-			// echo($menu);
-			// echo($menu_id);
-		?>
-		</p>
-

@@ -31,7 +31,5 @@
 	<?php comments_template(); ?>
 
 	<?php endwhile; endif; ?>
-
-<?php post_navigation(); ?>
 	
 <?php get_footer(); ?>

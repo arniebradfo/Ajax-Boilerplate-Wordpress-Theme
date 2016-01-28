@@ -6,11 +6,14 @@
 
 - ajax the comments section:
 	- make sure all comment classes are implemented properly
-	- add ctrl-enter to post comment
 
 - NAVIGATION:
 	+ research the history object api
-	+ post pagination should do what?
+	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
+	+ post pagination should:
+		* load the current posts or post link and put it into the same page nav element
+	+ post next/previous links should:
+		* work like any other link?
 	+ make sure back button paginates comments
 
 - Refactor

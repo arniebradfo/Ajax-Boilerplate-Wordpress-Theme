@@ -8,12 +8,17 @@
 
 </main><!-- Pjax content wrapper element -->
 
-<?php get_sidebar(); ?>
+<nav class="nav post-navigation">
+	<div class="next-posts"><?php get_next_posts_link('&laquo; Older Entries') ?></div>
+	<div class="prev-posts"><?php get_previous_posts_link('Newer Entries &raquo;') ?></div>
+</nav>
 
 <?php
 	// if this is not an ajax call
 	if (!$GLOBALS['is_ajax']):
 ?>
+
+<?php get_sidebar(); ?>
 
 	<footer id="footer" class="source-org vcard copyright" role="contentinfo">
 		<nav class="nav" role="navigation">

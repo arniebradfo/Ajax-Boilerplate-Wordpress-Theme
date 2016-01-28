@@ -33,8 +33,6 @@
 			
 			<?php } ?>
 
-			<?php post_navigation(); ?>
-
 			<?php while (have_posts()) : the_post(); ?>
 			
 				<article <?php post_class() ?>>
@@ -50,8 +48,6 @@
 				</article>
 
 			<?php endwhile; ?>
-
-			<?php post_navigation(); ?>
 			
 	<?php else : ?>
 
