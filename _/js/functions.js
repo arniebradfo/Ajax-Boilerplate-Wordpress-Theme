@@ -303,8 +303,10 @@
 			// var e = event != 'undefined' ? event : window.event; // this seems more safe...
 
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
-				// if the click event was not on a linked element
-				return false;
+				return false; // if the click event was not on a linked element
+			}
+			if (e.ctrlKey || e.altKey || e.shiftKey){
+				return false; // if the click was a ctrl/alt/shift click
 			}
 			var href = e.target.href;
 			var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
@@ -428,6 +430,8 @@
 		});
 		return true;
 	}
+
+
 	
 	// attach element outside of this
 	// find a better way to call this?

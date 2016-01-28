@@ -16,7 +16,7 @@
 ?>
 
 	<footer id="footer" class="source-org vcard copyright" role="contentinfo">
-		<nav id="nav" role="navigation">
+		<nav class="nav" role="navigation">
 			<?php 
 				$secondary_menu_name = 'secondary';
 				wp_nav_menu( array('theme_location' => $secondary_menu_name) ); 
