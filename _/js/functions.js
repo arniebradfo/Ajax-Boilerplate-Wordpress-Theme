@@ -431,10 +431,20 @@
 		return true;
 	}
 
-
+	ctrlEnterPost = function(){
+		commentArea = document.getElementById('comment');
+		if(commentArea){
+			addEvent( commentArea, 'keydown', function(e){ 
+  				if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10) ){
+  					document.getElementById('submit').click();
+				}
+			}); 
+		}
+	};
 	
 	// attach element outside of this
 	// find a better way to call this?
+	ctrlEnterPost();
 	plusPjax();
 	attachAjaxComments();
 
