@@ -1,13 +1,12 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
-
 ## AJAX TODOs:
 - load js in functions.php
 
 - ajax the comments section:
 	- make sure all comment classes are implemented properly
 
-- NAVIGATION:
+## NAVIGATION:
 	+ research the history object api
 	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 	+ post pagination should:
@@ -16,7 +15,7 @@
 		* work like any other link?
 	+ make sure back button paginates comments
 
-- Refactor
+## Refactor js
 	+ refactor functions to the appropiate type: anonymous, public, etc...
 	+ refactor names - more like jQuery?
 	+ add a global settings object
@@ -28,10 +27,15 @@
 	+ Test browser implementation inconsistencies of popstate.
 
 
-## SITE TODOs:
+## SITE TODOs / HTML:
 - clean up and modernize head
-- add newer coustom ptions framework
+- add newer [custom options framework](http://www.paulund.co.uk/theme-options-page). Current options framework does not save options when cloning db to a new server.
+	+ strip current options framework
+	+ reseach
+	+ add new options
 - add ctrl-s to save stuff in the admin panel
+
+# FINAL
 - research best keywords for naming
 - Write documentation.
 

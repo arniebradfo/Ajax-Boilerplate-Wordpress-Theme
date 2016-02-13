@@ -201,7 +201,7 @@
 				// console.log( 'ajax is done...' );
 				return true;
 			},
-			failed: function(href, statusText, status, statusText ) {
+			failed: function(href, status, statusText, responseText) {
 				// called when the response is recieved with an error
 				errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
 				console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);

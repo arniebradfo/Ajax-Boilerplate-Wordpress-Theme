@@ -190,7 +190,18 @@
 
 	// Posted On
 	function posted_on() {
-		printf( __( '<span class="sep">Posted </span><a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s" pubdate>%4$s</time></a> by <span class="byline author vcard">%5$s</span>', '' ),
+		printf( __( '
+			<span class="sep">
+				Posted 
+			</span>
+			<a href="%1$s" title="%2$s" rel="bookmark">
+				<time class="entry-date" datetime="%3$s" pubdate>%4$s</time>
+			</a> 
+			by 
+			<span class="byline author vcard">
+				%5$s
+			</span>
+			', '' ),
 			esc_url( get_permalink() ),
 			esc_attr( get_the_time() ),
 			esc_attr( get_the_date( 'c' ) ),
