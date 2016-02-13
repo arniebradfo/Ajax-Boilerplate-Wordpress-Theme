@@ -134,33 +134,42 @@
 	}
 	add_filter( 'wp_title', 'html5reset_wp_title', 10, 2 );
 
-
-
-
-//OLD STUFF BELOW
-
-
-	// Load jQuery
-	if ( !function_exists( 'core_mods' ) ) {
-		function core_mods() {
-			if ( !is_admin() ) {
-				wp_deregister_script( 'jquery' );
-				// wp_register_script( 'jquery', ( "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ), false);
-				// wp_enqueue_script( 'jquery' );
-			}
+	// Load jQuery scripts
+	// jq v1.12.0 is for < IE8 
+	if ( !function_exists( 'load_jquery' ) ) {
+		function load_jquery() {
+			wp_deregister_script( 'jquery' ); // if using vanilla .js
+			// google Hosted jQuery
+			// wp_register_script( 'jquery', "http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js", false, null, false, true);
+			// local Hosted jQuery
+			// wp_register_script( 'jquery', get_template_directory_uri()."/_/js/jquery-2.2.0.min.js", null, false, true);
+			// wp_enqueue_script( 'jquery' );
 		}
-		add_action( 'wp_enqueue_scripts', 'core_mods' );
+		add_action( 'wp_enqueue_scripts', 'load_jquery' );
+	}
+
+	// Load Custom Styles
+	// wp_register_style ( string $handle, string|bool $src, array $deps=array(), string|bool $ver=false, string $media='all' )
+	// wp_enqueue_style ( string $handle, string|bool $src=false, array $deps=array(), string|bool $ver=false, string $media='all' );
+	if ( !function_exists( 'load_theme_css' ) ) {
+		function load_theme_css() {
+			wp_register_style( 'reset', get_template_directory_uri()."/_/css/reset.css" );
+			wp_enqueue_style( 'reset' );
+			wp_register_style( 'style', get_stylesheet_uri() );
+			wp_enqueue_style( 'style' );
+		}
+		add_action( 'wp_enqueue_scripts', 'load_theme_css' );
 	}
 
 	// Load Custom Scripts
-	if ( !function_exists( 'load_custom_scripts' ) ) {
-		function load_custom_scripts() {
-			if ( !is_admin() ) {
-				wp_register_script( 'ajaxjs', ( dirname( __FILE__ )."/_/js/functions.js" ), false);
-				wp_enqueue_script( 'ajaxjs' );
-			}
+	// wp_register_script ( string $handle, string $src, array $deps=array(), string|bool $ver=false, bool $in_footer=false );
+	// wp_enqueue_script ( string $handle, string|bool $src=false, array $deps=array(), string|bool $ver=false, bool $in_footer=false );
+	if ( !function_exists( 'load_theme_scripts' ) ) {
+		function load_theme_scripts() {
+			wp_register_script( 'ajaxjs', get_template_directory_uri()."/_/js/functions.js", null, false, true );
+			wp_enqueue_script( 'ajaxjs' );
 		}
-		// add_action( 'wp_enqueue_scripts', 'load_custom_scripts' );
+		add_action( 'wp_enqueue_scripts', 'load_theme_scripts' );
 	}
 
 	// Clean up the <head>, if you so desire.
@@ -170,7 +179,7 @@
 	//    }
 	//    add_action('init', 'removeHeadLinks');
 
-	// Custom Menu
+	// Register Menus
 	register_nav_menu( 'primary', __( 'Navigation Menu', 'html5reset' ) );
 
 	// Widgets

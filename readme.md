@@ -1,8 +1,6 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
 ## AJAX TODOs:
-- load js in functions.php
-
 - ajax the comments section:
 	- make sure all comment classes are implemented properly
 
@@ -28,25 +26,27 @@
 
 
 ## SITE TODOs / HTML:
-- clean up and modernize head
-- add newer [custom options framework](http://www.paulund.co.uk/theme-options-page). Current options framework does not save options when cloning db to a new server.
-	+ strip current options framework
-	+ reseach
-	+ add new options
-- add ctrl-s to save stuff in the admin panel
+	+ add github updater headers
+	+ remove `if ( !function_exists()){}` checks
+	+ clean up and modernize head
+	+ add newer [custom options framework](http://www.paulund.co.uk/theme-options-page). Current options framework does not save options when cloning db to a new server.
+		* strip current options framework
+		* reseach
+		* add new options
+	+ add ctrl-s to save stuff in the admin panel
 
-# FINAL
-- research best keywords for naming
-- Write documentation.
+## FINAL
+	+ research best keywords for naming
+	+ Write documentation.
 
 
 ## DONES to keep:
-- Research and reduce SEO problems with ajax
-	this should work fine because the stie will still function normally without js. 
-	all the links have accurate urls
-	the site map will still work normally with site crawlers 
-- [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) 
-- Add hover [prefetch option](http://miguel-perez.github.io/smoothState.js/) to increase performance.
+	+ Research and reduce SEO problems with ajax
+		this should work fine because the stie will still function normally without js. 
+		all the links have accurate urls
+		the site map will still work normally with site crawlers 
+	+ [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) 
+	+ Add hover [prefetch option](http://miguel-perez.github.io/smoothState.js/) to increase performance.
 
 
 ## Credits:
