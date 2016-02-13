@@ -5,10 +5,10 @@
 	- make sure all comment classes are implemented properly
 
 ## NAVIGATION:
-	+ research the history object api
-	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 	+ post pagination should:
 		* load the current posts or post link and put it into the same page nav element
+	+ research the history object api
+	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 	+ post next/previous links should:
 		* work like any other link?
 	+ make sure back button paginates comments
@@ -27,13 +27,14 @@
 
 ## SITE TODOs / HTML:
 	+ add github updater headers
-	+ remove `if ( !function_exists()){}` checks
-	+ clean up and modernize head
+	+ remove `if ( !function_exists()){}` checks ??
 	+ add newer [custom options framework](http://www.paulund.co.uk/theme-options-page). Current options framework does not save options when cloning db to a new server.
 		* strip current options framework
 		* reseach
 		* add new options
+		* replace head meta options
 	+ add ctrl-s to save stuff in the admin panel
+	+ move html outputing php into a new folder
 
 ## FINAL
 	+ research best keywords for naming
