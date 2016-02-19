@@ -9,8 +9,8 @@
 </main><!-- Pjax content wrapper element -->
 
 <nav class="nav post-navigation">
-	<div class="next-posts"><?php echo get_next_posts_link('&laquo; Older Entries') ?></div>
-	<div class="prev-posts"><?php echo get_previous_posts_link('Newer Entries &raquo;') ?></div>
+	<div class="next-posts"><?php next_posts_link('&laquo; Older Entries') ?></div>
+	<div class="prev-posts"><?php previous_posts_link('Newer Entries &raquo;') ?></div>
 </nav>
 
 <?php

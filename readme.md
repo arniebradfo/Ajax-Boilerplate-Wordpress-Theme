@@ -5,8 +5,6 @@
 		- make sure all comment classes are implemented properly
 
 ## NAVIGATION:
-	+ post pagination should:
-		* load the current posts or post link and put it into the same page nav element
 	+ research the history object api
 	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 	+ post next/previous links should:

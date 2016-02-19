@@ -1,97 +1,87 @@
-// Browser detection for when you get desparate. A measure of last resort.
-// http://rog.ie/post/9089341529/html5boilerplatejs
 
-// var b = document.documentElement;
-// b.setAttribute('data-useragent',  navigator.userAgent);
-// b.setAttribute('data-platform', navigator.platform);
 
-// sample CSS: html[data-useragent*='Chrome/13.0'] { ... }
-
-// remap jQuery to $
-// (function ($) {
-
-(function() {
-
-	// normalizes adding event listeners/handlers (http://stackoverflow.com/questions/10149963/adding-event-listener-cross-browser)
-	function addEvent(elem, event, fn) {
-		//console.log('addEvent was called on '+elem+' with function '+fn);
-		if (elem.addEventListener) {
-			elem.addEventListener(event, fn, false);
-		} else if (elem.attachEvent) {
-			elem.attachEvent('on' + event, function() {
-				// set the this pointer same as addEventListener when fn is called
-				return(fn.call(elem, window.event));
-			});
-		}
-	}
-	// Add the forEach method to Array elements if absent
-	if (!Array.prototype.forEach) {
-		Array.prototype.forEach = function(fn, scope) {
-			'use strict';
-			var i, len;
-			for (i = 0, len = this.length; i < len; ++i) {
-				if (i in this) {
-					fn.call(scope, this[i], i, this);
-				}
-			}
-		};
-	}
-	// Extrapolate the Array forEach method to NodeList elements if absent */
-	if (!NodeList.prototype.forEach) {
-		NodeList.prototype.forEach = Array.prototype.forEach;
-	}
-	// Extrapolate the Array forEach method to HTMLFormControlsCollection elements if absent
-	if (!HTMLFormControlsCollection.prototype.forEach) {
-		HTMLFormControlsCollection.prototype.forEach = Array.prototype.forEach;
-	}
-	// Convert form elements to query string or JavaScript object.
-	HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: If the serialization should be returned as an object.
-		'use strict';
-		var form = this;
-		var elements;
-		var add = function(name, value) {
-			value = encodeURIComponent(value);
-			if (asObject) {
-				elements[name] = value;
-			} else {
-				elements.push(name + '=' + value);
-			}
-		};
-		if (asObject) {
-			elements = {};
-		} else {
-			elements = [];
-		}
-		form.elements.forEach(function(element) {
-			switch (element.nodeName) {
-				case 'BUTTON':
-					/* Omit this elements */
-					break;
-				default:
-					switch (element.type) {
-						case 'submit':
-						case 'button':
-							/* Omit this types */
-							break;
-						default:
-							add(element.name, element.value);
-							break;
-					}
-					break;
-			}
+// normalizes adding event listeners/handlers (http://stackoverflow.com/questions/10149963/adding-event-listener-cross-browser)
+function addEvent(elem, event, fn) {
+	//console.log('addEvent was called on '+elem+' with function '+fn);
+	if (elem.addEventListener) {
+		elem.addEventListener(event, fn, false);
+	} else if (elem.attachEvent) {
+		elem.attachEvent('on' + event, function() {
+			// set the this pointer same as addEventListener when fn is called
+			return(fn.call(elem, window.event));
 		});
-
-		if (asObject) {
-			return elements;
+	}
+}
+// Add the forEach method to Array elements if absent
+if (!Array.prototype.forEach) {
+	Array.prototype.forEach = function(fn, scope) {
+		'use strict';
+		var i, len;
+		for (i = 0, len = this.length; i < len; ++i) {
+			if (i in this) {
+				fn.call(scope, this[i], i, this);
+			}
 		}
+	};
+}
+// Extrapolate the Array forEach method to NodeList elements if absent */
+if (!NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = Array.prototype.forEach;
+}
+// Extrapolate the Array forEach method to HTMLFormControlsCollection elements if absent
+if (!HTMLFormControlsCollection.prototype.forEach) {
+	HTMLFormControlsCollection.prototype.forEach = Array.prototype.forEach;
+}
+// Convert form elements to query string or JavaScript object.
+HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: If the serialization should be returned as an object.
+	'use strict';
+	var form = this;
+	var elements;
+	var add = function(name, value) {
+		value = encodeURIComponent(value);
+		if (asObject) {
+			elements[name] = value;
+		} else {
+			elements.push(name + '=' + value);
+		}
+	};
+	if (asObject) {
+		elements = {};
+	} else {
+		elements = [];
+	}
+	form.elements.forEach(function(element) {
+		switch (element.nodeName) {
+			case 'BUTTON':
+				/* Omit this elements */
+				break;
+			default:
+				switch (element.type) {
+					case 'submit':
+					case 'button':
+						/* Omit this types */
+						break;
+					default:
+						add(element.name, element.value);
+						break;
+				}
+				break;
+		}
+	});
 
-		return elements.join('&');
-	};
-	// opposite of Object.appendChild
-	// TODO: change this to NodeList or something more specific than Object
-	Object.prototype.prependChild = function(child) {
-		this.insertBefore( child, this.firstChild );
-	};
+	if (asObject) {
+		return elements;
+	}
+
+	return elements.join('&');
+};
+// opposite of Object.appendChild
+// TODO: change this to NodeList or something more specific than Object
+Object.prototype.prependChild = function(child) {
+	this.insertBefore( child, this.firstChild );
+};
+
+(function(d) { // why ther wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
 
 	function ajaxLoad(obj) {
 		
@@ -156,11 +146,28 @@
 		return true;
 	}
 
+	function replaceNavLinks(newPosts, oldPosts, prepend) {
+		if (newPosts.firstChild && oldPosts){
+			// replace href
+			oldPosts.forEach(function(el){
+				if(el.firstChild){
+					el.firstChild.href = newPosts.firstChild.href;
+				} else {
+					el.innerHTML = newPosts.innerHTML;
+				}
+			});
+		} else {
+			// delete div contents
+			oldPosts.forEach(function(el){
+				el.innerHTML = '';
+			});
+		}
+	}
+
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
 	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
 
-		var d = document;
 		var main = d.getElementsByTagName('main')[0];
 
 		var ajaxGetPage = {
@@ -215,6 +222,14 @@
 				d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
 				main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
 
+				postsNav = workspace.querySelector('.post-navigation');
+				var newNextPosts = postsNav.querySelector('.next-posts'),
+					newPrevPosts = postsNav.querySelector('.prev-posts'),
+					NextPosts = d.querySelectorAll('.next-posts'),
+					PrevPosts = d.querySelectorAll('.prev-posts');
+				replaceNavLinks(newNextPosts, NextPosts, true );
+				replaceNavLinks(newPrevPosts, PrevPosts, false);
+
 				// update the the class list of all menu items
 				menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
 				for (var i = 0; i < menuItems.length; ++i) {
@@ -257,29 +272,14 @@
 					}
 				}
 
-				var newNextPosts = workspace.querySelector('.next-posts'),
-					newPrevPosts = workspace.querySelector('.prev-posts'),
-					NextPosts = d.querySelectorAll('.next-posts'),
-					PrevPosts = d.querySelectorAll('.prev-posts'),
-					newCommentNavigation = function(newPosts, oldPosts, prepend) {
-					if (newPosts.firstChild && oldPosts){
-						// replace href
-						oldPosts.forEach(function(el){
-							if(el.firstChild){
-								el.firstChild.href = newPosts.firstChild.href;
-							} else {
-								el.innerHTML = newPosts.innerHTML;
-							}
-						});
-					} else {
-						// delete div
-						oldPosts.forEach(function(el){
-							el.removeChild(el.firstChild);
-						});
-					}
-				};
-				newCommentNavigation(newNextPosts, NextPosts, true );
-				newCommentNavigation(newPrevPosts, PrevPosts, false);
+				// replace comments navigation links
+				var commentsNav = workspace.querySelector('.comment-navigation');
+				var newNextComments = commentsNav.querySelector('.next-comments'),
+					newPrevComments = commentsNav.querySelector('.prev-comments'),
+					NextComments = d.querySelectorAll('.next-comments'),
+					PrevComments = d.querySelectorAll('.prev-comments');
+				replaceNavLinks(newNextComments, NextComments, true );
+				replaceNavLinks(newPrevComments, PrevComments, false);
 			}
 		};
 
@@ -311,7 +311,7 @@
 			var href = e.target.href;
 			var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
 
-			if ((href.indexOf(document.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
+			if ((href.indexOf(d.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
 			&& !href.match(currentPageWithParameters) // href isnt a parameterized link of the current page
 			&& href != window.location.href // href isn't a link to the current page
 			&& !href.match(/\/wp-/g)  // href doesn't go to the wp-admin backend
@@ -337,10 +337,9 @@
 	}
 
 	function attachAjaxComments(){
-		var d = document;
 		var commentform = d.getElementById('commentform');
 		var statusdiv = d.getElementById('comment-status');
-		if (commentform) {
+		if (commentform && statusdiv) {
 			addEvent(commentform, 'submit', function(e){
 				e.preventDefault();
 				submitComment(commentform, statusdiv);
@@ -349,7 +348,6 @@
 	}
 
 	function submitComment(commentform, statusdiv){
-		var d = document;
 		// Extract action URL from commentform
 		var formurl = commentform.action;
 		// Serialize and store form data
@@ -432,11 +430,11 @@
 	}
 
 	ctrlEnterPost = function(){
-		commentArea = document.getElementById('comment');
+		commentArea = d.getElementById('comment');
 		if(commentArea){
 			addEvent( commentArea, 'keydown', function(e){ 
   				if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10) ){
-  					document.getElementById('submit').click();
+  					d.getElementById('submit').click();
 				}
 			}); 
 		}
@@ -448,6 +446,4 @@
 	plusPjax();
 	attachAjaxComments();
 
-
-})();
-//}(window.jQuery || window.$));
+})(document);
