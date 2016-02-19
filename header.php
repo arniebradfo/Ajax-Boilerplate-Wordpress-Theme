@@ -83,6 +83,7 @@
 		// Richard's Toolbox  -  http://richardstoolbox.com/#q=meta tag
 
 		// Windows  -  https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx
+		// https://msdn.microsoft.com/library/dn455106.aspx
 		if (true == of_get_option('meta_app_win_name')) {
 			echo '<meta name="application-name" content="' . of_get_option("meta_app_win_name") . '" /> ';
 			echo '<meta name="msapplication-TileColor" content="' . of_get_option("meta_app_win_color") . '" /> ';
@@ -115,33 +116,30 @@
 </head>
 <body <?php body_class(); ?>>
 
-	<!-- not needed? up to you: http://camendesign.com/code/developpeurs_sans_frontieres -->
-	<div id="wrapper">
+	<header id="header" role="banner">
+		<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+		<div class="description"><?php bloginfo( 'description' ); ?></div>
+	</header>
 
-		<header id="header" role="banner">
-			<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-			<div class="description"><?php bloginfo( 'description' ); ?></div>
-		</header>
+	<nav class="nav" role="navigation">
+		<?php 
+			$primary_menu_name = 'primary';
+			wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
+		?>
+	</nav>
 
-		<nav class="nav" role="navigation">
-			<?php 
-				$primary_menu_name = 'primary';
-				wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
-			?>
-		</nav>
+	<?php else:	// content that only comes through ajax ?>
 
-		<?php else:	// content that only comes through ajax ?>
+	<nav id="wp-all-registered-nav-menus">
+		<?php
+			$menus = get_registered_nav_menus();
+			foreach ( $menus as $location => $description ) { 
+				wp_nav_menu( array('theme_location' => $location) ); 
+				// echo $location . ': ' . $description . "\r";
+			}
+		?>
+	</nav>
 
-		<nav id="wp-all-registered-nav-menus">
-			<?php
-				$menus = get_registered_nav_menus();
-				foreach ( $menus as $location => $description ) { 
-					wp_nav_menu( array('theme_location' => $location) ); 
-					// echo $location . ': ' . $description . "\r";
-				}
-			?>
-		</nav>
-
-		<?php endif; // end ajax detection ?>
-		
-		<main><!-- Pjax content wrapper element -->
+	<?php endif; // end ajax detection ?>
+	
+	<main><?php // Pjax content wrapper element ?>

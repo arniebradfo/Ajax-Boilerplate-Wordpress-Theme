@@ -1,8 +1,8 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
 ## AJAX TODOs:
-- ajax the comments section:
-	- make sure all comment classes are implemented properly
+	- ajax the comments section:
+		- make sure all comment classes are implemented properly
 
 ## NAVIGATION:
 	+ post pagination should:

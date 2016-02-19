@@ -20,27 +20,25 @@
 
 <?php get_sidebar(); ?>
 
-	<footer id="footer" class="source-org vcard copyright" role="contentinfo">
-		<nav class="nav" role="navigation">
-			<?php 
-				$secondary_menu_name = 'secondary';
-				wp_nav_menu( array('theme_location' => $secondary_menu_name) ); 
-			?>
-		</nav>
-		<small>&copy;<?php echo date("Y"); echo " "; bloginfo('name'); ?></small>
-	</footer>
+<footer id="footer" class="source-org vcard copyright" role="contentinfo">
+	<nav class="nav" role="navigation">
+		<?php 
+			$secondary_menu_name = 'secondary';
+			wp_nav_menu( array('theme_location' => $secondary_menu_name) ); 
+		?>
+	</nav>
+	<small>&copy;<?php echo date("Y"); echo " "; bloginfo('name'); ?></small>
+</footer>
 
-	<?php wp_footer(); ?>
+<?php wp_footer(); ?>
 
 
-<!-- jQuery is called via the WordPress-friendly way via functions.php -->
+<?php // all js is called via the WordPress-friendly way via functions.php ?>
 
-<!-- this is where we put our custom functions -->
-<!-- <script src="<?php bloginfo('template_directory'); ?>/_/js/functions.js"></script> -->
+<?php // Asynchronous google analytics; this is the official snippet.
+	  // Replace UA-XXXX-Y with your site's ID and domainname.com with your domain, then uncomment to enable. ?>
 
-<!-- Asynchronous google analytics; this is the official snippet.
-				 Replace UA-XXXX-Y with your site's ID and domainname.com with your domain, then uncomment to enable.
-
+<!--
 <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
