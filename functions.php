@@ -70,6 +70,10 @@
 	}
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
 
+	// function.php partials
+	require_once dirname( __FILE__ ) . '/options.php';
+
+
 	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
 	function html5reset_setup() {
 		load_theme_textdomain( 'html5reset', get_template_directory() . '/languages' );
