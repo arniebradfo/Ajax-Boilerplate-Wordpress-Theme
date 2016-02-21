@@ -70,12 +70,6 @@
 	}
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
 
-	// Options Framework (https://github.com/devinsays/options-framework-plugin)
-	if ( !function_exists( 'optionsframework_init' ) ) {
-		define( 'OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/_/inc/' );
-		require_once dirname( __FILE__ ) . '/_/inc/options-framework.php';
-	}
-
 	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
 	function html5reset_setup() {
 		load_theme_textdomain( 'html5reset', get_template_directory() . '/languages' );

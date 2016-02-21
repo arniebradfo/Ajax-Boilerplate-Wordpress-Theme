@@ -31,7 +31,7 @@
 <!--[if IE 11 ]>   <html class="ie ie11 " <?php language_attributes(); ?>> <![endif]-->
 <!--[if !IE ]><!--><html <?php language_attributes(); ?>><!--<![endif]-->
 
-<head id="<?php echo of_get_option('meta_headid'); ?>">
+<head>
 
 	<meta charset="<?php bloginfo('charset'); ?>">
 
@@ -53,29 +53,23 @@
 	<meta name="description" content="<?php bloginfo('description'); ?>" />
 
 	<?php
-		if (true == of_get_option('meta_author'))
-			echo '<meta name="author" content="' . of_get_option("meta_author") . '" />';
-
-		if (true == of_get_option('meta_google'))
-			echo '<meta name="google-site-verification" content="' . of_get_option("meta_google") . '" />';
+		// <meta name="author" content="" />
+		// <meta name="google-site-verification" content="" />
 	?>
 
 	<meta name="Copyright" content="Copyright &copy; <?php bloginfo('name'); ?> <?php echo date('Y'); ?>. All Rights Reserved.">
 
-	<?php
-		/*
-			j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag
-			 - device-width : Occupy full width of the screen in its current orientation
-			 - initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
-			 - maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
-			 - minimal-ui = iOS devices have minimal browser ui by default
-		*/
-		if (true == of_get_option('meta_viewport'))
-			echo '<meta name="viewport" content="' . of_get_option("meta_viewport") . ' minimal-ui" />';
-	?>
+	<?php /*
+		j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag
+		 - device-width : Occupy full width of the screen in its current orientation
+		 - initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
+		 - maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
+		 - minimal-ui = iOS devices have minimal browser ui by default
+	*/ ?>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 minimal-ui" />
 	
-	<!-- Application-specific meta tags -->
 	<?php
+		// <!-- Application-specific meta tags -->
 
 		// Google  -  https://support.google.com/webmasters/answer/79812
 		// LinkedIn  -  https://developer.linkedin.com/docs/share-on-linkedin
@@ -84,28 +78,10 @@
 
 		// Windows  -  https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx
 		// https://msdn.microsoft.com/library/dn455106.aspx
-		if (true == of_get_option('meta_app_win_name')) {
-			echo '<meta name="application-name" content="' . of_get_option("meta_app_win_name") . '" /> ';
-			echo '<meta name="msapplication-TileColor" content="' . of_get_option("meta_app_win_color") . '" /> ';
-			echo '<meta name="msapplication-TileImage" content="' . of_get_option("meta_app_win_image") . '" />';
-		}
 
 		// Twitter  -  https://dev.twitter.com/cards/markup
-		if (true == of_get_option('meta_app_twt_card')) {
-			echo '<meta name="twitter:card" content="' . of_get_option("meta_app_twt_card") . '" />';
-			echo '<meta name="twitter:site" content="' . of_get_option("meta_app_twt_site") . '" />';
-			echo '<meta name="twitter:title" content="' . of_get_option("meta_app_twt_title") . '">';
-			echo '<meta name="twitter:description" content="' . of_get_option("meta_app_twt_description") . '" />';
-			echo '<meta name="twitter:url" content="' . of_get_option("meta_app_twt_url") . '" />';
-		}
 
 		// Facebook  -  https://developers.facebook.com/docs/sharing/webmasters
-		if (true == of_get_option('meta_app_fb_title')) {
-			echo '<meta property="og:title" content="' . of_get_option("meta_app_fb_title") . '" />';
-			echo '<meta property="og:description" content="' . of_get_option("meta_app_fb_description") . '" />';
-			echo '<meta property="og:url" content="' . of_get_option("meta_app_fb_url") . '" />';
-			echo '<meta property="og:image" content="' . of_get_option("meta_app_fb_image") . '" />';
-		}
 	?>
 
 	<link rel="profile" href="http://gmpg.org/xfn/11" />

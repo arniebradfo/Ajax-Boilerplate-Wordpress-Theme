@@ -1,15 +1,15 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
 ## AJAX TODOs:
-	- ajax the comments section:
-		- make sure all comment classes are implemented properly
+
 
 ## NAVIGATION:
 	+ research the history object api
 	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
-	+ post next/previous links should:
-		* work like any other link?
-	+ make sure back button paginates comments
+
+	+ COMMENTS:
+		* back button paginates comments 
+		* make sure all comment classes are implemented properly
 
 ## Refactor js
 	+ refactor functions to the appropiate type: anonymous, public, etc...
@@ -27,12 +27,12 @@
 	+ add github updater headers
 	+ remove `if ( !function_exists()){}` checks ??
 	+ add newer [custom options framework](http://www.paulund.co.uk/theme-options-page). Current options framework does not save options when cloning db to a new server.
-		* strip current options framework
-		* reseach
+		* research
 		* add new options
 		* replace head meta options
 	+ add ctrl-s to save stuff in the admin panel
 	+ move html outputing php into a new folder
+	+ drop support for <=IE9
 
 ## FINAL
 	+ research best keywords for naming
