@@ -70,9 +70,13 @@
 	}
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
 
-	// function.php partials
-	require_once dirname( __FILE__ ) . '/options.php';
-
+	// runs through all .php partials in /_/php/
+	foreach (scandir(dirname(__FILE__).'/_/php') as $filename) {
+		$path = dirname(__FILE__).'/_/php/' . $filename;
+		if (is_file($path)) {
+			require_once $path;
+		}
+	}
 
 	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
 	function html5reset_setup() {

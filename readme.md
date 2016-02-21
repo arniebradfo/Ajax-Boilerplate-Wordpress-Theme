@@ -27,8 +27,6 @@
 	+ add github updater headers
 	+ remove `if ( !function_exists()){}` checks ??
 	+ add newer [custom options framework](http://www.paulund.co.uk/theme-options-page). Current options framework does not save options when cloning db to a new server.
-		* research
-		* add new options
 		* replace head meta options
 	+ add ctrl-s to save stuff in the admin panel
 	+ move html outputing php into a new folder
