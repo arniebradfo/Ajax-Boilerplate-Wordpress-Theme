@@ -1,7 +1,9 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
 ## AJAX TODOs:
-
+	+ load in meta tags
+	+ ajax does not load properly in theme customizer
+	+ comments is broken in strict mode
 
 ## NAVIGATION:
 	+ research the history object api

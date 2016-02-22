@@ -12,6 +12,14 @@
 	$GLOBALS['is_ajax_get_comments_section'] = (!empty($_SERVER['HTTP_WP_REQUEST_TYPE']) && strtolower($_SERVER['HTTP_WP_REQUEST_TYPE']) == 'getcommentssection') ? true : false ;
 	$GLOBALS['is_ajax_post_comment'] = (!empty($_SERVER['HTTP_WP_REQUEST_TYPE']) && strtolower($_SERVER['HTTP_WP_REQUEST_TYPE']) == 'postcomment') ? true : false ;
 
+	// runs through all .php partials in /_/php/
+	foreach (scandir(dirname(__FILE__).'/_/php') as $filename) {
+		$path = dirname(__FILE__).'/_/php/' . $filename;
+		if (is_file($path)) {
+			require_once $path;
+		}
+	}
+
 	// http://www.inkthemes.com/ajax-comment-wordpress/
 	function ajaxify_comments_jaya($comment_ID, $comment_status) {
 		if ($GLOBALS['is_ajax']) {
@@ -21,45 +29,13 @@
 					break;
 				case '1': //Approved comment
 					// echo "success";
-					$commentdata = &get_comment( $comment_ID, ARRAY_A );
+					$commentdata = get_comment( $comment_ID, ARRAY_A );
 					// print_r( $commentdata);
-					$permaurl = get_permalink( $post->ID );
+					$permaurl = get_permalink( $post['ID'] );
 					$url = str_replace('http://', '/', $permaurl);
 
-					$comment_depth = 1;
-					$comment_ancestor_ID = $commentdata['comment_parent']; 
-					while ($comment_ancestor_ID != 0){
-						$comment_depth++;
-						$comment_ancestor_ID = get_comment( $comment_ancestor_ID, ARRAY_A )['comment_parent']; 
-					}
-
-					$output = '';
-					// TODO: find out what all these classes do and implement them properly
-					$output .='	<li class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-'.$comment_depth.'" id="comment-' . $commentdata['comment_ID'] . '">';
-					$output .='			<div id="div-comment-' . $commentdata['comment_ID'] . '" class="comment-body">';
-					$output .='				<div class="comment-author vcard">';
-					$output .=					get_avatar( $commentdata['comment_author_email'], 32 );
-					$output .='					<cite class="fn">' . $commentdata['comment_author'] . '</cite> ';
-					$output .='					<span class="says">says:</span>';
-					$output .='				</div>';
-					$output .='				<div class="comment-meta commentmetadata"><a href="http://localhost/WordPress_Code/?p=1#comment-'. $commentdata['comment_ID'] .'">';
-					$output .=					get_comment_date( 'F j, Y \a\t g:i a', $commentdata['comment_ID']) .'</a>&nbsp;&nbsp;';
-												if ( is_user_logged_in() ){
-					$output .='					<a class="comment-edit-link" href="'. home_url() .'/wp-admin/comment.php?action=editcomment&amp;c='. $commentdata['comment_ID'] .'">';
-					$output .='						(Edit)';
-					$output .='					</a>';
-												}
-					$output .='				</div>';
-					$output .='				<p>' . $commentdata['comment_content'] . '</p>';
-					$output .='				<div class="reply">';
-					$output .='					<a class="comment-reply-link" href="'. $url .'&amp;replytocom='. $commentdata['comment_ID'] .'#respond"';
-					$output .='					onclick="return addComment.moveForm(&quot;div-comment-'. $commentdata['comment_ID'] .'&quot;, &quot;'. $commentdata['comment_ID'] . '&quot;, &quot;respond&quot;, &quot;1&quot;)">Reply</a>';
-					$output .='				</div>';
-					$output .='			</div>';
-					$output .='		</li>';
-					
-					echo $output;
-					wp_notify_postauthor($comment_ID, $commentdata['comment_type']);
+					single_comment( $commentdata, $url );
+					wp_notify_postauthor($comment_ID);
 					break;
 
 				default: // $comment_status was null
@@ -70,48 +46,33 @@
 	}
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
 
-	// runs through all .php partials in /_/php/
-	foreach (scandir(dirname(__FILE__).'/_/php') as $filename) {
-		$path = dirname(__FILE__).'/_/php/' . $filename;
-		if (is_file($path)) {
-			require_once $path;
-		}
-	}
-
 	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
 	function html5reset_setup() {
 		load_theme_textdomain( 'html5reset', get_template_directory() . '/languages' );
+
+		add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ) );
 		add_theme_support( 'automatic-feed-links' );
-		add_theme_support( 'structured-post-formats', array( 'link', 'video' ) );
-		add_theme_support( 'post-formats', array( 'aside', 'audio', 'chat', 'gallery', 'image', 'quote', 'status' ) );
-		register_nav_menu( 'primary', __( 'Navigation Menu', 'html5reset' ) );
-		register_nav_menu( 'secondary', __( 'Footer Menu', 'html5reset' ) );
+		// add_theme_support( 'title-tag' );
+		add_theme_support( 'post-formats', array( 'link', 'video', 'aside', 'audio', 'chat', 'gallery', 'image', 'quote', 'status' ) );
 		add_theme_support( 'post-thumbnails' );
+
+		// Nav Menus
+		register_nav_menus( array(
+			'primary'   => __( 'Navigation Menu', 'html5reset' ),
+			'secondary' => __( 'Footer Menu', 'html5reset' ),
+		) );
+
+		// Widgets
+		register_sidebar( array(
+			'name'          => __( 'Sidebar Widgets', 'html5reset' ),
+			'id'            => 'sidebar-primary',
+			'before_widget' => '<div id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		) );
 	}
 	add_action( 'after_setup_theme', 'html5reset_setup' );
-
-	// Scripts & Styles (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
-	function html5reset_scripts_styles() {
-		global $wp_styles;
-
-		// Load Comments
-		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) )
-			wp_enqueue_script( 'comment-reply' );
-
-		// Load Stylesheets
-//		wp_enqueue_style( 'html5reset-reset', get_template_directory_uri() . '/reset.css' );
-//		wp_enqueue_style( 'html5reset-style', get_stylesheet_uri() );
-
-		// Load IE Stylesheet.
-//		wp_enqueue_style( 'html5reset-ie', get_template_directory_uri() . '/css/ie.css', array( 'html5reset-style' ), '20130213' );
-//		$wp_styles->add_data( 'html5reset-ie', 'conditional', 'lt IE 9' );
-
-		// Modernizr
-		// This is an un-minified, complete version of Modernizr. Before you move to production, you should generate a custom build that only has the detects you need.
-		// wp_enqueue_script( 'html5reset-modernizr', get_template_directory_uri() . '/_/js/modernizr-2.6.2.dev.js' );
-
-	}
-	add_action( 'wp_enqueue_scripts', 'html5reset_scripts_styles' );
 
 	// WP Title (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
 	function html5reset_wp_title( $title, $sep ) {
@@ -136,67 +97,32 @@
 	}
 	add_filter( 'wp_title', 'html5reset_wp_title', 10, 2 );
 
-	// Load jQuery scripts
-	// jq v1.12.0 is for < IE8 
-	if ( !function_exists( 'load_jquery' ) ) {
-		function load_jquery() {
+	if ( !function_exists( 'load_theme_scripts_and_styles' ) ) {
+		function load_theme_scripts_and_styles() {
+			// Load Custom Styles
+			wp_register_style( 'reset', get_template_directory_uri()."/_/css/reset.css" );
+			wp_enqueue_style( 'reset' );
+			wp_register_style( 'style', get_stylesheet_uri() );
+			wp_enqueue_style( 'style' );
+
+			// Load jQuery scripts - jq v1.12.0 is for < IE8 
 			wp_deregister_script( 'jquery' ); // if using vanilla .js
 			// google Hosted jQuery
 			// wp_register_script( 'jquery', "http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js", false, null, false, true);
 			// local Hosted jQuery
 			// wp_register_script( 'jquery', get_template_directory_uri()."/_/js/jquery-2.2.0.min.js", null, false, true);
 			// wp_enqueue_script( 'jquery' );
-		}
-		add_action( 'wp_enqueue_scripts', 'load_jquery' );
-	}
 
-	// Load Custom Styles
-	// wp_register_style ( string $handle, string|bool $src, array $deps=array(), string|bool $ver=false, string $media='all' )
-	// wp_enqueue_style ( string $handle, string|bool $src=false, array $deps=array(), string|bool $ver=false, string $media='all' );
-	if ( !function_exists( 'load_theme_css' ) ) {
-		function load_theme_css() {
-			wp_register_style( 'reset', get_template_directory_uri()."/_/css/reset.css" );
-			wp_enqueue_style( 'reset' );
-			wp_register_style( 'style', get_stylesheet_uri() );
-			wp_enqueue_style( 'style' );
-		}
-		add_action( 'wp_enqueue_scripts', 'load_theme_css' );
-	}
+			// add the wp comment-reply.js to manage comments
+			if ( is_singular() && comments_open() && get_option( 'thread_comments' ) )
+				wp_enqueue_script( 'comment-reply' );
 
-	// Load Custom Scripts
-	// wp_register_script ( string $handle, string $src, array $deps=array(), string|bool $ver=false, bool $in_footer=false );
-	// wp_enqueue_script ( string $handle, string|bool $src=false, array $deps=array(), string|bool $ver=false, bool $in_footer=false );
-	if ( !function_exists( 'load_theme_scripts' ) ) {
-		function load_theme_scripts() {
+			// Load Custom Scripts
 			wp_register_script( 'ajaxjs', get_template_directory_uri()."/_/js/functions.js", null, false, true );
 			wp_enqueue_script( 'ajaxjs' );
+
 		}
-		add_action( 'wp_enqueue_scripts', 'load_theme_scripts' );
-	}
-
-	// Clean up the <head>, if you so desire.
-	//	function removeHeadLinks() {
-	//    	remove_action('wp_head', 'rsd_link');
-	//    	remove_action('wp_head', 'wlwmanifest_link');
-	//    }
-	//    add_action('init', 'removeHeadLinks');
-
-	// Register Menus
-	register_nav_menu( 'primary', __( 'Navigation Menu', 'html5reset' ) );
-
-	// Widgets
-	if ( function_exists('register_sidebar' )) {
-		function html5reset_widgets_init() {
-			register_sidebar( array(
-				'name'          => __( 'Sidebar Widgets', 'html5reset' ),
-				'id'            => 'sidebar-primary',
-				'before_widget' => '<div id="%1$s" class="widget %2$s">',
-				'after_widget'  => '</div>',
-				'before_title'  => '<h3 class="widget-title">',
-				'after_title'   => '</h3>',
-			) );
-		}
-		add_action( 'widgets_init', 'html5reset_widgets_init' );
+		add_action( 'wp_enqueue_scripts', 'load_theme_scripts_and_styles' ); 
 	}
 
 	// Posted On

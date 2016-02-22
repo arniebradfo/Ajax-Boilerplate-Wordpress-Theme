@@ -1,5 +1,8 @@
 <?php
 /**
+ *
+ * handles the theme's custom options
+ * 
  * @package WordPress
  * @subpackage HTML5-Reset-Plus-PJAX
  * @since HTML5 Reset + PJAX 0.1
