@@ -394,7 +394,7 @@ Object.prototype.prependChild = function(child) {
 				wrapperUL.className = 'children';
 				wrapperUL.innerHTML = commentLI;
 				// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
-				console.log(wrapperUL);
+				// console.log(wrapperUL);
 
 				var wpErrorTitle = wrapperUL.querySelector('title');
 				if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){

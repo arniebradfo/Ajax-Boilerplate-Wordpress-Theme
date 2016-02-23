@@ -28,20 +28,14 @@
 					wp_notify_moderator($comment_ID);
 					break;
 				case '1': //Approved comment
-					// echo "success";
 					$commentdata = get_comment( $comment_ID, ARRAY_A );
-					// print_r( $commentdata);
-					$permaurl = get_permalink( $post['ID'] );
-					$url = str_replace('http://', '/', $permaurl);
-
-					single_comment( $commentdata, $url );
+					single_comment( $commentdata );
 					wp_notify_postauthor($comment_ID);
 					break;
-
 				default: // $comment_status was null
 					echo "error";
 			}
-			exit;
+			exit; // better the wp_die() ?
 		}
 	}
 	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);

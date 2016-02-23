@@ -3,7 +3,7 @@
 ## AJAX TODOs:
 	+ load in meta tags
 	+ ajax does not load properly in theme customizer
-	+ comments is broken in strict mode
+	+ comments is broken in strict mode - works with debug turned off
 
 ## NAVIGATION:
 	+ research the history object api
