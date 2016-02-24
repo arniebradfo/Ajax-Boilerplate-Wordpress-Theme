@@ -3,15 +3,13 @@
 ## AJAX TODOs:
 	+ load in meta tags
 	+ ajax does not load properly in theme customizer
-	+ comments is broken in strict mode - works with debug turned off
 
 ## NAVIGATION:
 	+ research the history object api
 	+ add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 
-	+ COMMENTS:
-		* back button paginates comments 
-		* make sure all comment classes are implemented properly
+## COMMENTS:
+	+ back button paginates comments 
 
 ## Refactor js
 	+ refactor functions to the appropiate type: anonymous, public, etc...

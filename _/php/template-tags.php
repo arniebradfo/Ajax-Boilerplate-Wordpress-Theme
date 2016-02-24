@@ -18,22 +18,15 @@ function single_comment( $commentdata ){
 	}
 
 	?>
-	<li id="comment-<?php echo $commentdata['comment_ID']; ?>" 
-		class="comment 
-			<?php if( $commentdata['user_id'] > 0 ):?>byuser <?php endif; ?>
-			comment-author-<?php echo $commentdata['comment_author']; ?> 
-			<?php if( $commentdata['user_id'] == get_post_field('post_author',$commentdata['comment_post_ID']) ):?>bypostauthor <?php endif; ?>
-			even <?php //TODO: test for this ?>
-			thread-even <?php //TODO: test for this ?>
-			depth-<?php echo $comment_depth; ?>">
+	<li id="comment-<?php echo $commentdata['comment_ID']; ?>" class="<?php echo join( ' ',get_comment_class( '', $commentdata['comment_ID'], $commentdata['comment_post_ID'] )) ; ?>">
 		<article id="div-comment-<?php echo $commentdata['comment_ID']; ?>" class="comment-body">
+
 			<footer class="comment-meta">
 				<div class="comment-author vcard">
 					<?php echo get_avatar( $commentdata['comment_author_email'], 32 ); ?>
 					<b class="fn"><?php echo $commentdata['comment_author']; ?></b> 
 					<span class="says">says:</span>					
 				</div><!-- .comment-author -->
-
 				<div class="comment-metadata">
 					<a href="<?php echo get_comment_link( $commentdata['comment_ID'] ); ?>">
 						<time datetime="<?php echo $commentdata['comment_date_gmt']; ?>+00:00">
@@ -48,14 +41,16 @@ function single_comment( $commentdata ){
 					</span>
 					<?php endif; ?>
 				</div><!-- .comment-metadata -->
-
 			</footer><!-- .comment-meta -->
 
 			<div class="comment-content">
-				<?php echo $commentdata['comment_content']; ?>
+				<p>
+					<?php echo $commentdata['comment_content']; ?>
+				</p>
 			</div><!-- .comment-content -->
 
 			<div class="reply">
+				<?php // echo get_comment_reply_link(array(), $commentdata['comment_ID'], $commentdata['comment_post_ID'] ); // I don't know why this doesn't work?>
 				<a rel="nofollow" 
 				   class="comment-reply-link" 
 				   href="<?php echo get_permalink( $commentdata['comment_post_ID'] ); ?>?replytocom=<?php echo $commentdata['comment_ID']; ?>#respond" 
@@ -65,6 +60,7 @@ function single_comment( $commentdata ){
 					Reply
 				</a>
 			</div>
+
 		</article><!-- .comment-body -->
 	</li><!-- #comment-## -->
 	<?php
