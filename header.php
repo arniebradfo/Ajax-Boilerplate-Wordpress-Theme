@@ -32,10 +32,9 @@
 <!--[if !IE ]><!--><html <?php language_attributes(); ?>><!--<![endif]-->
 
 <head>
+<?php endif; // step out of ajax detection for the head ?>
+<?php if ($GLOBALS['is_ajax']){ ?><div id="ajax-head"><?php } // wrap meta info ?>
 
-	<?php // Always force latest IE rendering engine (even in intranet) ?>
-	<!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
-	
 	<?php // <!-- Application-specific meta tags -->
 		// Google  				-  https://support.google.com/webmasters/answer/79812
 		// LinkedIn  			-  https://developer.linkedin.com/docs/share-on-linkedin
@@ -46,24 +45,17 @@
 		// Twitter  			-  https://dev.twitter.com/cards/markup
 		// Facebook  			-  https://developers.facebook.com/docs/sharing/webmasters
 	?>
-
-	<?php if (is_search()){ ?>
-		<meta name="robots" content="noindex, nofollow" />
-	<?php } ?>
 	<meta charset="<?php bloginfo('charset'); ?>"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 minimal-ui" />
-	<meta name="Copyright" content="Copyright &copy; <?php bloginfo('name'); ?> <?php echo date('Y'); ?>. All Rights Reserved." />
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
-	<?php // <meta name="google-site-verification" content="" /> ?>
-
-	<?php endif; // step out of ajax detection for meta and wp_head ?>
 
 	<?php author_meta_tag(); ?>
-	<meta name="description" content="<?php bloginfo('description'); // Google will often use this as its description of your page/site. Make it good. ?>" />
+	<!-- wp_head starts here -->
 	<?php wp_head(); ?>
 
-	<?php if (!$GLOBALS['is_ajax']): //... and step back in?>
 
+<?php if ($GLOBALS['is_ajax']){ ?></div><?php } // close #ajax-head ?>
+<?php if (!$GLOBALS['is_ajax']): //... and step back in?>
 </head>
 <body <?php body_class(); ?> >
 
@@ -89,4 +81,4 @@
 
 	<?php endif; // end ajax detection ?>
 	
-	<main><?php // Pjax content wrapper element ?>
+	<main id="content"><?php // Pjax content wrapper element ?>

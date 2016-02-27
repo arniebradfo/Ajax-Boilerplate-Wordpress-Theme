@@ -220,8 +220,9 @@ Object.prototype.prependChild = function(child) {
 				var workspace       = d.createElement("div");
 				workspace.innerHTML = responseText;
 				console.log(workspace);
+				d.head.innerHTML = workspace.querySelector('#ajax-head').innerHTML;
 				//d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
-				main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
+				main.innerHTML      = workspace.querySelector('#content').innerHTML;  // update the content
 
 				postsNav = workspace.querySelector('.post-navigation');
 				var newNextPosts = postsNav.querySelector('.next-posts'),
@@ -322,7 +323,7 @@ Object.prototype.prependChild = function(child) {
 				history.pushState({}, '', href);
 				var optionsSurrogate;
 				// if the link is in the comment-navigation
-				if (e.toElement.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
+				if (e.target.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
 					optionsSurrogate = ajaxGetCommentsSection;
 					optionsSurrogate.href = href;
 					ajaxLoad(optionsSurrogate);

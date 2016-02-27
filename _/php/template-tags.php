@@ -80,23 +80,16 @@ function posted_on() {
 	<?php
 }
 
-// needs testing - when does it output other authors?
+// add option for fallback site author
 function author_meta_tag($nameType = 'display_name'){
 	global $post;
 	$authorID=$post->post_author;
-	$theAuthorName = '';
-
-	if( $authorID != null) { // display the author for the post
-		$theAuthorName .= get_the_author_meta( $nameType , $authorID ); 
-	} else { 
-		// there is no author 
-		$theAuthorName .= 'ArnieBradfo'; // display pseudonym
-		// return null; // or stop the function
-	}
-
+	if( $authorID == null) return null;
+	if( is_single() || is_page() ){
 	?>
-		<meta name="author" content="<?php echo esc_attr($theAuthorName); ?>"/>
+		<meta name="author" content="<?php echo esc_attr(get_the_author_meta( $nameType , $authorID )); ?>"/>
 	<?php
+	} else { return null; }
 }
 	
 ?>

@@ -3,6 +3,7 @@
 ## AJAX TODOs:
 	+ ajax does not load properly in theme customizer
 	+ post date link ajax is broken
+	+ nav link to current page also broken - maybe stopping if the url source is the same??
 
 ## META TAGS
 	- ajax load in meta tags
