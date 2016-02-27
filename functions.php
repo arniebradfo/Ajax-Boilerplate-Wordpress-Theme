@@ -96,28 +96,6 @@
 		add_action( 'wp_enqueue_scripts', 'load_theme_scripts_and_styles' ); 
 	}
 
-	// Posted On
-	function posted_on() {
-		printf( __( '
-			<span class="sep">
-				Posted 
-			</span>
-			<a href="%1$s" title="%2$s" rel="bookmark">
-				<time class="entry-date" datetime="%3$s" pubdate>%4$s</time>
-			</a> 
-			by 
-			<span class="byline author vcard">
-				%5$s
-			</span>
-			', '' ),
-			esc_url( get_permalink() ),
-			esc_attr( get_the_time() ),
-			esc_attr( get_the_date( 'c' ) ),
-			esc_html( get_the_date() ),
-			esc_attr( get_the_author() )
-		);
-	}
-
 	// DISABLE EMOJIs  -  http://wordpress.stackexchange.com/questions/185577/disable-emojicons-introduced-with-wp-4-2
 	function disable_wp_emojicons() {
 		// all actions related to emojis

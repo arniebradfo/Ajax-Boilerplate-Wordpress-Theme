@@ -8,6 +8,7 @@
  * @since HTML5 Reset + PJAX 0.1
  */
 
+// HTML formatted single comment
 function single_comment( $commentdata ){
 
 	$comment_depth = 1;
@@ -64,8 +65,26 @@ function single_comment( $commentdata ){
 		</article><!-- .comment-body -->
 	</li><!-- #comment-## -->
 	<?php
-
 	return;
-
 }
+
+// Posted On 
+function posted_on() {
+	?>
+	<span class="sep">
+		Posted 
+	</span>
+	<a href="<?php echo esc_url( get_permalink() ); ?>" title="<?php echo esc_attr( get_the_time() ); ?>" rel="bookmark">
+		<time class="entry-date" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>" pubdate>
+			<?php echo esc_html( get_the_date() ); ?>
+		</time>
+	</a> 
+	by 
+	<span class="byline author vcard">
+		<?php // echo get_avatar( get_the_author_meta('ID'), 32 ); ?>
+		<?php echo esc_attr( get_the_author() ); ?>
+	</span>
+	<?php
+}
+
 ?>
