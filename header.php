@@ -43,9 +43,9 @@
 			echo '<meta name="robots" content="noindex, nofollow" />';
 	?>
 
-	<?php endif; // step out of ajax detection for the title?>
-	<title><?php wp_title( '|', true, 'right' ); ?></title>
-	<?php if (!$GLOBALS['is_ajax']): //... and step back in?>
+	<?php // endif; // step out of ajax detection for the title?>
+	<!--<title><?php // wp_title( '|', true, 'right' ); ?></title>-->	
+	<?php // if (!$GLOBALS['is_ajax']): //... and step back in?>
 
 	<meta name="title" content="<?php wp_title( '|', true, 'right' ); ?>">
 

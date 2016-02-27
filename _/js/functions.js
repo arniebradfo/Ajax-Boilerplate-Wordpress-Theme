@@ -219,7 +219,7 @@ Object.prototype.prependChild = function(child) {
 				// Do this once the ajax request is returned.
 				var workspace       = d.createElement("div");
 				workspace.innerHTML = responseText;
-				d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
+				//d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
 				main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
 
 				postsNav = workspace.querySelector('.post-navigation');
@@ -315,8 +315,8 @@ Object.prototype.prependChild = function(child) {
 			&& !href.match(currentPageWithParameters) // href isnt a parameterized link of the current page
 			&& href != window.location.href // href isn't a link to the current page
 			&& !href.match(/\/wp-/g)  // href doesn't go to the wp-admin backend
-			&& !href.match(/\/feed/g) ){ // is not an rss feed of somekind
-
+			&& !href.match(/\/feed/g) ) // is not an rss feed of somekind
+			{
 				e.preventDefault();
 				history.pushState({}, '', href);
 				var optionsSurrogate;

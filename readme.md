@@ -1,8 +1,13 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
 ## AJAX TODOs:
-	+ load in meta tags
 	+ ajax does not load properly in theme customizer
+
+## META TAGS
+	- ajax load in meta tags
+		- load the whole head and replace it wholesale?
+	+ choose which meat tags to add ??
+	+ make it work with plugins
 
 ## NAVIGATION:
 	+ research the history object api
@@ -10,6 +15,7 @@
 
 ## COMMENTS:
 	+ back button paginates comments 
+		* make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
 
 ## Refactor js
 	+ refactor functions to the appropiate type: anonymous, public, etc...
@@ -19,7 +25,7 @@
 
 - Test it with google analytics
 
-- feature detect to allow gracefull degredation.
+- feature detect to allow graceful degredation.
 	+ Test browser implementation inconsistencies of popstate.
 
 
