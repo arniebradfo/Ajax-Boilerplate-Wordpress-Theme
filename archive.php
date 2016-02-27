@@ -10,6 +10,8 @@
 
  			<?php $post = $posts[0]; // Hack. Set $post so that the_date() works. ?>
 
+ 			<?php // the_archive_title(); the_archive_description(); // NEW FUNCTIONS! ?>
+
 			<?php /* If this is a category archive */ if (is_category()) { ?>
 				<h2><?php _e('Archive for the','html5reset'); ?> &#8216;<?php single_cat_title(); ?>&#8217; <?php _e('Category','html5reset'); ?></h2>
 

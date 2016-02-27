@@ -33,64 +33,39 @@
 
 <head>
 
-	<meta charset="<?php bloginfo('charset'); ?>">
-
 	<?php // Always force latest IE rendering engine (even in intranet) ?>
-	<!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
-
-	<?php
-		if (is_search())
-			echo '<meta name="robots" content="noindex, nofollow" />';
-	?>
-
-	<?php // endif; // step out of ajax detection for the title?>
-	<!--<title><?php // wp_title( '|', true, 'right' ); ?></title>-->	
-	<?php // if (!$GLOBALS['is_ajax']): //... and step back in?>
-
-	<meta name="title" content="<?php wp_title( '|', true, 'right' ); ?>">
-
-	<?php // Google will often use this as its description of your page/site. Make it good. ?>
-	<meta name="description" content="<?php bloginfo('description'); ?>" />
-
-	<?php
-		// <meta name="author" content="" />
-		// <meta name="google-site-verification" content="" />
-	?>
-
-	<meta name="Copyright" content="Copyright &copy; <?php bloginfo('name'); ?> <?php echo date('Y'); ?>. All Rights Reserved.">
-
-	<?php /*
-		j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag
-		 - device-width : Occupy full width of the screen in its current orientation
-		 - initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
-		 - maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
-		 - minimal-ui = iOS devices have minimal browser ui by default
-	*/ ?>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0 minimal-ui" />
+	<!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
 	
-	<?php
-		// <!-- Application-specific meta tags -->
-
-		// Google  -  https://support.google.com/webmasters/answer/79812
-		// LinkedIn  -  https://developer.linkedin.com/docs/share-on-linkedin
-		// OpenGraph  -  http://ogp.me/
-		// Richard's Toolbox  -  http://richardstoolbox.com/#q=meta tag
-
-		// Windows  -  https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx
-		// https://msdn.microsoft.com/library/dn455106.aspx
-
-		// Twitter  -  https://dev.twitter.com/cards/markup
-
-		// Facebook  -  https://developers.facebook.com/docs/sharing/webmasters
+	<?php // <!-- Application-specific meta tags -->
+		// Google  				-  https://support.google.com/webmasters/answer/79812
+		// LinkedIn  			-  https://developer.linkedin.com/docs/share-on-linkedin
+		// OpenGraph  			-  http://ogp.me/
+		// Richard's Toolbox  	-  http://richardstoolbox.com/#q=meta tag
+		// Windows  			-  https://msdn.microsoft.com/en-us/library/dn255024(v=vs.85).aspx
+		// 						-  https://msdn.microsoft.com/library/dn455106.aspx
+		// Twitter  			-  https://dev.twitter.com/cards/markup
+		// Facebook  			-  https://developers.facebook.com/docs/sharing/webmasters
 	?>
 
-	<link rel="profile" href="http://gmpg.org/xfn/11" />
+	<?php if (is_search()){ ?>
+		<meta name="robots" content="noindex, nofollow" />
+	<?php } ?>
+	<meta charset="<?php bloginfo('charset'); ?>"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 minimal-ui" />
+	<meta name="Copyright" content="Copyright &copy; <?php bloginfo('name'); ?> <?php echo date('Y'); ?>. All Rights Reserved." />
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+	<?php // <meta name="google-site-verification" content="" /> ?>
 
+	<?php endif; // step out of ajax detection for meta and wp_head ?>
+
+	<?php author_meta_tag(); ?>
+	<meta name="description" content="<?php bloginfo('description'); // Google will often use this as its description of your page/site. Make it good. ?>" />
 	<?php wp_head(); ?>
 
+	<?php if (!$GLOBALS['is_ajax']): //... and step back in?>
+
 </head>
-<body <?php body_class(); ?>>
+<body <?php body_class(); ?> >
 
 	<header id="header" role="banner">
 		<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
@@ -98,10 +73,7 @@
 	</header>
 
 	<nav class="nav" role="navigation">
-		<?php 
-			$primary_menu_name = 'primary';
-			wp_nav_menu( array('theme_location' => $primary_menu_name) ); 
-		?>
+		<?php wp_nav_menu( array('theme_location' => 'primary') ); ?>
 	</nav>
 
 	<?php else:	// content that only comes through ajax ?>
@@ -111,7 +83,6 @@
 			$menus = get_registered_nav_menus();
 			foreach ( $menus as $location => $description ) { 
 				wp_nav_menu( array('theme_location' => $location) ); 
-				// echo $location . ': ' . $description . "\r";
 			}
 		?>
 	</nav>

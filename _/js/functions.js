@@ -219,6 +219,7 @@ Object.prototype.prependChild = function(child) {
 				// Do this once the ajax request is returned.
 				var workspace       = d.createElement("div");
 				workspace.innerHTML = responseText;
+				console.log(workspace);
 				//d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
 				main.innerHTML      = workspace.getElementsByTagName('main')[0].innerHTML;  // update the content
 

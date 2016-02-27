@@ -9,15 +9,8 @@
  */
 
 // HTML formatted single comment
-function single_comment( $commentdata ){
-
-	$comment_depth = 1;
-	$comment_ancestor_ID = $commentdata['comment_parent']; 
-	while ($comment_ancestor_ID != 0){
-		$comment_depth++;
-		$comment_ancestor_ID = get_comment( $comment_ancestor_ID, ARRAY_A )['comment_parent']; 
-	}
-
+function single_comment( $comment_ID ){
+	$commentdata = get_comment( $comment_ID, ARRAY_A );
 	?>
 	<li id="comment-<?php echo $commentdata['comment_ID']; ?>" class="<?php echo join( ' ',get_comment_class( '', $commentdata['comment_ID'], $commentdata['comment_post_ID'] )) ; ?>">
 		<article id="div-comment-<?php echo $commentdata['comment_ID']; ?>" class="comment-body">
@@ -87,4 +80,23 @@ function posted_on() {
 	<?php
 }
 
+// needs testing - when does it output other authors?
+function author_meta_tag($nameType = 'display_name'){
+	global $post;
+	$authorID=$post->post_author;
+	$theAuthorName = '';
+
+	if( $authorID != null) { // display the author for the post
+		$theAuthorName .= get_the_author_meta( $nameType , $authorID ); 
+	} else { 
+		// there is no author 
+		$theAuthorName .= 'ArnieBradfo'; // display pseudonym
+		// return null; // or stop the function
+	}
+
+	?>
+		<meta name="author" content="<?php echo esc_attr($theAuthorName); ?>"/>
+	<?php
+}
+	
 ?>

@@ -2,6 +2,7 @@
 
 ## AJAX TODOs:
 	+ ajax does not load properly in theme customizer
+	+ post date link ajax is broken
 
 ## META TAGS
 	- ajax load in meta tags
@@ -16,6 +17,8 @@
 ## COMMENTS:
 	+ back button paginates comments 
 		* make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
+	+ sanatize wp error messages - style is coming in
+	+ attach ctrl+enter function to new comments box after ajax reload
 
 ## Refactor js
 	+ refactor functions to the appropiate type: anonymous, public, etc...

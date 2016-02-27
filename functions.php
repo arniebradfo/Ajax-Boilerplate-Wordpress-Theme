@@ -28,8 +28,7 @@
 					wp_notify_moderator($comment_ID);
 					break;
 				case '1': //Approved comment
-					$commentdata = get_comment( $comment_ID, ARRAY_A );
-					single_comment( $commentdata );
+					single_comment( $comment_ID );
 					wp_notify_postauthor($comment_ID);
 					break;
 				default: // $comment_status was null
@@ -75,6 +74,7 @@
 			wp_enqueue_style( 'reset' );
 			wp_register_style( 'style', get_stylesheet_uri() );
 			wp_enqueue_style( 'style' );
+			// Remove widget css from head - https://wordpress.org/support/topic/remove-css-from-head
 
 			// Load jQuery scripts - jq v1.12.0 is for < IE8 
 			wp_deregister_script( 'jquery' ); // if using vanilla .js
