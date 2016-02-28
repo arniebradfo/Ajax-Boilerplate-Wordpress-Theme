@@ -220,9 +220,20 @@ Object.prototype.prependChild = function(child) {
 				var workspace       = d.createElement("div");
 				workspace.innerHTML = responseText;
 				console.log(workspace);
-				d.head.innerHTML = workspace.querySelector('#ajax-head').innerHTML;
-				//d.title             = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
-				main.innerHTML      = workspace.querySelector('#content').innerHTML;  // update the content
+
+				// d.head.innerHTML = workspace.querySelector('#ajax-head').innerHTML;
+				var headMeta = d.head.getElementsByTagName('meta'),
+					newHeadMeta = workspace.querySelector('#ajax-head').getElementsByTagName('meta');
+					console.log(headMeta);
+				for (var i = headMeta.length - 1; i > -1; --i) { // remove all meta tags
+					headMeta[i].remove();
+				}
+				for (var j = newHeadMeta.length - 1; j > -1; --j) { // replace meta tags with new ones
+					d.head.appendChild(newHeadMeta[j]);
+				}
+				d.head.querySelector('link[rel="canonical"]').href = workspace.querySelector('link[rel="canonical"]').href; // replace canonical link
+				d.title = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
+				main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
 
 				postsNav = workspace.querySelector('.post-navigation');
 				var newNextPosts = postsNav.querySelector('.next-posts'),
@@ -234,8 +245,8 @@ Object.prototype.prependChild = function(child) {
 
 				// update the the class list of all menu items
 				menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
-				for (var i = 0; i < menuItems.length; ++i) {
-					var item = menuItems[i];  // Calling myNodeList.item(i) isn't necessary in JavaScript
+				for (var k = 0; k < menuItems.length; ++k) {
+					var item = menuItems[k];  // Calling myNodeList.item(k) isn't necessary in JavaScript
 					d.getElementById(item.id).className = item.className;
 				}
 				console.log('ajax loaded!');
