@@ -322,12 +322,19 @@ Object.prototype.prependChild = function(child) {
 			if (e.ctrlKey || e.altKey || e.shiftKey){
 				return false; // if the click was a ctrl/alt/shift click
 			}
+
 			var href = e.target.href;
 			var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
 
+			if (href == window.location.href){ // if the page is exactly the same page
+				console.log("you're already on that page");
+				e.preventDefault();
+				return false;
+			}
+
 			if ((href.indexOf(d.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
 			&& !href.match(currentPageWithParameters) // href isnt a parameterized link of the current page
-			&& href != window.location.href // href isn't a link to the current page
+			// && href != window.location.href // href isn't a link to the current page - we already check for this above
 			&& !href.match(/\/wp-/g)  // href doesn't go to the wp-admin backend
 			&& !href.match(/\/feed/g) ) // is not an rss feed of somekind
 			{

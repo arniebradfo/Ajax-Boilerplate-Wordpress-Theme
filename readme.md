@@ -2,14 +2,6 @@
 
 ## AJAX TODOs:
 	+ ajax does not load properly in theme customizer
-	+ post date link ajax is broken
-	+ nav link to current page also broken - maybe stopping if the url source is the same??
-
-## META TAGS
-	- ajax load in meta tags
-		- load the whole head and replace it wholesale?
-	+ choose which meat tags to add ??
-	+ make it work with plugins
 
 ## NAVIGATION:
 	+ research the history object api
