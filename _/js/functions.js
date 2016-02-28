@@ -394,17 +394,17 @@ Object.prototype.prependChild = function(child) {
 			started: function(){
 				statusdiv.innerHTML = commentStatus.placeholder;
 			},
-			failed: function(href, responseText, status, statusText) {
-				var errorWrapper       = d.createElement('div');
+			failed: function(href, status, statusText, responseText) {
+				var errorWrapper = d.createElement('div');
 				errorWrapper.innerHTML = responseText;
-				console.log(errorWrapper);
+				console.log(errorWrapper.getElementsByTagName('p'));
 
 				var wpErrorTitle = errorWrapper.querySelector('title');
 				if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){
 					// in case wordpress sends a formatted error page
 					statusdiv.innerHTML = '<p><strong>ERROR '+status+': </strong>'+errorWrapper.getElementsByTagName('p')[0].innerHTML+'</p>';
 					return true;
-				} else {		
+				} else {
 					statusdiv.innerHTML = '<p><strong>ERROR '+status+': </strong>'+statusText+'</p>';
 					return false;
 				}
