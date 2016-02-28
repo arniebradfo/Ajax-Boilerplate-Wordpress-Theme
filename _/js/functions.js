@@ -257,7 +257,9 @@ Object.prototype.prependChild = function(child) {
 					ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
 				}
 
-				attachAjaxComments(); // comments section will be new - need to rebind events to new elements
+				// comments section will be new - need to rebind events to new elements
+				attachAjaxComments(); 
+				ctrlEnterPost();
 				return true;
 			}
 		};
