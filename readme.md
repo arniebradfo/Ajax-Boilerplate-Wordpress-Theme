@@ -19,17 +19,14 @@
 - refactor names - more like jQuery?
 - add a global settings object
 	- wp-admin rename
-
-- Test it with google analytics
-
+- Test it with google analytics - use ga plugin?
 - feature detect to allow graceful degredation.
 	+ Test browser implementation inconsistencies of popstate.
 
 ## SITE TODOs / HTML:
 - remove `if ( !function_exists()){}` checks ??
-- add ctrl-s to save stuff in the admin panel
-- move html outputing php into a new folder
 - drop support for <=IE9
+- fix archive title / description
 
 ## FINAL
 - research best keywords for naming
