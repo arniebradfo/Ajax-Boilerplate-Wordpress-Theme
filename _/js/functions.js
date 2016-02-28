@@ -397,7 +397,6 @@ Object.prototype.prependChild = function(child) {
 			failed: function(href, status, statusText, responseText) {
 				var errorWrapper = d.createElement('div');
 				errorWrapper.innerHTML = responseText;
-				console.log(errorWrapper.getElementsByTagName('p'));
 
 				var wpErrorTitle = errorWrapper.querySelector('title');
 				if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){
