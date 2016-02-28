@@ -6,7 +6,7 @@
  */
 ?>
 
-</main><!-- Pjax content wrapper element -->
+</main>
 
 <nav class="nav post-navigation">
 	<div class="next-posts"><?php next_posts_link('&laquo; Older Entries') ?></div>

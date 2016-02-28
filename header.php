@@ -55,7 +55,7 @@
 
 
 <?php if ($GLOBALS['is_ajax']){ ?></div><?php } // close #ajax-head ?>
-<?php if (!$GLOBALS['is_ajax']): //... and step back in?>
+<?php if (!$GLOBALS['is_ajax']): //... and step back inv?>
 </head>
 <body <?php body_class(); ?> >
 
@@ -82,3 +82,5 @@
 	<?php endif; // end ajax detection ?>
 	
 	<main id="content"><?php // Pjax content wrapper element ?>
+
+	
