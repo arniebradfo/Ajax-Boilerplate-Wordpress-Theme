@@ -1,7 +1,7 @@
 #  HTML5 Reset+PJAX WordPress Theme
 
 ## AJAX TODOs:
-- ajax does not load properly in theme customizer
+
 
 ## NAVIGATION:
 - research the history object api
@@ -15,6 +15,7 @@
 	+ make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
 
 ## Refactor js
+- remove prototype methods
 - refactor functions to the appropiate type: anonymous, public, etc...
 - refactor names - more like jQuery?
 - add a global settings object
@@ -33,10 +34,6 @@
 - Write documentation.
 
 ## DONES to keep:
-- Research and reduce SEO problems with ajax
-	this should work fine because the stie will still function normally without js. 
-	all the links have accurate urls
-	the site map will still work normally with site crawlers 
 - [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) 
 - Add hover [prefetch option](http://miguel-perez.github.io/smoothState.js/) to increase performance.
 

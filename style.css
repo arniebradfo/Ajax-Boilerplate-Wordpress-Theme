@@ -15,6 +15,11 @@ GitHub Branch: master
 
 *{transition: all 0.5s ease;}
 
+html, body{
+	background-color: white;
+}
+
+
 /* A Linux- and Windows-friendly sans-serif font stack: http://prospects.mhurrell.co.uk/post/updating-the-helvetica-font-stack */
 body {font: 13px Helmet, Freesans, sans-serif;}
 
