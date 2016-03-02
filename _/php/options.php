@@ -24,10 +24,10 @@ function opts_theme_page()
 	<div class="section panel">
 		<h1>Theme Options</h1>
 		<form method="post" enctype="multipart/form-data" action="options.php">
-		<?php 
-			settings_fields('opts_theme_options'); 	
-			do_settings_sections('opts_theme_options.php');
-		?>
+			<?php 
+				settings_fields('opts_theme_options'); 	
+				do_settings_sections('opts_theme_options.php');
+			?>
 			<p class="submit">  
 				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />  
 			</p>
@@ -48,15 +48,15 @@ function opts_register_settings()
 	// Create textbox field
 	$field_args = array(
 	  'type'      => 'text',
-	  'id'        => 'opts_textbox',
-	  'name'      => 'opts_textbox',
-	  'desc'      => 'Example of textbox description',
+	  'id'        => 'site_author',
+	  'name'      => 'site_author',
+	  'desc'      => 'This will appear in the author meta tag when there is not and author for the page.',
 	  'std'       => '',
-	  'label_for' => 'opts_textbox',
-	  'class'     => 'css_class'
+	  'label_for' => 'site_author',
+	  'class'     => 'site-author'
 	);
 
-	add_settings_field( 'example_textbox', 'Example Textbox', 'opts_display_setting', 'opts_theme_options.php', 'opts_text_section', $field_args );
+	add_settings_field( 'example_textbox', 'Site Author', 'opts_display_setting', 'opts_theme_options.php', 'opts_text_section', $field_args );
 }
 add_action( 'admin_init', 'opts_register_settings' );
 

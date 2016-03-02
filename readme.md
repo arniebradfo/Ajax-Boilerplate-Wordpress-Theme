@@ -8,7 +8,10 @@
 - add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 
 ##META
-- global author option
+- next and prev link tags in head
+
+##SETTINGS:
+- add an option to (theme customizer)[http://www.paulund.co.uk/using-theme-customiser]
 
 ## COMMENTS:
 - back button paginates comments 
@@ -28,7 +31,6 @@
 ## SITE TODOs / HTML:
 - remove `if ( !function_exists()){}` checks ??
 - drop support for <=IE9
-- fix archive title / description
 
 ## FINAL
 - research best keywords for naming
