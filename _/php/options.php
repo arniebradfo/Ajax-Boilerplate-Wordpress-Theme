@@ -10,6 +10,9 @@
 
 // http://www.paulund.co.uk/theme-options-page
 
+// use these options in a theme:
+// get_option( 'opts_theme_options' )['key'];
+
 // Theme Option Page Example
 function opts_theme_menu()
 {

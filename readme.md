@@ -2,7 +2,6 @@
 
 ## AJAX TODOs:
 
-
 ## NAVIGATION:
 - research the history object api
 - add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
@@ -11,7 +10,7 @@
 - next and prev link tags in head
 
 ##SETTINGS:
-- add an option to (theme customizer)[http://www.paulund.co.uk/using-theme-customiser]
+- remove other option type
 
 ## COMMENTS:
 - back button paginates comments 
