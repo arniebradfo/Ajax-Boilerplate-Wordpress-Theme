@@ -84,15 +84,14 @@ function posted_on() {
 function author_meta_tag($nameType = 'display_name'){
 	global $post;
 	$authorID=$post->post_author;
-	// if( $authorID == null) return null;
 	$theAuthor = '';
 	if( (is_single() || is_page()) && $authorID != null ){
 		$theAuthor = get_the_author_meta( $nameType , $authorID );
-	} else if( get_theme_mod('site_author') ){
+	} else if ( get_theme_mod('site_author') ) {
 		$theAuthor = get_theme_mod('site_author');
-	} else if( get_option( 'opts_theme_options' )['site_author'] ){
-		$theAuthor = get_option( 'opts_theme_options' )['site_author'];
-	} else { return null; }
+	} else { 
+		return null; 
+	}
 	?>
 		<meta name="author" content="<?php echo esc_attr($theAuthor); ?>"/>
 	<?php

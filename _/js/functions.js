@@ -164,11 +164,23 @@ Object.prototype.prependChild = function(child) {
 		}
 	}
 
+	function updateLinkTag(rel, workspace) {
+		if (d.head.querySelector('link[rel="'+rel+'"]')){
+			if (workspace.querySelector('link[rel="'+rel+'"]')){
+				// replace link href
+				d.head.querySelector('link[rel="'+rel+'"]').href = workspace.querySelector('link[rel="'+rel+'"]').href;
+			} else {
+				// remove link
+				d.head.querySelector('link[rel="'+rel+'"]').remove();
+			}
+		}
+	}
+
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
 	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
 
-		var main = d.getElementsByTagName('main')[0];
+		var main = d.querySelector('#content');
 
 		var ajaxGetPage = {
 			httpMethod: 'GET',
@@ -231,12 +243,12 @@ Object.prototype.prependChild = function(child) {
 				for (var j = newHeadMeta.length - 1; j > -1; --j) { // replace meta tags with new ones
 					d.head.appendChild(newHeadMeta[j]);
 				}
-				if (d.head.querySelector('link[rel="shortlink"]') && workspace.querySelector('link[rel="shortlink"]')){
-					d.head.querySelector('link[rel="shortlink"]').href = workspace.querySelector('link[rel="shortlink"]').href; // replace shortlink link
-				}
-				if (d.head.querySelector('link[rel="canonical"]') && workspace.querySelector('link[rel="canonical"]')){
-					d.head.querySelector('link[rel="canonical"]').href = workspace.querySelector('link[rel="canonical"]').href; // replace canonical link
-				}
+
+				updateLinkTag('next', workspace);
+				updateLinkTag('prev', workspace);
+				updateLinkTag('shortlink', workspace);
+				updateLinkTag('canonical', workspace);
+
 				if (workspace.getElementsByTagName('title')){
 					d.title = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
 				}

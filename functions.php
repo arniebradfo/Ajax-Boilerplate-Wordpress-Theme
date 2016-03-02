@@ -15,7 +15,7 @@
 	// runs through all .php partials in /_/php/
 	foreach (scandir(dirname(__FILE__).'/_/php') as $filename) {
 		$path = dirname(__FILE__).'/_/php/' . $filename;
-		if (is_file($path)) {
+		if ( is_file($path) && pathinfo($path,PATHINFO_EXTENSION) == 'php') {
 			require_once $path;
 		}
 	}

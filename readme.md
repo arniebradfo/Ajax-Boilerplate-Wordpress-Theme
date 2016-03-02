@@ -7,10 +7,8 @@
 - add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
 
 ##META
-- next and prev link tags in head
 
 ##SETTINGS:
-- remove other option type
 
 ## COMMENTS:
 - back button paginates comments 
@@ -30,6 +28,7 @@
 ## SITE TODOs / HTML:
 - remove `if ( !function_exists()){}` checks ??
 - drop support for <=IE9
+- add support for svg uploads??
 
 ## FINAL
 - research best keywords for naming
