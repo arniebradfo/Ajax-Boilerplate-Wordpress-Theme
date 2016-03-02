@@ -8,29 +8,19 @@
 
 	<?php if (have_posts()) : ?>
 
-		<h2><?php _e('Search Results','html5reset'); ?></h2>
+		<h1><?php _e('Search Results','html5reset'); ?></h1>
 
-		<?php while (have_posts()) : the_post(); ?>
+		<section class="post-items">		
+			<?php while (have_posts()) : the_post(); ?>
 
-			<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
+				<?php get_template_part('part-postitem'); ?>
 
-				<h2><?php the_title(); ?></h2>
-
-				<?php posted_on(); ?>
-
-				<div class="entry">
-
-					<?php the_excerpt(); ?>
-
-				</div>
-
-			</article>
-
-		<?php endwhile; ?>
+			<?php endwhile; ?>
+		</section>
 
 	<?php else : ?>
 
-		<h2><?php _e('Nothing Found','html5reset'); ?></h2>
+		<h1><?php _e('Nothing Found','html5reset'); ?></h1>
 
 	<?php endif; ?>
 
