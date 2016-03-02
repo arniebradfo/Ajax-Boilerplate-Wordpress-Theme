@@ -28,7 +28,6 @@
 ## SITE TODOs / HTML:
 - remove `if ( !function_exists()){}` checks ??
 - drop support for <=IE9
-- add support for svg uploads??
 
 ## FINAL
 - research best keywords for naming
