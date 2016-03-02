@@ -15,6 +15,7 @@
 	+ make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
 
 ## Refactor js
+- add if() checks for everything
 - remove prototype methods
 - refactor functions to the appropiate type: anonymous, public, etc...
 - refactor names - more like jQuery?

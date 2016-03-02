@@ -231,10 +231,18 @@ Object.prototype.prependChild = function(child) {
 				for (var j = newHeadMeta.length - 1; j > -1; --j) { // replace meta tags with new ones
 					d.head.appendChild(newHeadMeta[j]);
 				}
-				d.head.querySelector('link[rel="shortlink"]').href = workspace.querySelector('link[rel="shortlink"]').href; // replace shortlink link
-				d.head.querySelector('link[rel="canonical"]').href = workspace.querySelector('link[rel="canonical"]').href; // replace canonical link
-				d.title = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
-				main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
+				if (d.head.querySelector('link[rel="shortlink"]') && workspace.querySelector('link[rel="shortlink"]')){
+					d.head.querySelector('link[rel="shortlink"]').href = workspace.querySelector('link[rel="shortlink"]').href; // replace shortlink link
+				}
+				if (d.head.querySelector('link[rel="canonical"]') && workspace.querySelector('link[rel="canonical"]')){
+					d.head.querySelector('link[rel="canonical"]').href = workspace.querySelector('link[rel="canonical"]').href; // replace canonical link
+				}
+				if (workspace.getElementsByTagName('title')){
+					d.title = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
+				}
+				if (main && workspace.querySelector('#content').innerHTML){
+					main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
+				}
 
 				postsNav = workspace.querySelector('.post-navigation');
 				var newNextPosts = postsNav.querySelector('.next-posts'),
