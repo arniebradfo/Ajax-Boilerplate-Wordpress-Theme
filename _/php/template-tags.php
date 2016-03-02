@@ -88,6 +88,8 @@ function author_meta_tag($nameType = 'display_name'){
 	$theAuthor = '';
 	if( (is_single() || is_page()) && $authorID != null ){
 		$theAuthor = get_the_author_meta( $nameType , $authorID );
+	} else if( get_theme_mod('site_author') ){
+		$theAuthor = get_theme_mod('site_author');
 	} else if( get_option( 'opts_theme_options' )['site_author'] ){
 		$theAuthor = get_option( 'opts_theme_options' )['site_author'];
 	} else { return null; }
