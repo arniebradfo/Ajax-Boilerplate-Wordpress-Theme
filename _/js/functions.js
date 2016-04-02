@@ -147,21 +147,21 @@ Object.prototype.prependChild = function(child) {
 	}
 
 	function replaceNavLinks(newPosts, oldPosts, prepend) {
-		if (newPosts.firstChild && oldPosts){
+		// if (newPosts.firstElementChild && oldPosts){
 			// replace href
-			oldPosts.forEach(function(el){
-				if(el.firstChild){
-					el.firstChild.href = newPosts.firstChild.href;
+			oldPosts.forEach( function(el) {
+				if( newPosts.firstElementChild.href){
+					el.firstElementChild.href = newPosts.firstElementChild.href;
 				} else {
-					el.innerHTML = newPosts.innerHTML;
+					el.firstElementChild.removeAttribute('href');
 				}
 			});
-		} else {
-			// delete div contents
-			oldPosts.forEach(function(el){
-				el.innerHTML = '';
-			});
-		}
+		// } else {
+		// 	// delete div contents
+		// 	oldPosts.forEach(function(el){
+		// 		el.innerHTML = '';
+		// 	});
+		// }
 	}
 
 	function updateLinkTag(rel, workspace) {
@@ -177,7 +177,6 @@ Object.prototype.prependChild = function(child) {
 	}
 
 	// adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
-	// TODO: add hover prefetch option to increase performance ( copy: http://miguel-perez.github.io/smoothState.js/ )
 	function plusPjax() {
 
 		var main = d.querySelector('#content');
@@ -344,6 +343,9 @@ Object.prototype.prependChild = function(child) {
 			if (e.ctrlKey || e.altKey || e.shiftKey){
 				return false; // if the click was a ctrl/alt/shift click
 			}
+			if (!e.target.href){
+				return false; // if the link has no destination
+			}
 
 			var href = e.target.href;
 			var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
@@ -482,8 +484,8 @@ Object.prototype.prependChild = function(child) {
 		}
 	};
 	
-	// attach element outside of this
-	// find a better way to call this?
+	// TODO: attach element outside of this
+	// TODO: find a better way to call this?
 	ctrlEnterPost();
 	plusPjax();
 	attachAjaxComments();

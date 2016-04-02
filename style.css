@@ -40,6 +40,10 @@ body, select, input, textarea {color: #333;}
 
 a {color: #03f;}
 a:hover {color: #69f;}
+/* links without destinations of funtions tied to them are inactive */
+a:not([href]):not([onclick]) {
+    color: gray;
+}
 
 /* Custom text-selection colors (remove any text shadows: http://twitter.com/miketaylr/status/12228805301) */
 ::-moz-selection{background: #fcd700; color: #fff; text-shadow: none;}

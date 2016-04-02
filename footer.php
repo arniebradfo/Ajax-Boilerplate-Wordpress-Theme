@@ -8,20 +8,9 @@
 
 </main>
 
-<nav class="nav post-navigation">
-	<div class="next-posts"><?php next_posts_link('&laquo; Older Entries') ?></div>
-	<div class="prev-posts"><?php previous_posts_link('Newer Entries &raquo;') ?></div>
-</nav>
-
 <?php
-	// Previous/next page navigation.
-	// the_posts_pagination( array(
-	// 	'prev_text'          => __( 'Previous page', 'twentysixteen' ),
-	// 	'next_text'          => __( 'Next page', 'twentysixteen' ),
-	// 	'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentysixteen' ) . ' </span>',
-	// ) );
-	// if this is not an ajax call
-	if (!$GLOBALS['is_ajax']):
+	ajax_post_pagination(); 	
+	if (!$GLOBALS['is_ajax']): // if this is not an ajax call
 ?>
 
 <?php get_sidebar(); ?>
@@ -57,7 +46,6 @@
 	</div>
 
 </footer>
-
 
 </body>
 

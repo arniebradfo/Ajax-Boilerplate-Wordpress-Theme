@@ -5,6 +5,8 @@
 ## NAVIGATION:
 - research the history object api
 - add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
+- php: add href to current pagination link
+- js: don't delete innerhtml of deactivated link
 
 ##META
 
@@ -13,6 +15,7 @@
 ## COMMENTS:
 - back button paginates comments 
 	+ make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
+    + save a copy of the last ajax response and use that insted of querying the server
 
 ## Refactor js
 - add if() checks for everything
@@ -36,7 +39,6 @@
 ## DONES to keep:
 - [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) 
 - Add hover [prefetch option](http://miguel-perez.github.io/smoothState.js/) to increase performance.
-
 
 ## Credits:
 	comments ajax: http://wpcrux.com/ajax-submit-wordpress-comments/

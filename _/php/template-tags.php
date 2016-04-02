@@ -81,7 +81,7 @@ function posted_on() {
 }
 
 // add option for fallback site author
-function author_meta_tag($nameType = 'display_name'){
+function author_meta_tag( $nameType='display_name' ){
 	global $post;
 	$authorID=$post->post_author;
 	$theAuthor = '';
@@ -96,5 +96,64 @@ function author_meta_tag($nameType = 'display_name'){
 		<meta name="author" content="<?php echo esc_attr($theAuthor); ?>"/>
 	<?php
 }
-	
+
+// exports the posts page pagination	
+function ajax_post_pagination( $prev_text='&laquo; Previous' , $next_text='Next &raquo;' ){
+	?>
+	<nav class="nav post-navigation">
+		<div class="next-posts">
+			<?php 
+				if (get_next_posts_link()){
+					next_posts_link($prev_text);
+				} else {
+					echo '<a>'.$prev_text.'</a>';
+				}
+			?>
+		</div>
+		<?php 
+			$pagination_links = paginate_links( array( 'prev_next'=>false, 'type'=>'list' )); 
+			// repace the current link's <span> with an <a> 
+			$pagination_links = str_replace('<span',  '<a',  $pagination_links);
+			$pagination_links = str_replace('</span', '</a', $pagination_links);
+			// TODO: add an href to this somehow
+			echo $pagination_links;
+		?>
+		<div class="prev-posts">
+			<?php 
+				if (get_previous_posts_link()){
+					previous_posts_link($next_text);
+				} else {
+					echo '<a>'.$next_text.'</a>';
+				}
+			?>
+		</div>
+	</nav>
+	<?php
+}
+
+function ajax_comment_navigation( $prev_text='&laquo; Older Comments', $next_text='Newer Comments &raquo;' ){
+	?>
+	<nav class="nav comment-navigation">
+		<div class="next-comments">
+			<?php
+				if(get_previous_comments_link()){
+					previous_comments_link($prev_text);
+				} else {
+					echo '<a>'.$prev_text.'</a>';
+				}
+			?>
+		</div>
+		<div class="prev-comments">
+			<?php
+				if(get_next_comments_link()){
+					next_comments_link($next_text);
+				} else {
+					echo '<a>'.$next_text.'</a>';
+				}
+			?>
+		</div>
+	</nav>
+	<?php
+}
+
 ?>
