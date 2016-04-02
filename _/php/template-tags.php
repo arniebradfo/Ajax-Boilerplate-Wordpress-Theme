@@ -97,8 +97,8 @@ function author_meta_tag( $nameType='display_name' ){
 	<?php
 }
 
-// exports the posts page pagination	
-function ajax_post_pagination( $prev_text='&laquo; Previous' , $next_text='Next &raquo;' ){
+// exports the posts page pagination html
+function ajax_post_pagination( $show_pagination=true, $prev_text='&laquo; Previous' , $next_text='Next &raquo;', $pagination_args=array() ){
 	?>
 	<nav class="nav post-navigation">
 		<div class="next-posts">
@@ -111,12 +111,14 @@ function ajax_post_pagination( $prev_text='&laquo; Previous' , $next_text='Next 
 			?>
 		</div>
 		<?php 
-			$pagination_links = paginate_links( array( 'prev_next'=>false, 'type'=>'list' )); 
-			// repace the current link's <span> with an <a> 
-			$pagination_links = str_replace('<span',  '<a',  $pagination_links);
-			$pagination_links = str_replace('</span', '</a', $pagination_links);
-			// TODO: add an href to this somehow
-			echo $pagination_links;
+		if($show_pagination){
+			$pagination_args['type'] = 'list'; // force list because the js won't update the links wihout a wrapper
+			$pagination_args['prev_next'] = false; // force this to be false becasue we already do this elsewhere
+			$pagination_links = paginate_links( $pagination_args ); 
+			// repace the current link's <span> with an <a> and add the current url as its href
+			$pagination_links = preg_replace('/<span(.+current.+)>(.+)<\/span>/', '<a\1 href='.get_the_url().'>\2</a>', $pagination_links);
+			echo $pagination_links;		
+		}
 		?>
 		<div class="prev-posts">
 			<?php 
@@ -131,7 +133,8 @@ function ajax_post_pagination( $prev_text='&laquo; Previous' , $next_text='Next 
 	<?php
 }
 
-function ajax_comment_navigation( $prev_text='&laquo; Older Comments', $next_text='Newer Comments &raquo;' ){
+// exports comment navigation html
+function ajax_comment_pagination( $show_pagination=false, $prev_text='&laquo; Older Comments', $next_text='Newer Comments &raquo;', $pagination_args=array() ){
 	?>
 	<nav class="nav comment-navigation">
 		<div class="next-comments">
@@ -143,6 +146,16 @@ function ajax_comment_navigation( $prev_text='&laquo; Older Comments', $next_tex
 				}
 			?>
 		</div>
+		<?php 
+		if($show_pagination){
+			$pagination_args['type'] = 'list'; // force list because the js won't update the links wihout a wrapper
+			$pagination_args['prev_next'] = false; // force this to be false becasue we already do this elsewhere
+			$pagination_links = paginate_comments_links($pagination_args); 
+			// repace the current link's <span> with an <a> and add the current url as its href
+			$pagination_links = preg_replace('/<span(.+current.+)>(.+)<\/span>/', '<a\1 href='.get_the_url().'>\2</a>', $pagination_links);
+			echo $pagination_links;
+		}
+		?>
 		<div class="prev-comments">
 			<?php
 				if(get_next_comments_link()){

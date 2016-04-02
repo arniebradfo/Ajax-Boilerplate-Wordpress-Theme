@@ -26,7 +26,7 @@ body {font: 13px Helmet, Freesans, sans-serif;}
 .current-menu-ancestor > a { color: green;}
 .current-page-ancestor > a { font-weight: bold;}
 .current-page-parent > a {text-decoration: none;}
-.current-menu-item > a, .current_page_item > a {color: red;}
+.current-menu-item > a, .current_page_item > a , .current {color: red;}
 
 img, object, embed {
     max-width: 100%;

@@ -4,9 +4,8 @@
 
 ## NAVIGATION:
 - research the history object api
-- add [pagination](https://codex.wordpress.org/Function_Reference/paginate_links) to comments and post archives
-- php: add href to current pagination link
-- js: don't delete innerhtml of deactivated link
+- Pagination: dynamiclly replace each link? - don't know how I would do this?
+- paginate comments
 
 ##META
 

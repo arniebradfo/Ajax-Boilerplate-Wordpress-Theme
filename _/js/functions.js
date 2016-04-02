@@ -146,22 +146,28 @@ Object.prototype.prependChild = function(child) {
 		return true;
 	}
 
-	function replaceNavLinks(newPosts, oldPosts, prepend) {
-		// if (newPosts.firstElementChild && oldPosts){
-			// replace href
-			oldPosts.forEach( function(el) {
-				if( newPosts.firstElementChild.href){
-					el.firstElementChild.href = newPosts.firstElementChild.href;
-				} else {
-					el.firstElementChild.removeAttribute('href');
-				}
-			});
-		// } else {
-		// 	// delete div contents
-		// 	oldPosts.forEach(function(el){
-		// 		el.innerHTML = '';
-		// 	});
-		// }
+	function replaceNavLinks(newPosts, oldPosts) {
+		if( !newPosts || !oldPosts ){
+			return false;
+		}
+		oldPosts.forEach( function(el) {
+			if( newPosts.firstElementChild.href){
+				el.firstElementChild.href = newPosts.firstElementChild.href;
+			} else {
+				el.firstElementChild.removeAttribute('href');
+			}
+		});
+		return true;
+	}
+
+	function replaceNavPageLinks(newList, oldList) {
+		if( !newList || !oldList ){
+			return false;
+		}
+		// TODO: dynamiclly replace each link? - don't know how I would do this?
+		oldList.forEach( function(el) {
+			el.innerHTML = newList.innerHTML;
+		});
 	}
 
 	function updateLinkTag(rel, workspace) {
@@ -258,10 +264,13 @@ Object.prototype.prependChild = function(child) {
 				postsNav = workspace.querySelector('.post-navigation');
 				var newNextPosts = postsNav.querySelector('.next-posts'),
 					newPrevPosts = postsNav.querySelector('.prev-posts'),
+					newPostPages = postsNav.querySelector('.page-numbers'),
 					NextPosts = d.querySelectorAll('.next-posts'),
-					PrevPosts = d.querySelectorAll('.prev-posts');
-				replaceNavLinks(newNextPosts, NextPosts, true );
-				replaceNavLinks(newPrevPosts, PrevPosts, false);
+					PrevPosts = d.querySelectorAll('.prev-posts'),
+					PostPages = d.querySelectorAll('.page-numbers');
+				replaceNavLinks(newNextPosts, NextPosts);
+				replaceNavLinks(newPrevPosts, PrevPosts);
+				replaceNavPageLinks(newPostPages, PostPages);
 
 				// update the the class list of all menu items
 				menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
@@ -308,13 +317,14 @@ Object.prototype.prependChild = function(child) {
 				}
 
 				// replace comments navigation links
+				// TODO: add pagination functionality
 				var commentsNav = workspace.querySelector('.comment-navigation');
 				var newNextComments = commentsNav.querySelector('.next-comments'),
 					newPrevComments = commentsNav.querySelector('.prev-comments'),
 					NextComments = d.querySelectorAll('.next-comments'),
 					PrevComments = d.querySelectorAll('.prev-comments');
-				replaceNavLinks(newNextComments, NextComments, true );
-				replaceNavLinks(newPrevComments, PrevComments, false);
+				replaceNavLinks(newNextComments, NextComments);
+				replaceNavLinks(newPrevComments, PrevComments);
 			}
 		};
 

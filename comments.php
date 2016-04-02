@@ -16,13 +16,13 @@
 	
 	<h2 id="comments"><?php comments_number(__('No Responses','html5reset'), __('One Response','html5reset'), __('% Responses','html5reset') );?></h2>
 
-	<?php ajax_comment_navigation(); ?>
+	<?php ajax_comment_pagination(); ?>
 
 	<ol class="commentlist">
 		<?php wp_list_comments(); ?>
 	</ol>
 
-	<?php ajax_comment_navigation(); ?>
+	<?php ajax_comment_pagination(); ?>
 	
  <?php else : // this is displayed if there are no comments so far ?>
 
