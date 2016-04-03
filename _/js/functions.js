@@ -347,49 +347,26 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 		timeoutTimer: 5000,
 		requestHeaders:[{header:'WP-Request-Type', value: 'GetPage' }],
 		main: d.querySelector('#content'),
-		started: function() {
-			// After the XMLHttpRequest object has been created, but before the open() method has been called
-			// console.log('ajax load has not yet been initalized');
-			return true;
-		},
-		connected: function() {
-			// The open method has been invoked successfully
-			// console.log('Connection Established');
-			return true;
-		},
-		requested: function() {
-			// The send method has been invoked and the HTTP response headers have been received
-			// console.log('Request Recieved');
-			return true;
-		},
-		processing: function() {
-			// HTTP response content begins to load
-			// console.log('Processing Request');
-			return true;
-		},
 		aborted: function(href, timoutTimer) {
 			var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
-			// console.log( 'ajax load was aborted.\n'+timoutText );
+			console.log( 'ajax load was aborted.\n'+timoutText );
 			if (href){
 				location.href = href;
 				return true;
 			}
 			return false;
 		},
-		finished: function() {
-			// called when ajax is finished, pass or fail.
-			// console.log( 'ajax is done...' );
-			return true;
-		},
 		failed: function(href, status, statusText, responseText) {
-			// called when the response is recieved with an error
 			errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
-			// console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
-			location.href = href;
+			console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
+			if (href){
+				location.href = href;
+				return true;
+			}
 			return false;
 		},
 		delivered: function(responseText, statusText) {
-			// Do this once the ajax request is returned.
+
 			var workspace       = d.createElement("div");
 			workspace.innerHTML = responseText;
 
@@ -402,6 +379,7 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 				d.head.appendChild(newHeadMeta[j]);
 			}
 
+			// update header link tags
 			WPAjax.updateLinkTag('next', workspace);
 			WPAjax.updateLinkTag('prev', workspace);
 			WPAjax.updateLinkTag('shortlink', workspace);
@@ -414,6 +392,7 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 				this.main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
 			}
 
+			// update post navigation
 			var newNextPosts = workspace.querySelector('.post-navigation .next-posts'),
 				newPrevPosts = workspace.querySelector('.post-navigation .prev-posts'),
 				newPostPages = workspace.querySelector('.post-navigation .page-numbers'),
@@ -439,7 +418,7 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 			// comments section will be new - need to rebind events to new elements
 			WPAjax.attachComments(); 
 			attachCtrlEnterSubmitWPComment();
-			// console.log('ajax loaded!');
+			console.log('ajax loaded!\n'+statusText);
 			return true;
 		}
 	};
@@ -479,6 +458,65 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 			WPAjax.replaceNavLinks(newNextComments, NextComments);
 			WPAjax.replaceNavLinks(newPrevComments, PrevComments);
 			WPAjax.replaceNavPageLinks(newCommentPages, CommentPages);
+		}
+	};
+
+	WPAjaxGETExample = {
+		httpMethod: 'GET',
+		timeoutTimer: 5000,
+		requestHeaders:[{header:'WP-Request-Type', value: 'GetExample' }],
+		started: function() {
+			// After the XMLHttpRequest object has been created, but before the open() method has been called
+			// console.log('ajax load has not yet been initalized');
+			return true;
+		},
+		connected: function() {
+			// The open method has been invoked successfully
+			// console.log('Connection Established');
+			return true;
+		},
+		requested: function() {
+			// The send method has been invoked and the HTTP response headers have been received
+			// console.log('Request Recieved');
+			return true;
+		},
+		processing: function() {
+			// HTTP response content begins to load
+			// console.log('Processing Request');
+			return true;
+		},
+		aborted: function(href, timoutTimer) {
+			// called when ajax aborts due to timeout of other causes
+			var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
+			// console.log( 'ajax load was aborted.\n'+timoutText );
+			if (href){
+				location.href = href;
+				return true;
+			}
+			return false;
+		},
+		finished: function() {
+			// called when ajax is finished, pass or fail.
+			// console.log( 'ajax is done...' );
+			return true;
+		},
+		failed: function(href, status, statusText, responseText) {
+			// called when the response is recieved with an error
+			errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
+			// console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
+			if (href){
+				location.href = href;
+				return true;
+			}
+			return false;
+		},
+		delivered: function(responseText, statusText) {
+			// Do this once the ajax request is returned.
+			var workspace       = d.createElement("div");
+			workspace.innerHTML = responseText;
+
+			// console.log('ajax loaded!');
+			return true;
 		}
 	};
 	
