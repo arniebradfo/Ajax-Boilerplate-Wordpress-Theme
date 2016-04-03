@@ -5,6 +5,8 @@
 ## NAVIGATION:
 - research the history object api
 - Pagination: dynamiclly replace each link? - don't know how I would do this?
+    + if there is no paginaion returned, delete current one
+    + if there is no current pagination, but one is returned, add it.
 
 ##META
 
