@@ -22,7 +22,7 @@
 		<?php wp_list_comments(); ?>
 	</ol>
 
-	<?php ajax_comment_pagination(); ?>
+	<?php ajax_comment_pagination(true); ?>
 	
  <?php else : // this is displayed if there are no comments so far ?>
 

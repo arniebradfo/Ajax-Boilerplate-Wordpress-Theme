@@ -261,13 +261,12 @@ Object.prototype.prependChild = function(child) {
 					main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
 				}
 
-				postsNav = workspace.querySelector('.post-navigation');
-				var newNextPosts = postsNav.querySelector('.next-posts'),
-					newPrevPosts = postsNav.querySelector('.prev-posts'),
-					newPostPages = postsNav.querySelector('.page-numbers'),
-					NextPosts = d.querySelectorAll('.next-posts'),
-					PrevPosts = d.querySelectorAll('.prev-posts'),
-					PostPages = d.querySelectorAll('.page-numbers');
+				var newNextPosts = workspace.querySelector('.post-navigation .next-posts'),
+					newPrevPosts = workspace.querySelector('.post-navigation .prev-posts'),
+					newPostPages = workspace.querySelector('.post-navigation .page-numbers'),
+					NextPosts = d.querySelectorAll('.post-navigation .next-posts'),
+					PrevPosts = d.querySelectorAll('.post-navigation .prev-posts'),
+					PostPages = d.querySelectorAll('.post-navigation .page-numbers');
 				replaceNavLinks(newNextPosts, NextPosts);
 				replaceNavLinks(newPrevPosts, PrevPosts);
 				replaceNavPageLinks(newPostPages, PostPages);
@@ -318,13 +317,15 @@ Object.prototype.prependChild = function(child) {
 
 				// replace comments navigation links
 				// TODO: add pagination functionality
-				var commentsNav = workspace.querySelector('.comment-navigation');
-				var newNextComments = commentsNav.querySelector('.next-comments'),
-					newPrevComments = commentsNav.querySelector('.prev-comments'),
-					NextComments = d.querySelectorAll('.next-comments'),
-					PrevComments = d.querySelectorAll('.prev-comments');
+				var newNextComments = workspace.querySelector('.comment-navigation .next-comments'),
+					newPrevComments = workspace.querySelector('.comment-navigation .prev-comments'),
+					newCommentPages = workspace.querySelector('.comment-navigation .page-numbers'),
+					NextComments = d.querySelectorAll('.comment-navigation .next-comments'),
+					PrevComments = d.querySelectorAll('.comment-navigation .prev-comments'),
+					CommentPages = d.querySelectorAll('.comment-navigation .page-numbers');
 				replaceNavLinks(newNextComments, NextComments);
 				replaceNavLinks(newPrevComments, PrevComments);
+				replaceNavPageLinks(newCommentPages, CommentPages);
 			}
 		};
 
@@ -375,8 +376,17 @@ Object.prototype.prependChild = function(child) {
 				e.preventDefault();
 				history.pushState({}, '', href);
 				var optionsSurrogate;
+				
 				// if the link is in the comment-navigation
-				if (e.target.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
+				var commentNav = d.querySelectorAll('.comment-navigation'),
+					isCommentNav = false;
+				for ( var i = 0, len = commentNav.length; i < len; ++i) {
+					if(commentNav[i].contains(e.target)){
+						isCommentNav = true;
+					}
+				}
+				// if (e.target.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
+				if (isCommentNav){
 					optionsSurrogate = ajaxGetCommentsSection;
 					optionsSurrogate.href = href;
 					ajaxLoad(optionsSurrogate);

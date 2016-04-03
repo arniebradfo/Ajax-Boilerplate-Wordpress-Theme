@@ -5,7 +5,6 @@
 ## NAVIGATION:
 - research the history object api
 - Pagination: dynamiclly replace each link? - don't know how I would do this?
-- paginate comments
 
 ##META
 
@@ -25,7 +24,7 @@
 	- wp-admin rename
 - Test it with google analytics - use ga plugin?
 - feature detect to allow graceful degredation.
-	+ Test browser implementation inconsistencies of popstate.
+	+ Test browser implementation inconsistencies of popstate.     
 
 ## SITE TODOs / HTML:
 - remove `if ( !function_exists()){}` checks ??

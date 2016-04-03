@@ -150,7 +150,8 @@ function ajax_comment_pagination( $show_pagination=false, $prev_text='&laquo; Ol
 		if($show_pagination){
 			$pagination_args['type'] = 'list'; // force list because the js won't update the links wihout a wrapper
 			$pagination_args['prev_next'] = false; // force this to be false becasue we already do this elsewhere
-			$pagination_links = paginate_comments_links($pagination_args); 
+			$pagination_args['echo'] = false; // force this not to echo so we can work on the string
+			$pagination_links = paginate_comments_links($pagination_args);
 			// repace the current link's <span> with an <a> and add the current url as its href
 			$pagination_links = preg_replace('/<span(.+current.+)>(.+)<\/span>/', '<a\1 href='.get_the_url().'>\2</a>', $pagination_links);
 			echo $pagination_links;

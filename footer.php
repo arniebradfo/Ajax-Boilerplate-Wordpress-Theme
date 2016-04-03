@@ -9,7 +9,7 @@
 </main>
 
 <?php
-	ajax_post_pagination();
+	ajax_post_pagination(true);
 	if (!$GLOBALS['is_ajax']): // if this is not an ajax call
 ?>
 
