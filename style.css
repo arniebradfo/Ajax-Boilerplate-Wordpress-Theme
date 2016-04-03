@@ -43,6 +43,7 @@ a:hover {color: #69f;}
 /* links without destinations of funtions tied to them are inactive */
 a:not([href]):not([onclick]) {
     color: gray;
+    /* disply:none; */
 }
 
 /* Custom text-selection colors (remove any text shadows: http://twitter.com/miketaylr/status/12228805301) */
