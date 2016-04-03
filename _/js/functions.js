@@ -61,11 +61,6 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 
 	return elements.join('&');
 };
-// opposite of Object.appendChild
-// TODO: change this to NodeList or something more specific than Object
-// Object.prototype.prependChild = function(child) {
-// 	this.insertBefore( child, this.firstChild );
-// };
 
 (function(d) { // why ther wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
 
@@ -463,7 +458,6 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 					if ( parentCommentId == '0' ) {
 						var commentlist = d.getElementsByClassName('commentlist')[0];
 						if ( commentlist ){
-							// commentlist.prependChild(wrapperUL.children[0]);					
 							commentlist.insertBefore( wrapperUL.children[0], commentlist.firstChild ); // prependChild
 						} else {
 							console.log('there is nowhere to put the comment');

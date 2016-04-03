@@ -4,15 +4,18 @@
 
 ## NAVIGATION:
 - research the history object api
-- Pagination: dynamiclly replace each link? - don't know how I would do this?
+- Pagination: 
+    + dynamiclly replace each link? - don't know how I would do this?
     + if there is no paginaion returned, delete current one
     + if there is no current pagination, but one is returned, add it.
+- ctrl click is broken
 
 ##META
 
 ##SETTINGS:
 
 ## COMMENTS:
+- when posting the first comment, the navigation does not appear
 - back button paginates comments 
 	+ make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
     + save a copy of the last ajax response and use that insted of querying the server

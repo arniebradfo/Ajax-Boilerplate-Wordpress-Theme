@@ -117,7 +117,11 @@ function ajax_post_pagination( $show_pagination=true, $prev_text='&laquo; Previo
 			$pagination_links = paginate_links( $pagination_args ); 
 			// repace the current link's <span> with an <a> and add the current url as its href
 			$pagination_links = preg_replace('/<span(.+current.+)>(.+)<\/span>/', '<a\1 href='.get_the_url().'>\2</a>', $pagination_links);
-			echo $pagination_links;		
+			if ($pagination_links == null){ ?>
+				<ul class="page-numbers"></ul>
+			<?php } else {
+				echo $pagination_links;
+			}
 		}
 		?>
 		<div class="prev-posts">
@@ -154,7 +158,11 @@ function ajax_comment_pagination( $show_pagination=false, $prev_text='&laquo; Ol
 			$pagination_links = paginate_comments_links($pagination_args);
 			// repace the current link's <span> with an <a> and add the current url as its href
 			$pagination_links = preg_replace('/<span(.+current.+)>(.+)<\/span>/', '<a\1 href='.get_the_url().'>\2</a>', $pagination_links);
-			echo $pagination_links;
+			if ($pagination_links == null){ ?>
+				<ul class="page-numbers"></ul>
+			<?php } else {
+				echo $pagination_links;
+			}
 		}
 		?>
 		<div class="prev-comments">
