@@ -338,8 +338,8 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 			if ( e.target.tagName !== 'A' && e.target.tagName !== 'AREA' ){
 				return false; // if the click event was not on a linked element
 			}
-			if (e.ctrlKey || e.altKey || e.shiftKey){
-				return false; // if the click was a ctrl/alt/shift click
+			if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey){
+				return false; // if the click was a cmd/ctrl/alt/shift click
 			}
 			if (!e.target.href){
 				return false; // if the link has no destination
