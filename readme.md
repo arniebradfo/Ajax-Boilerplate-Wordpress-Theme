@@ -19,9 +19,6 @@
 
 ## Refactor js
 - add if() checks for everything
-- remove prototype methods
-- refactor functions to the appropiate type: anonymous, public, etc...
-- refactor names - more like jQuery?
 - add a global settings object
 	- wp-admin rename
 - Test it with google analytics - use ga plugin?
@@ -29,8 +26,10 @@
 	+ Test browser implementation inconsistencies of popstate.     
 
 ## SITE TODOs / HTML:
-- remove `if ( !function_exists()){}` checks ??
 - drop support for <=IE9
+- update screenshot
+- move postitem to template-tags
+    + rename template tags to template-parts
 
 ## FINAL
 - research best keywords for naming
