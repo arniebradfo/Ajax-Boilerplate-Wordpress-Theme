@@ -4,8 +4,8 @@
  * Theme customizer options
  * 
  * @package WordPress
- * @subpackage HTML5-Reset-Plus-PJAX
- * @since HTML5 Reset + PJAX 0.1
+ * @subpackage WPAjax
+ * @since 0.1.0
  */ 
 
 // http://www.paulund.co.uk/using-theme-customiser

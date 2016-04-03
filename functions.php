@@ -1,8 +1,12 @@
 <?php
 /**
  * @package WordPress
- * @subpackage HTML5-Reset-Plus-PJAX
- * @since HTML5 Reset + PJAX 0.1
+ * @subpackage WPAjax
+ * @since 0.1.0
+ * @author     James Bradford &lt;james@polaris.graphics&gt;
+ * @copyright  Copyright (c) 2016, James Bradford
+ * @link       https://github.com/arniebradfo/HTML5-Reset-Plus-PJAX
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 	// Detect ajax request (https://rosspenman.com/pushstate-part-2/)
@@ -21,7 +25,7 @@
 	}
 
 	// http://www.inkthemes.com/ajax-comment-wordpress/
-	function ajaxify_comments_jaya($comment_ID, $comment_status) {
+	function WPAjax_load_comment($comment_ID, $comment_status) {
 		if ($GLOBALS['is_ajax']) {
 			switch ($comment_status) {
 				case '0': //notify moderator of unapproved comment
@@ -37,11 +41,11 @@
 			exit; // better the wp_die() ?
 		}
 	}
-	add_action('comment_post', 'ajaxify_comments_jaya', 25, 2);
+	add_action('comment_post', 'WPAjax_load_comment', 25, 2);
 
 	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
-	function html5reset_setup() {
-		load_theme_textdomain( 'html5reset', get_template_directory() . '/languages' );
+	function WPAjax_theme_setup() {
+		load_theme_textdomain( 'wpajax', get_template_directory() . '/languages' );
 
 		add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ) );
 		add_theme_support( 'automatic-feed-links' );
@@ -51,13 +55,13 @@
 
 		// Nav Menus
 		register_nav_menus( array(
-			'primary'   => __( 'Navigation Menu', 'html5reset' ),
-			'secondary' => __( 'Footer Menu', 'html5reset' ),
+			'primary'   => __( 'Navigation Menu', 'wpajax' ),
+			'secondary' => __( 'Footer Menu', 'wpajax' ),
 		) );
 
 		// Widgets
 		register_sidebar( array(
-			'name'          => __( 'Sidebar Widgets', 'html5reset' ),
+			'name'          => __( 'Sidebar Widgets', 'wpajax' ),
 			'id'            => 'sidebar-primary',
 			'before_widget' => '<div id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</div>',
@@ -65,7 +69,7 @@
 			'after_title'   => '</h3>',
 		) );
 	}
-	add_action( 'after_setup_theme', 'html5reset_setup' );
+	add_action( 'after_setup_theme', 'WPAjax_theme_setup' );
 
 	if ( !function_exists( 'load_theme_scripts_and_styles' ) ) {
 		function load_theme_scripts_and_styles() {

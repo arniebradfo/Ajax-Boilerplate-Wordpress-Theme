@@ -1,14 +1,14 @@
 <?php
 /**
  * @package WordPress
- * @subpackage HTML5-Reset-Plus-PJAX
- * @since HTML5 Reset + PJAX 0.1
+ * @subpackage WPAjax
+ * @since 0.1.0
  */
  get_header(); ?>
 
 	<?php if (have_posts()) : ?>
 
-		<h1><?php _e('Search Results','html5reset'); ?></h1>
+		<h1><?php _e('Search Results','wpajax'); ?></h1>
 
 		<section class="post-items">		
 			<?php while (have_posts()) : the_post(); ?>
@@ -20,7 +20,7 @@
 
 	<?php else : ?>
 
-		<h1><?php _e('Nothing Found','html5reset'); ?></h1>
+		<h1><?php _e('Nothing Found','wpajax'); ?></h1>
 
 	<?php endif; ?>
 

@@ -1,4 +1,4 @@
-#  HTML5 Reset+PJAX WordPress Theme
+#  WPAjax WordPress Theme
 
 ## AJAX TODOs:
 

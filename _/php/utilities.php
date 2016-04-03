@@ -4,8 +4,8 @@
  * utility functions
  * 
  * @package WordPress
- * @subpackage HTML5-Reset-Plus-PJAX
- * @since HTML5 Reset + PJAX 0.1
+ * @subpackage WPAjax
+ * @since 0.1.0
  */
 
 // source: https://css-tricks.com/snippets/php/get-current-page-url/

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: HTML5-Reset-WordPress-Theme\n"
+"Project-Id-Version: WPAjax\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-12 13:40+0100\n"
 "PO-Revision-Date: \n"
