@@ -5,7 +5,7 @@
  * @since 0.1.0
  * @author     James Bradford &lt;james@polaris.graphics&gt;
  * @copyright  Copyright (c) 2016, James Bradford
- * @link       https://github.com/arniebradfo/HTML5-Reset-Plus-PJAX
+ * @link       https://github.com/arniebradfo/WPAjax-Theme
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
