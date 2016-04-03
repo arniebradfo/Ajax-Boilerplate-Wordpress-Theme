@@ -12,26 +12,7 @@ function addEvent(elem, event, fn) {
 		});
 	}
 }
-// // Add the forEach method to Array elements if absent
-// if (!Array.prototype.forEach) {
-// 	Array.prototype.forEach = function(fn, scope) {
-// 		'use strict';
-// 		var i, len;
-// 		for (i = 0, len = this.length; i < len; ++i) {
-// 			if (i in this) {
-// 				fn.call(scope, this[i], i, this);
-// 			}
-// 		}
-// 	};
-// }
-// // Extrapolate the Array forEach method to NodeList elements if absent */
-// if (!NodeList.prototype.forEach) {
-// 	NodeList.prototype.forEach = Array.prototype.forEach;
-// }
-// // Extrapolate the Array forEach method to HTMLFormControlsCollection elements if absent
-// if (!HTMLFormControlsCollection.prototype.forEach) {
-// 	HTMLFormControlsCollection.prototype.forEach = Array.prototype.forEach;
-// }
+
 // Convert form elements to query string or JavaScript object.
 HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: If the serialization should be returned as an object.
 	'use strict';
@@ -74,25 +55,6 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 		}
 	}
 
-	// form.elements.forEach(function(element) {
-	// 	switch (element.nodeName) {
-	// 		case 'BUTTON':
-	// 			/* Omit this elements */
-	// 			break;
-	// 		default:
-	// 			switch (element.type) {
-	// 				case 'submit':
-	// 				case 'button':
-	// 					/* Omit this types */
-	// 					break;
-	// 				default:
-	// 					add(element.name, element.value);
-	// 					break;
-	// 			}
-	// 			break;
-	// 	}
-	// });
-
 	if (asObject) {
 		return elements;
 	}
@@ -101,9 +63,9 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 };
 // opposite of Object.appendChild
 // TODO: change this to NodeList or something more specific than Object
-Object.prototype.prependChild = function(child) {
-	this.insertBefore( child, this.firstChild );
-};
+// Object.prototype.prependChild = function(child) {
+// 	this.insertBefore( child, this.firstChild );
+// };
 
 (function(d) { // why ther wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
 
@@ -184,14 +146,6 @@ Object.prototype.prependChild = function(child) {
 				el.firstElementChild.removeAttribute('href');
 			}
 		}
-
-		// oldPosts.forEach( function(el) {
-		// 	if( newPosts.firstElementChild.href){
-		// 		el.firstElementChild.href = newPosts.firstElementChild.href;
-		// 	} else {
-		// 		el.firstElementChild.removeAttribute('href');
-		// 	}
-		// });
 		return true;
 	}
 
@@ -205,11 +159,7 @@ Object.prototype.prependChild = function(child) {
 			var el = oldList[i];
 			el.innerHTML = newList.innerHTML;
 		}
-
-		// oldList.forEach( function(el) {
-		// 	el.innerHTML = newList.innerHTML;
-		// });
-
+		return true;
 	}
 
 	function updateLinkTag(rel, workspace) {
@@ -513,7 +463,8 @@ Object.prototype.prependChild = function(child) {
 					if ( parentCommentId == '0' ) {
 						var commentlist = d.getElementsByClassName('commentlist')[0];
 						if ( commentlist ){
-							commentlist.prependChild(wrapperUL.children[0]);						
+							// commentlist.prependChild(wrapperUL.children[0]);					
+							commentlist.insertBefore( wrapperUL.children[0], commentlist.firstChild ); // prependChild
 						} else {
 							console.log('there is nowhere to put the comment');
 							statusdiv.innerHTML = commentStatus.error;
