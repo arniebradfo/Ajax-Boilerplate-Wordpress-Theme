@@ -74,7 +74,12 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 	return elements.join('&');
 };
 
-(function(d) { // why the wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
+WPAjax_options = { // things that might change
+	contentSelector: '#content',
+	adminUrlRegEx: '\/wp-'
+};
+
+(function(d,opts) { // why the wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
 
 	WPAjax = {
 		load: function(obj){
@@ -208,7 +213,6 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 				}
 
 				var href = e.target.href;
-				var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
 
 				if (href == window.location.href){ // if the page is exactly the same page
 					console.log("you're already on that page");
@@ -216,10 +220,13 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 					return false;
 				}
 
+				var currentPageWithParameters = new RegExp(window.location.origin+window.location.pathname+'[^\/]*[&#?]', 'g' );
+				var adminUrl = new RegExp(opts.adminUrlRegEx,'g');
+
 				if ((href.indexOf(d.domain) > -1 || href.indexOf(':') === -1) // if the link goes to the current domain
 				&& !href.match(currentPageWithParameters) // href isnt a parameterized link of the current page
 				// && href != window.location.href // href isn't a link to the current page - we already check for this above
-				&& !href.match(/\/wp-/g)  // href doesn't go to the wp-admin backend
+				&& !href.match(adminUrl)  // href doesn't go to the wp-admin backend
 				&& !href.match(/\/feed/g) ) // is not an rss feed of somekind
 				{
 					e.preventDefault();
@@ -346,7 +353,7 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 		httpMethod: 'GET',
 		timeoutTimer: 5000,
 		requestHeaders:[{header:'WP-Request-Type', value: 'GetPage' }],
-		main: d.querySelector('#content'),
+		main: d.querySelector(opts.contentSelector),
 		aborted: function(href, timoutTimer) {
 			var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
 			console.log( 'ajax load was aborted.\n'+timoutText );
@@ -525,4 +532,4 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 	WPAjax.attachPageLoad();
 	WPAjax.attachComments();
 
-})(document);
+})(document,WPAjax_options);
