@@ -178,4 +178,34 @@ function WPAjax_comment_pagination( $show_pagination=false, $prev_text='&laquo; 
 	<?php
 }
 
+// HTML for a post links - use inside the loop
+function template_post_item() {
+	if (!in_the_loop()){
+		if (WP_DEBUG === true) { // error logging
+			error_log(__( 'you must use template_post_item() in the loop', 'wpajax' ));
+		}
+		return false;
+	}
+	?>
+	<article <?php post_class(); ?> id="post-<?php the_ID(); ?>">
+
+		<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+
+		<?php posted_on(); ?>
+
+		<div class="entry">
+			<?php the_content(); ?>
+		</div>
+
+		<footer class="postmetadata">
+			<?php the_tags(__('Tags: ','wpajax'), ', ', '<br />'); ?>
+			<?php _e('Posted in','wpajax'); ?> 
+			<?php the_category(', '); ?> | 
+			<?php comments_popup_link(__('No Comments &#187;','wpajax'), __('1 Comment &#187;','wpajax'), __('% Comments &#187;','wpajax')); ?>
+		</footer>
+
+	</article>
+	<?php
+}
+
 ?>

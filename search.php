@@ -13,7 +13,7 @@
 		<section class="post-items">		
 			<?php while (have_posts()) : the_post(); ?>
 
-				<?php get_template_part('part-postitem'); ?>
+				<?php template_post_item(); ?>
 
 			<?php endwhile; ?>
 		</section>

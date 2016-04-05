@@ -27,9 +27,6 @@
 
 ## SITE TODOs / HTML:
 - drop support for <=IE9
-- update screenshot
-- move postitem to template-tags
-    + rename template tags to template-parts
 
 ## FINAL
 - research best keywords for naming

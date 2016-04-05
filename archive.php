@@ -8,14 +8,16 @@
 
 	<?php if (have_posts()) : ?>
 
-		<?php // the_archive_title(); the_archive_description(); // NEW FUNCTIONS! ?>
-
 		<h1><?php echo the_archive_title(); ?></h1>
 
+		<?php if (the_archive_description()): ?>
+			<p><?php echo the_archive_description(); ?></p>
+		<?php endif; ?>
+
 		<section class="post-items">		
-			<?php while (have_posts()) : the_post(); ?>
+			<?php while ( have_posts()) : the_post(); ?>
 		
-				<?php get_template_part('part-postitem'); ?>
+				<?php template_post_item(); ?>
 
 			<?php endwhile; ?>
 		</section>
