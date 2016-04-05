@@ -29,11 +29,11 @@
 		if ($GLOBALS['is_ajax']) {
 			switch ($comment_status) {
 				case '0': //notify moderator of unapproved comment
-					wp_notify_moderator($comment_ID);
+					wp_notify_moderator( $comment_ID );
 					break;
 				case '1': //Approved comment
 					single_comment( $comment_ID );
-					wp_notify_postauthor($comment_ID);
+					wp_notify_postauthor( $comment_ID );
 					break;
 				default: // $comment_status was null
 					echo "error";
@@ -83,8 +83,6 @@
 		wp_deregister_script( 'jquery' ); // if using vanilla .js
 		// google Hosted jQuery
 		// wp_register_script( 'jquery', "http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js", false, null, false, true);
-		// local Hosted jQuery
-		// wp_register_script( 'jquery', get_template_directory_uri()."/_/js/jquery-2.2.0.min.js", null, false, true);
 		// wp_enqueue_script( 'jquery' );
 
 		// add the wp comment-reply.js to manage comments
