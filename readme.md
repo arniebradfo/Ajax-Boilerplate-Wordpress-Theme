@@ -1,42 +1,46 @@
 #  WPAjax WordPress Theme
+what is this?
 
-## AJAX TODOs:
+## HOW IT WORKS
+high level concept - uses ajax to load a wordpress page and updates its page contents - ajaxed page and loaded new page should have parity.
 
-## NAVIGATION:
-- research the history object api
-- Pagination: 
+## WPAjax js
+
+
+
+## Helpful code
+- If your developing a wordpress theme, you should use the [Theme Checker Plugin](https://wordpress.org/plugins/theme-check/).
+- If your hosting your theme repository on github or bitbucket use the [github updater pluin](https://github.com/afragen/github-updater).
+- For SEO [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/).
+- For google analytics [Google Analytics by Yoast](https://wordpress.org/plugins/google-analytics-for-wordpress/).
+- [W3 total cache](https://wordpress.org/plugins/w3-total-cache/)is complicated but can make your site a lot faster.
+- [Save with Keyboard](https://wordpress.org/plugins/save-with-keyboard/) is awesome.
+- [Use svg](https://wordpress.org/plugins/svg-support/).
+- Use [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) to animate between anchors and other loads. 
+
+## TODOs:
+- PAGINATION: 
     + dynamiclly replace each link? - don't know how I would do this?
-
-##META
-
-##SETTINGS:
-
-## COMMENTS:
-- when posting the first comment, the navigation does not appear
-- back button paginates comments 
-	+ make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
-    + save a copy of the last ajax response and use that insted of querying the server
-
-## Refactor js
-- add if() checks for everything
-- add a global settings object
-	- wp-admin rename
-- Test it with google analytics - use ga plugin?
-- feature detect to allow graceful degredation.
-	+ Test browser implementation inconsistencies of popstate.     
-
-## SITE TODOs / HTML:
-- drop support for <=IE9
-
-## FINAL
-- research best keywords for naming
+    + don't reload menu and header for pagination - like comments
+- back button loads just comments if previous post was a comment load - same with posts pagination.
+    + make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
+    + save a copy of the last ajax response and use that insted of querying the server.
+- JS:
+    + rename file
+    + add if() checks for everything in js - fail gracefully
+- CSS:
+    + add a css framework for animating content in an out
+- TEST:
+    + Test it with google analytics - use ga plugin?
+    + feature detect to allow graceful degredation.
+        * Test browser implementation inconsistencies of popstate.
 - Write documentation.
-
-## DONES to keep:
-- [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) 
-- Add hover [prefetch option](http://miguel-perez.github.io/smoothState.js/) to increase performance.
-
-## Credits:
-	comments ajax: http://wpcrux.com/ajax-submit-wordpress-comments/
-	comments php ajax reply: http://davidwalsh.name/wordpress-ajax-comments
-
+- research best keywords for naming
+    + boilerplate
+    + ajax
+    + theme
+    + wordpress
+    + wp
+    + pjax
+    + pushstate
+    + WP ajax boilerplate theme ??
