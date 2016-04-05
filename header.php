@@ -23,9 +23,7 @@
 
 <!DOCTYPE html>
 
-<!--[if lt IE 7 ]> <html class="ie ie6 ie-lt11 ie-lt10 ie-lt9 ie-lt8 ie-lt7" <?php language_attributes(); ?>> <![endif]-->
-<!--[if IE 7 ]>    <html class="ie ie7 ie-lt11 ie-lt10 ie-lt9 ie-lt8" <?php language_attributes(); ?>> <![endif]-->
-<!--[if IE 8 ]>    <html class="ie ie8 ie-lt11 ie-lt10 ie-lt9" <?php language_attributes(); ?>> <![endif]-->
+<!--[if lt IE 9 ]> <html class="ie ie-lt11 ie-lt10 ie-lt9" <?php language_attributes(); ?>> <![endif]-->
 <!--[if IE 9 ]>    <html class="ie ie9 ie-lt11 ie-lt10" <?php language_attributes(); ?>> <![endif]-->
 <!--[if IE 10 ]>   <html class="ie ie10 ie-lt11 " <?php language_attributes(); ?>> <![endif]-->
 <!--[if IE 11 ]>   <html class="ie ie11 " <?php language_attributes(); ?>> <![endif]-->

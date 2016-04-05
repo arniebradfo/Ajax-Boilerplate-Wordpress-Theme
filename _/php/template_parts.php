@@ -97,7 +97,7 @@ function author_meta_tag( $nameType='display_name' ){
 	<?php
 }
 
-// exports the posts page pagination html
+// exports the posts page pagination HTML
 function WPAjax_post_pagination( $show_pagination=true, $prev_text='&laquo; Previous' , $next_text='Next &raquo;', $pagination_args=array() ){
 	?>
 	<nav class="nav post-navigation">
@@ -137,7 +137,7 @@ function WPAjax_post_pagination( $show_pagination=true, $prev_text='&laquo; Prev
 	<?php
 }
 
-// exports comment navigation html
+// exports comment navigation HTML
 function WPAjax_comment_pagination( $show_pagination=false, $prev_text='&laquo; Older Comments', $next_text='Newer Comments &raquo;', $pagination_args=array() ){
 	?>
 	<nav class="nav comment-navigation">
