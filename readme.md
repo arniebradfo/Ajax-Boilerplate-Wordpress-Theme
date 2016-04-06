@@ -40,6 +40,7 @@ high level concept - uses ajax to load a wordpress page and updates its page con
         * Test browser implementation inconsistencies of popstate.
 - Write documentation.
 - research best keywords for naming
+    + ajax, pjax, pushstate, boilerplate, blank, starter, template, blueprint, framework, scaffolding, wp, asynchronous, js, javascript, xml
     + boilerplate
     + ajax
     + theme
