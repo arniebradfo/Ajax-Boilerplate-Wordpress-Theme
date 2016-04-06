@@ -29,6 +29,7 @@ high level concept - uses ajax to load a wordpress page and updates its page con
     + add post_formats blueprint
     + adapt to new comment_form(); function
     + fix directory name
+    + keep checkin the theme
 - JS:
     + rename file
     + add if() checks for everything in js - fail gracefully
