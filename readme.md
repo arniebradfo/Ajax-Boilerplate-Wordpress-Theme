@@ -25,6 +25,10 @@ high level concept - uses ajax to load a wordpress page and updates its page con
 - back button loads just comments if previous post was a comment load - same with posts pagination.
     + make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
     + save a copy of the last ajax response and use that insted of querying the server.
+- WP:
+    + add post_formats blueprint
+    + adapt to new comment_form(); function
+    + fix directory name
 - JS:
     + rename file
     + add if() checks for everything in js - fail gracefully

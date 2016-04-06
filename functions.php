@@ -51,6 +51,8 @@
 		add_theme_support( 'automatic-feed-links' );
 		add_theme_support( 'title-tag' );
 		add_theme_support( 'post-formats', array( 'link', 'video', 'aside', 'audio', 'chat', 'gallery', 'image', 'quote', 'status' ) );
+		add_post_type_support( 'post', 'post-formats' );
+		add_post_type_support( 'page', 'post-formats' );
 		add_theme_support( 'post-thumbnails' );
 
 		// Nav Menus
@@ -58,7 +60,10 @@
 			'primary'   => __( 'Navigation Menu', 'wpajax' ),
 			'secondary' => __( 'Footer Menu', 'wpajax' ),
 		) );
+	}
+	add_action( 'after_setup_theme', 'WPAjax_theme_setup' );
 
+	function WPAjax_widget_setup() {
 		// Widgets
 		register_sidebar( array(
 			'name'          => __( 'Sidebar Widgets', 'wpajax' ),
@@ -69,7 +74,12 @@
 			'after_title'   => '</h3>',
 		) );
 	}
-	add_action( 'after_setup_theme', 'WPAjax_theme_setup' );
+	add_action( 'widgets_init', 'WPAjax_widget_setup' );
+
+
+	if ( ! isset( $content_width ) ) { // this guy sucks - https://codex.wordpress.org/Content_Width
+		$content_width = 2000;
+	}
 
 	function load_theme_scripts_and_styles() {
 		// Load Custom Styles

@@ -41,7 +41,9 @@
 
 <?php if ( comments_open() ) : ?>
 
-
+	<?php comment_form(); ?>
+	
+	<!-- 
 	<div id="respond">
 
 		<h2><?php comment_form_title( __('Leave a Reply','wpajax'), __('Leave a Reply to %s','wpajax') ); ?></h2>
@@ -81,8 +83,6 @@
 
 			<?php endif; ?>
 
-			<!--<p>You can use these tags: <code><?php echo allowed_tags(); ?></code></p>-->
-
 			<div>
 				<textarea name="comment" id="comment" cols="58" rows="10" tabindex="4"></textarea>
 			</div>
@@ -99,6 +99,7 @@
 		<?php endif; // If registration required and not logged in ?>
 		
 	</div>
+	-->
 
 </section>
 

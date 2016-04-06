@@ -1,14 +1,16 @@
 /*
-Theme Name: WPAjax
-Theme URI: https://github.com/arniebradfo/WPAjax-Theme
-Description: A style-free theme that uses the history API and PJAX to get you started on an ajax based WordPress theme of your own. Originally forked from the HTML5 Reset Theme.
-Author: ArnieBradfo
-Author URI: http://polaris.graphics
-Version: 0.1.0
-GitHub Theme URI: https://github.com/arniebradfo/WPAjax-Theme
-GitHub Branch: master
+Theme Name:        WPAjax
+Theme URI:         https://github.com/arniebradfo/WPAjax-Theme
+Description:       A style-free theme that uses the history API and PJAX to get you started on an ajax based WordPress theme of your own. Originally forked from the HTML5 Reset Theme.
+Author:            ArnieBradfo
+Author URI:        http://polaris.graphics
+Version:           0.1.0
+GitHub Theme URI:  https://github.com/arniebradfo/WPAjax-Theme
+GitHub Branch:     master
+License:           http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+License URI:       GPL 2.0
+Tags:              ajax, pjax, pushstate, boilerplate, blank, starter, template, blueprint, framework, scaffolding, wp, asynchronous, js, javascript, xml
 */
-
 
 /* Ok, this is where the fun starts.
 -------------------------------------------------------------------------------*/
@@ -18,7 +20,6 @@ GitHub Branch: master
 html, body{
 	background-color: white;
 }
-
 
 /* A Linux- and Windows-friendly sans-serif font stack: http://prospects.mhurrell.co.uk/post/updating-the-helvetica-font-stack */
 body {font: 13px Helmet, Freesans, sans-serif;}
@@ -61,8 +62,29 @@ input:-moz-placeholder { color:#a9a9a9; }
 textarea:-moz-placeholder { color:#a9a9a9; }
 
 
-/* And here begins the WordPress fun.
+/* Required Wordpress CSS
 -------------------------------------------------------------------------------*/
+
+/* http://codex.wordpress.org/CSS#WordPress_Generated_Classes */
+.wp-caption{}
+.wp-caption-text{}
+.sticky{}
+.gallery-caption{}
+.bypostauthor{}
+.alignright{}
+.alignleft{}
+.aligncenter{}
+.screen-reader-text{}
+
+/* https://codex.wordpress.org/Content_Width#Adding_Theme_Support */
+.size-auto, 
+.size-full,
+.size-large,
+.size-medium,
+.size-thumbnail {
+	max-width: 100%;
+	height: auto;
+}
 
 /* Print styles!
 -------------------------------------------------------------------------------*/
