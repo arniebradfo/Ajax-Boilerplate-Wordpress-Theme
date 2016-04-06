@@ -1,8 +1,8 @@
 <?php
 /**
- * @package WordPress
- * @subpackage WPAjax
- * @since 0.1.0
+ * @package      WordPress
+ * @subpackage   wpajax
+ * @since        0.1.0
  */
  get_header(); ?>
 

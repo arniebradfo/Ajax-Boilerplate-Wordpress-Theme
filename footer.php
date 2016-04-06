@@ -1,15 +1,15 @@
 <?php
 /**
- * @package WordPress
- * @subpackage WPAjax
- * @since 0.1.0
+ * @package      WordPress
+ * @subpackage   wpajax
+ * @since        0.1.0
  */
 ?>
 
 </main>
 
 <?php
-	WPAjax_post_pagination();
+	wpajax_post_pagination();
 	if (!$GLOBALS['is_ajax']): // if this is not an ajax call
 ?>
 

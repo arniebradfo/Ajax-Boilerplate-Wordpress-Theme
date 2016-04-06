@@ -74,14 +74,14 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 	return elements.join('&');
 };
 
-WPAjax_options = { // things that might change
+wpajax_options = { // things that might change
 	contentSelector: '#content',
 	adminUrlRegEx: '\/wp-'
 };
 
 (function(d,opts) { // why the wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
 
-	WPAjax = {
+	wpajax = {
 		load: function(obj){
 			var xhttp = new XMLHttpRequest();
 			addEvent( xhttp, 'readystatechange', function() {
@@ -190,7 +190,7 @@ WPAjax_options = { // things that might change
 				// don't fire on the inital page load
 				// TODO: make back button paginates comments??
 				if (event.state !== null) {
-					var optionsSurrogate = WPAjaxGETPage;
+					var optionsSurrogate = wpajaxGETPage;
 					optionsSurrogate.href = location.href;
 					that.load(optionsSurrogate);
 				}
@@ -242,11 +242,11 @@ WPAjax_options = { // things that might change
 					}
 					// if (e.target.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
 					if (isCommentNav){
-						optionsSurrogate = WPAjaxGETCommentsSection;
+						optionsSurrogate = wpajaxGETCommentsSection;
 						optionsSurrogate.href = href;
 						that.load(optionsSurrogate);
 					} else {
-						optionsSurrogate = WPAjaxGETPage;
+						optionsSurrogate = wpajaxGETPage;
 						optionsSurrogate.href = href;
 						that.load(optionsSurrogate);
 					}
@@ -349,7 +349,7 @@ WPAjax_options = { // things that might change
 		}
 	};
 
-	WPAjaxGETPage = {
+	wpajaxGETPage = {
 		httpMethod: 'GET',
 		timeoutTimer: 5000,
 		requestHeaders:[{header:'WP-Request-Type', value: 'GetPage' }],
@@ -387,10 +387,10 @@ WPAjax_options = { // things that might change
 			}
 
 			// update header link tags
-			WPAjax.updateLinkTag('next', workspace);
-			WPAjax.updateLinkTag('prev', workspace);
-			WPAjax.updateLinkTag('shortlink', workspace);
-			WPAjax.updateLinkTag('canonical', workspace);
+			wpajax.updateLinkTag('next', workspace);
+			wpajax.updateLinkTag('prev', workspace);
+			wpajax.updateLinkTag('shortlink', workspace);
+			wpajax.updateLinkTag('canonical', workspace);
 
 			if (workspace.getElementsByTagName('title')){
 				d.title = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
@@ -406,9 +406,9 @@ WPAjax_options = { // things that might change
 				NextPosts = d.querySelectorAll('.post-navigation .next-posts'),
 				PrevPosts = d.querySelectorAll('.post-navigation .prev-posts'),
 				PostPages = d.querySelectorAll('.post-navigation .page-numbers');
-			WPAjax.replaceNavLinks(newNextPosts, NextPosts);
-			WPAjax.replaceNavLinks(newPrevPosts, PrevPosts);
-			WPAjax.replaceNavPageLinks(newPostPages, PostPages);
+			wpajax.replaceNavLinks(newNextPosts, NextPosts);
+			wpajax.replaceNavLinks(newPrevPosts, PrevPosts);
+			wpajax.replaceNavPageLinks(newPostPages, PostPages);
 
 			// update the the class list of all menu items
 			menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
@@ -423,14 +423,14 @@ WPAjax_options = { // things that might change
 			}
 
 			// comments section will be new - need to rebind events to new elements
-			WPAjax.attachComments(); 
+			wpajax.attachComments(); 
 			attachCtrlEnterSubmitWPComment();
 			console.log('ajax loaded!\n'+statusText);
 			return true;
 		}
 	};
 
-	WPAjaxGETCommentsSection = {
+	wpajaxGETCommentsSection = {
 		httpMethod: 'GET',
 		timeoutTimer: 5000,
 		requestHeaders: [{header:'WP-Request-Type', value:'GetCommentsSection'}],
@@ -462,13 +462,13 @@ WPAjax_options = { // things that might change
 				NextComments = d.querySelectorAll('.comment-navigation .next-comments'),
 				PrevComments = d.querySelectorAll('.comment-navigation .prev-comments'),
 				CommentPages = d.querySelectorAll('.comment-navigation .page-numbers');
-			WPAjax.replaceNavLinks(newNextComments, NextComments);
-			WPAjax.replaceNavLinks(newPrevComments, PrevComments);
-			WPAjax.replaceNavPageLinks(newCommentPages, CommentPages);
+			wpajax.replaceNavLinks(newNextComments, NextComments);
+			wpajax.replaceNavLinks(newPrevComments, PrevComments);
+			wpajax.replaceNavPageLinks(newCommentPages, CommentPages);
 		}
 	};
 
-	WPAjaxGETExample = {
+	wpajaxGETExample = {
 		httpMethod: 'GET',
 		timeoutTimer: 5000,
 		requestHeaders:[{header:'WP-Request-Type', value: 'GetExample' }],
@@ -529,7 +529,7 @@ WPAjax_options = { // things that might change
 	
 	// TODO: find a better way to call this?
 	attachCtrlEnterSubmitWPComment();
-	WPAjax.attachPageLoad();
-	WPAjax.attachComments();
+	wpajax.attachPageLoad();
+	wpajax.attachComments();
 
-})(document,WPAjax_options);
+})(document,wpajax_options);

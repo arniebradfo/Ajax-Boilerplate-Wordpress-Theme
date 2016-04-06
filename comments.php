@@ -16,13 +16,13 @@
 	
 	<h2 id="comments"><?php comments_number(__('No Responses','wpajax'), __('One Response','wpajax'), __('% Responses','wpajax') );?></h2>
 
-	<?php WPAjax_comment_pagination(); ?>
+	<?php wpajax_comment_pagination(); ?>
 
 	<ol class="commentlist">
 		<?php wp_list_comments(); ?>
 	</ol>
 
-	<?php WPAjax_comment_pagination(true); ?>
+	<?php wpajax_comment_pagination(true); ?>
 	
  <?php else : // this is displayed if there are no comments so far ?>
 

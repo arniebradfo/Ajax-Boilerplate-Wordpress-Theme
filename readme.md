@@ -1,10 +1,10 @@
-#  WPAjax WordPress Theme
+#  wpajax WordPress Theme
 what is this?
 
 ## HOW IT WORKS
 high level concept - uses ajax to load a wordpress page and updates its page contents - ajaxed page and loaded new page should have parity.
 
-## WPAjax js
+## wpajax js
 
 
 

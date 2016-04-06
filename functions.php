@@ -1,11 +1,11 @@
 <?php
 /**
  * @package    	WordPress
- * @subpackage 	WPAjax
+ * @subpackage 	wpajax
  * @since      	0.1.0
  * @author     	James Bradford &lt;james@polaris.graphics&gt;
  * @copyright  	Copyright (c) 2016, James Bradford
- * @link       	https://github.com/arniebradfo/WPAjax-Theme
+ * @link       	https://github.com/arniebradfo/wpajax-Theme
  * @license    	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -25,7 +25,7 @@
 	}
 
 	// http://www.inkthemes.com/ajax-comment-wordpress/
-	function WPAjax_load_comment($comment_ID, $comment_status) {
+	function wpajax_load_comment($comment_ID, $comment_status) {
 		if ($GLOBALS['is_ajax']) {
 			switch ($comment_status) {
 				case '0': //notify moderator of unapproved comment
@@ -41,10 +41,10 @@
 			exit; // better the wp_die() ?
 		}
 	}
-	add_action('comment_post', 'WPAjax_load_comment', 25, 2);
+	add_action('comment_post', 'wpajax_load_comment', 25, 2);
 
 	// Theme Setup (based on twentythirteen: http://make.wordpress.org/core/tag/twentythirteen/)
-	function WPAjax_theme_setup() {
+	function wpajax_theme_setup() {
 		load_theme_textdomain( 'wpajax', get_template_directory() . '/languages' );
 
 		add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ) );
@@ -61,9 +61,9 @@
 			'secondary' => __( 'Footer Menu', 'wpajax' ),
 		) );
 	}
-	add_action( 'after_setup_theme', 'WPAjax_theme_setup' );
+	add_action( 'after_setup_theme', 'wpajax_theme_setup' );
 
-	function WPAjax_widget_setup() {
+	function wpajax_widget_setup() {
 		// Widgets
 		register_sidebar( array(
 			'name'          => __( 'Sidebar Widgets', 'wpajax' ),
@@ -74,7 +74,7 @@
 			'after_title'   => '</h3>',
 		) );
 	}
-	add_action( 'widgets_init', 'WPAjax_widget_setup' );
+	add_action( 'widgets_init', 'wpajax_widget_setup' );
 
 
 	if ( ! isset( $content_width ) ) { // this guy sucks - https://codex.wordpress.org/Content_Width

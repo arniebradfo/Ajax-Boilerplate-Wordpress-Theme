@@ -4,7 +4,7 @@
  * custom html outputs
  * 
  * @package WordPress
- * @subpackage WPAjax
+ * @subpackage wpajax
  * @since 0.1.0
  */
 
@@ -98,7 +98,7 @@ function author_meta_tag( $nameType='display_name' ){
 }
 
 // exports the posts page pagination HTML
-function WPAjax_post_pagination( $show_pagination=true, $prev_text='&laquo; Previous' , $next_text='Next &raquo;', $pagination_args=array() ){
+function wpajax_post_pagination( $show_pagination=true, $prev_text='&laquo; Previous' , $next_text='Next &raquo;', $pagination_args=array() ){
 	?>
 	<nav class="nav post-navigation">
 		<div class="next-posts">
@@ -138,7 +138,7 @@ function WPAjax_post_pagination( $show_pagination=true, $prev_text='&laquo; Prev
 }
 
 // exports comment navigation HTML
-function WPAjax_comment_pagination( $show_pagination=false, $prev_text='&laquo; Older Comments', $next_text='Newer Comments &raquo;', $pagination_args=array() ){
+function wpajax_comment_pagination( $show_pagination=false, $prev_text='&laquo; Older Comments', $next_text='Newer Comments &raquo;', $pagination_args=array() ){
 	?>
 	<nav class="nav comment-navigation">
 		<div class="next-comments">

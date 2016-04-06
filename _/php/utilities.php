@@ -4,7 +4,7 @@
  * utility functions
  * 
  * @package WordPress
- * @subpackage WPAjax
+ * @subpackage wpajax
  * @since 0.1.0
  */
 
