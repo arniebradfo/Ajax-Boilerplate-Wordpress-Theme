@@ -182,7 +182,7 @@ wpajax_options = { // things that might change
 			}
 		},
 		attachPageLoad: function() { // adds pjax to all internal hyperlink elements (https://rosspenman.com/pushstate-jquery/)
-			var that = this;
+			var self = this;
 
 			// calls loadPage when the browser back button is pressed
 			// TODO: test browser implementation inconsistencies of popstate
@@ -192,7 +192,7 @@ wpajax_options = { // things that might change
 				if (event.state !== null) {
 					var optionsSurrogate = wpajaxGETPage;
 					optionsSurrogate.href = location.href;
-					that.load(optionsSurrogate);
+					self.load(optionsSurrogate);
 				}
 			});
 
@@ -244,11 +244,11 @@ wpajax_options = { // things that might change
 					if (isCommentNav){
 						optionsSurrogate = wpajaxGETCommentsSection;
 						optionsSurrogate.href = href;
-						that.load(optionsSurrogate);
+						self.load(optionsSurrogate);
 					} else {
 						optionsSurrogate = wpajaxGETPage;
 						optionsSurrogate.href = href;
-						that.load(optionsSurrogate);
+						self.load(optionsSurrogate);
 					}
 				}
 			});
@@ -258,12 +258,12 @@ wpajax_options = { // things that might change
 		attachComments: function(){
 			var commentform = d.getElementById('commentform'),
 				statusdiv = d.getElementById('comment-status'),
-				that = this;
+				self = this;
 			if (commentform && statusdiv) {
 				addEvent(commentform, 'submit', function(e){
 					e.preventDefault();
 					// this might break
-					that.submitComment(commentform, statusdiv);
+					self.submitComment(commentform, statusdiv);
 				});
 			}
 		},
