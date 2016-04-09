@@ -256,23 +256,28 @@ wpajax_options = { // things that might change
 			return true;
 		},
 		attachComments: function(){
-			var commentform = d.getElementById('commentform'),
-				statusdiv = d.getElementById('comment-status'),
+			var respond = d.getElementById('respond'),
+				commentform = d.getElementById('commentform'),
+				statusdiv = d.createElement('div'),
 				self = this;
+			statusdiv = respond.insertBefore(statusdiv, commentform);
+
 			if (commentform && statusdiv) {
 				addEvent(commentform, 'submit', function(e){
 					e.preventDefault();
-					// this might break
 					self.submitComment(commentform, statusdiv);
 				});
 			}
 		},
 		submitComment: function(commentform, statusdiv){
-			// Extract action URL from commentform
-			var formurl = commentform.action;
+			// Extract action URL and method from commentform
+			var formurl = commentform.action,
+				method = commentform.method.toUpperCase();
+
 			// Serialize and store form data
 			var formdata = commentform.serialize().replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
 			var parentCommentId = /&comment_parent=(\d+)/.exec(formdata)[1];
+
 			var commentStatus = {
 				// TODO: add better error messages
 				placeholder:  '<p class="ajax-placeholder">Processing...</p>',
@@ -281,9 +286,10 @@ wpajax_options = { // things that might change
 				aborted:      '<p class="ajax-success" ><strong>TIMEOUT:</strong> There was no response from the server. Please refresh the page to see if your comment Posted.</p>',
 				error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>'
 			};
+			
 			// Post Form with data
 			this.load({
-				httpMethod: 'POST',
+				httpMethod: method,
 				href: formurl,
 				data: formdata,
 				timeoutTimer: 5000,
@@ -306,7 +312,7 @@ wpajax_options = { // things that might change
 					}
 				},
 				aborted: function(href, timoutTimer) {
-					statusdiv.innerHTML = commentStatus.aborted;				
+					statusdiv.innerHTML = commentStatus.aborted;			
 				},
 				delivered: function( commentLI, textStatus ) {
 					var wrapperUL       = d.createElement('ul');

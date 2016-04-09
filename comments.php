@@ -41,6 +41,7 @@
 
 <?php if ( comments_open() ) : ?>
 
+	<div id="comment-status" ></div>
 	<?php comment_form(); ?>
 	
 	<!-- 
