@@ -38,7 +38,7 @@
 				default: // $comment_status was null
 					echo "error";
 			}
-			exit; // better the wp_die() ?
+			exit; // better than wp_die() ?
 		}
 	}
 	add_action('comment_post', 'wpajax_load_comment', 25, 2);
@@ -75,6 +75,12 @@
 		) );
 	}
 	add_action( 'widgets_init', 'wpajax_widget_setup' );
+
+	// ad custom css to style inside the tinyMCE editor
+	function add_editor_styles() {
+		add_editor_style(); // path defaults to editor-style.css
+	}
+	add_action( 'admin_init', 'add_editor_styles' );
 
 
 	if ( ! isset( $content_width ) ) { // this guy sucks - https://codex.wordpress.org/Content_Width
