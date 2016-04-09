@@ -256,13 +256,15 @@ wpajax_options = { // things that might change
 			return true;
 		},
 		attachComments: function(){
+			// link up with the wp comment form
 			var respond = d.getElementById('respond'),
 				commentform = d.getElementById('commentform'),
 				statusdiv = d.createElement('div'),
 				self = this;
-			statusdiv = respond.insertBefore(statusdiv, commentform);
 
 			if (commentform && statusdiv) {
+				statusdiv.id = 'comment-status';
+				statusdiv = respond.insertBefore(statusdiv, commentform);
 				addEvent(commentform, 'submit', function(e){
 					e.preventDefault();
 					self.submitComment(commentform, statusdiv);
@@ -286,7 +288,7 @@ wpajax_options = { // things that might change
 				aborted:      '<p class="ajax-success" ><strong>TIMEOUT:</strong> There was no response from the server. Please refresh the page to see if your comment Posted.</p>',
 				error:        '<p class="ajax-error" ><strong>ERROR:</strong> Please wait a while before posting your next comment</p>'
 			};
-			
+
 			// Post Form with data
 			this.load({
 				httpMethod: method,
