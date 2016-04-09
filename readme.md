@@ -5,16 +5,21 @@ what is this?
 high level concept - uses ajax to load a wordpress page and updates its page contents - ajaxed page and loaded new page should have parity.
 
 ## wpajax js
+ajax call is made
+a request header is set by js, read by php into a global
+certain sections are skipped or added based on type of request 
+- speeds up server response time, does less work
+returned code is placed in the doc using js
 
 
 ## Helpful code
-- If your developing a wordpress theme, you should use the [Theme Checker Plugin](https://wordpress.org/plugins/theme-check/).
+- If your developing a wordpress theme, you should use the [Theme Checker theme](https://wordpress.org/themes/theme-check/).
 - If your hosting your theme repository on github or bitbucket use the [github updater pluin](https://github.com/afragen/github-updater).
-- For SEO [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/).
-- For google analytics [Google Analytics by Yoast](https://wordpress.org/plugins/google-analytics-for-wordpress/).
-- [W3 total cache](https://wordpress.org/plugins/w3-total-cache/)is complicated but can make your site a lot faster.
-- [Save with Keyboard](https://wordpress.org/plugins/save-with-keyboard/) is awesome.
-- [Use svg](https://wordpress.org/plugins/svg-support/).
+- For SEO [Yoast SEO](https://wordpress.org/themes/wordpress-seo/).
+- For google analytics [Google Analytics by Yoast](https://wordpress.org/themes/google-analytics-for-wordpress/).
+- [W3 total cache](https://wordpress.org/themes/w3-total-cache/)is complicated but can make your site a lot faster.
+- [Save with Keyboard](https://wordpress.org/themes/save-with-keyboard/) is awesome.
+- [Use svg](https://wordpress.org/themes/svg-support/).
 - Use [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) to animate between anchors and other loads. 
 
 ## TODOs:
@@ -26,8 +31,6 @@ high level concept - uses ajax to load a wordpress page and updates its page con
     + save a copy of the last ajax response and use that insted of querying the server.
 - WP:
     + fix directory name
-    + add_editor_style() 
-    + add readme.txt
     + keep checkin the theme
 - JS:
     + back button is broken :(
@@ -41,22 +44,16 @@ high level concept - uses ajax to load a wordpress page and updates its page con
         * Test browser implementation inconsistencies of popstate.
 - Write documentation.
 - research best keywords for naming
-    + ajax, pjax, pushstate, boilerplate, blank, starter, template, blueprint, framework, scaffolding, wp, asynchronous, js, javascript, xml
-    + boilerplate
-    + ajax
-    + theme
-    + wordpress
-    + wp
-    + pjax
-    + pushstate
-    + WP ajax boilerplate theme ??
+    
+Keywords: ajax, pjax, pushstate, boilerplate, blank, starter, template, blueprint, framework, scaffolding, wp, js, asynchronous, javascript, xml
++ WP ajax boilerplate theme ??
++ WP ajax boilerplate
 
 
 
+## this should be in a readme.txt file
 
-
-
-=== Plugin Name ===
+=== Theme Name ===
 Contributors: (this should be a list of wordpress.org userid's)
 Donate link: http://example.com/
 Tags: comments, spam
@@ -66,7 +63,7 @@ Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Here is a short description of the theme.  This should be no more than 150 characters.  No markup here.
 
 == Description ==
 
@@ -78,16 +75,16 @@ Markdown parsed.
 A few notes about the sections above:
 
 *   "Contributors" is a comma separated list of wordpress.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
+*   "Tags" is a comma separated list of tags that apply to the theme
+*   "Requires at least" is the lowest version that the theme will work on
+*   "Tested up to" is the highest version that you've *successfully used to test the theme*. Note that it might work on
 higher versions... this is just the highest one you've verified.
 *   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
 stable.
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
+    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the theme, so
 if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
+for displaying information about the theme.  In this situation, the only thing considered from the trunk `readme.txt`
 is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
 your in-development version, without having that information incorrectly disclosed about the current stable version
 that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
@@ -97,14 +94,14 @@ you put the stable version, in order to eliminate any doubt.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+This section describes how to install the theme and get it working.
 
 e.g.
 
-1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Use the Settings->Plugin Name screen to configure the plugin
-1. (Make your instructions match the desired user flow for activating and installing your plugin. Include any steps that might be needed for explanatory purposes)
+1. Upload the theme files to the `/wp-content/themes/theme-name` directory, or install the theme through the WordPress themes screen directly.
+1. Activate the theme through the 'themes' screen in WordPress
+1. Use the Settings->theme Name screen to configure the theme
+1. (Make your instructions match the desired user flow for activating and installing your theme. Include any steps that might be needed for explanatory purposes)
 
 
 == Frequently Asked Questions ==
@@ -145,7 +142,7 @@ This version fixes a security related bug.  Upgrade immediately.
 == Arbitrary section ==
 
 You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
+themes where more information needs to be conveyed that doesn't fit into the categories of "description" or
 "installation."  Arbitrary sections will be shown below the built-in sections outlined above.
 
 == A brief Markdown Example ==
@@ -154,7 +151,7 @@ Ordered list:
 
 1. Some feature
 1. Another feature
-1. Something else about the plugin
+1. Something else about the theme
 
 Unordered list:
 
