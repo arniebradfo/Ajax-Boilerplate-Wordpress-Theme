@@ -187,12 +187,26 @@ function template_post_item() {
 		return false;
 	}
 	?>
+	<?php switch ( get_post_format() ): // output different HTML based on the post type
+	             case 'aside': ?>
+	<?php break; case 'chat': ?>
+	<?php break; case 'gallery': ?>
+	<?php break; case 'link': ?>
+	<?php break; case 'image': ?>
+	<?php break; case 'quote': ?>
+	<?php break; case 'status': ?>
+	<?php break; case 'video': ?>
+	<?php break; case 'audio': ?>
+	<?php break; default: // marked 'standard'?>
+	<?php endswitch;?>
 	<article <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 
 		<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 
 		<?php posted_on(); ?>
 
+		<?php the_post_thumbnail(); ?>
+				
 		<div class="entry">
 			<?php the_content(); ?>
 		</div>

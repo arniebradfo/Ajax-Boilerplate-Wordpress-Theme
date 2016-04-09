@@ -7,7 +7,6 @@ high level concept - uses ajax to load a wordpress page and updates its page con
 ## wpajax js
 
 
-
 ## Helpful code
 - If your developing a wordpress theme, you should use the [Theme Checker Plugin](https://wordpress.org/plugins/theme-check/).
 - If your hosting your theme repository on github or bitbucket use the [github updater pluin](https://github.com/afragen/github-updater).
@@ -26,11 +25,12 @@ high level concept - uses ajax to load a wordpress page and updates its page con
     + make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
     + save a copy of the last ajax response and use that insted of querying the server.
 - WP:
-    + add post_formats blueprint
-    + adapt to new comment_form(); function
     + fix directory name
+    + add_editor_style() 
+    + add readme.txt
     + keep checkin the theme
 - JS:
+    + back button is broken :(
     + rename file
     + add if() checks for everything in js - fail gracefully
 - CSS:
