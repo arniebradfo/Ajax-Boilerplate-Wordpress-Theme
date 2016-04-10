@@ -1,5 +1,7 @@
 #  Documentation Coming soon...
 this is a new branch
+this will be pulled into the new branch
+
 
 #  Ajax Boilerplate WordPress Theme
 what is this? why not angular or react.
