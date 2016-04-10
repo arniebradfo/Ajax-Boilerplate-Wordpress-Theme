@@ -45,6 +45,7 @@ a:hover {color: #69f;}
 /* links without destinations of funtions tied to them are inactive */
 a:not([href]):not([onclick]) {
     color: gray;
+    /* opacity:0.5; */
     /* disply:none; */
 }
 
@@ -87,11 +88,33 @@ textarea:-moz-placeholder { color:#a9a9a9; }
 	height: auto;
 }
 
+
+/* ajax Transition Styles
+-------------------------------------------------------------------------------*/
+@-webkit-keyframes grow-height{
+	0%  { max-height: 0px;   opacity:0;}
+	100%{ max-height: 300px; opacity:1;}
+}
+@keyframes grow-height{
+	0%  { max-height: 0px;   opacity:0;}
+	100%{ max-height: 300px; opacity:1;}
+}
+.comment.added-by-wpajax{
+	-webkit-animation: grow-height 1s ease-in; 
+	        animation: grow-height 1s ease-in; 
+	/* do we need forwards? */
+}
+
+
+
+
 /* Print styles!
 -------------------------------------------------------------------------------*/
 @media print {
 
 }
+
+
 
 
 /* Media queries!

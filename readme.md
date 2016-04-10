@@ -31,7 +31,6 @@ returned code is placed in the doc using js
 ## TODOs:
 - WP:
     + write documentation
-    + add image sizes
 - JS:
     + rename file
     + add if() checks for everything in js - fail gracefully
@@ -44,15 +43,15 @@ returned code is placed in the doc using js
     + COMMENTS:
         * adding a comment and then paganating might produce wierd results
         * delete the last top level comment if returning a new top level comment? - if there is a second page of comments.
+        * comment reply was borked
 - CSS:
     + add a css framework for animating content in an out
     + add progress bar
 - TEST:
     + Test it with google analytics - use ga plugin?
-    + feature detect to allow graceful degredation.
+    + feature detect to allow graceful degredation. modernizr?
         * Test browser implementation inconsistencies of popstate.
-- Write documentation.
-- research best keywords for naming
+    + browser test
     
 Keywords: ajax, pjax, pushstate, boilerplate, blank, starter, template, blueprint, framework, scaffolding, wp, js, asynchronous, javascript, xml
 + WP ajax boilerplate theme ??

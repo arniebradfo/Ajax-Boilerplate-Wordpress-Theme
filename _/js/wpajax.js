@@ -76,7 +76,8 @@ HTMLFormElement.prototype.serialize = function(asObject) { // @param asObject: I
 
 wpajax_options = { // things that might change
 	contentSelector: '#content',
-	adminUrlRegEx: '\/wp-'
+	adminUrlRegEx: '\/wp-',
+	ajaxClass: 'added-by-wpajax'
 };
 
 (function(d,opts) { // why the wrapper? -  http://stackoverflow.com/questions/2937227/what-does-function-jquery-mean
@@ -332,8 +333,9 @@ wpajax_options = { // things that might change
 					var wrapperUL       = d.createElement('ul');
 					wrapperUL.className = 'children';
 					wrapperUL.innerHTML = commentLI;
-					// wrapperUL.innerHTML will return commentLI as an HTML element - not a string.
-					// console.log(wrapperUL);
+					commentLI = wrapperUL.firstElementChild; 
+
+					console.log(commentLI);
 
 					var wpErrorTitle = wrapperUL.querySelector('title');
 					if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){
@@ -342,11 +344,12 @@ wpajax_options = { // things that might change
 						statusdiv.innerHTML = commentStatus.wpError;
 						return false;
 					} else {
-						// if the comment doesn't have a parent, i.e. is it a reply?
+						// if the comment doesn't have a parent, i.e. is it not a reply?
 						if ( parentCommentId == '0' ) {
 							var commentlist = d.getElementsByClassName('commentlist')[0];
 							if ( commentlist ){
-								commentlist.insertBefore( wrapperUL.children[0], commentlist.firstChild ); // prependChild
+								commentLI.className = commentLI.className+' '+opts.ajaxClass;
+								commentlist.insertBefore( commentLI, commentlist.firstElementChild ); // prependChild
 							} else {
 								console.log('there is nowhere to put the comment');
 								statusdiv.innerHTML = commentStatus.error;
