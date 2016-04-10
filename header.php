@@ -7,7 +7,7 @@
 ?>
 
 <?php 
-	// if this is an ajax request posting a comment
+	// if this is an ajax request paganating comments
 	if ($GLOBALS['is_ajax'] && $GLOBALS['is_ajax_get_comments_section']){
 		// return only the comments section of the current context
 		if (have_posts()) : while (have_posts()) : the_post();
@@ -16,6 +16,23 @@
 
 		endwhile; endif;
 		exit;
+	}
+
+	// if this is an ajax request paganating posts
+	if ($GLOBALS['is_ajax'] && $GLOBALS['is_ajax_get_posts']){ 
+		// return only the comments section of the current context
+		if (have_posts()) : ?>
+			<section class="post-items">
+			<?php while (have_posts()) : the_post();
+
+				template_post_item();
+
+			endwhile; ?>
+			</section>
+		<?php 
+		wpajax_post_pagination();
+		endif; 
+		exit; 
 	}
 ?>
 

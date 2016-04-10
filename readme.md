@@ -1,10 +1,14 @@
-#  wpajax WordPress Theme
-what is this?
+#  Ajax Boilerplate WordPress Theme
+what is this? why not angular or react.
 
-## HOW IT WORKS
+## How it Works
 high level concept - uses ajax to load a wordpress page and updates its page contents - ajaxed page and loaded new page should have parity.
 
-## wpajax js
+## Installation
+1. Download the .zip
+2. Rename downloaded folder to `wpajax`. That is the theme's real slug. WordPress likes it when the theme folder matches the theme's slug.
+
+## Working With The Theme
 ajax call is made
 a request header is set by js, read by php into a global
 certain sections are skipped or added based on type of request 
@@ -12,7 +16,7 @@ certain sections are skipped or added based on type of request
 returned code is placed in the doc using js
 
 
-## Helpful code
+## Helpful Code
 - If your developing a wordpress theme, you should use the [Theme Checker theme](https://wordpress.org/themes/theme-check/).
 - If your hosting your theme repository on github or bitbucket use the [github updater pluin](https://github.com/afragen/github-updater).
 - For SEO [Yoast SEO](https://wordpress.org/themes/wordpress-seo/).
@@ -21,23 +25,29 @@ returned code is placed in the doc using js
 - [Save with Keyboard](https://wordpress.org/themes/save-with-keyboard/) is awesome.
 - [Use svg](https://wordpress.org/themes/svg-support/).
 - Use [vanilla js smooth scroll](https://github.com/cferdinandi/smooth-scroll/) to animate between anchors and other loads. 
+- MAMP
+- [Just looking for pjax?](https://github.com/defunkt/jquery-pjax)
 
 ## TODOs:
-- PAGINATION: 
-    + dynamiclly replace each link? - don't know how I would do this?
-    + don't reload menu and header for pagination - like comments
-- back button loads just comments if previous post was a comment load - same with posts pagination.
-    + make history-like object/array that stores the type of ajax call along with the url. Reference this everytime we hit the back button.
-    + save a copy of the last ajax response and use that insted of querying the server.
 - WP:
-    + fix directory name
-    + keep checkin the theme
+    + write documentation
+    + add shortcodes.php template
 - JS:
     + back button is broken :(
     + rename file
     + add if() checks for everything in js - fail gracefully
+    + PAGINATION: 
+        * dynamiclly replace each link? - don't know how I would do this?
+    + HISTORY:
+        * back button should load just comments if previous post was a comment load, same with posts pagination, or maybe everything?
+        * make history-like object/array that stores the type of ajax call and along with the url? Reference this everytime we hit the back button.
+        * save a copy of the last ajax response and use that insted of querying the server?
+    + COMMENTS:
+        * adding a comment and then paganating might produce wierd results
+        * delete the last top level comment if returning a new top level comment
 - CSS:
     + add a css framework for animating content in an out
+    + add progress bar
 - TEST:
     + Test it with google analytics - use ga plugin?
     + feature detect to allow graceful degredation.
@@ -47,7 +57,10 @@ returned code is placed in the doc using js
     
 Keywords: ajax, pjax, pushstate, boilerplate, blank, starter, template, blueprint, framework, scaffolding, wp, js, asynchronous, javascript, xml
 + WP ajax boilerplate theme ??
-+ WP ajax boilerplate
++ WP Ajax Boilerplate
++ Ajax Boilerplate WordPress Theme
++ Ajax Boilerplate
++ WordPress Ajax Boilerplate
 
 
 

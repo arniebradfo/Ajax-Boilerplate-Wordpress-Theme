@@ -84,32 +84,33 @@ wpajax_options = { // things that might change
 	wpajax = {
 		load: function(obj){
 			var xhttp = new XMLHttpRequest();
-			addEvent( xhttp, 'readystatechange', function() {
-				switch (xhttp.readyState){
-					case 1: if(typeof obj.connected  === 'function'){ obj.connected(); } break;
-					case 2: if(typeof obj.requested  === 'function'){ obj.requested(); } break;
+			xhttp.onreadystatechange = function(){
+				switch (xhttp.readyState) {
+					case 0: break; // this is the case when the constructor is called
+					case 1: if(typeof obj.connected  === 'function'){ obj.connected();  } break;
+					case 2: if(typeof obj.requested  === 'function'){ obj.requested();  } break;
 					case 3: if(typeof obj.processing === 'function'){ obj.processing(); } break;
-					case 4:
+					case 4: 
 						if (xhttp.status >= 200 && xhttp.status < 300) {
 							if(typeof obj.delivered === 'function'){
 								obj.delivered(xhttp.responseText, xhttp.statusText);
 							}
-							break;
 						} else {
 							if(typeof obj.failed === 'function'){
-								obj.failed(obj.href, xhttp.status, xhttp.statusText, xhttp.responseText);								
+								obj.failed(obj.href, xhttp.status, xhttp.statusText);								
 							}
-							break;
 						}
+						break;
+
 				}
-			});
+			};
 			xhttp.timeout = typeof obj.timeoutTimer === 'number' ? obj.timeoutTimer : 0 ; // (in milliseconds) Set the amout of time until the ajax request times out.
 			if (typeof obj.started === 'function'){
 				addEvent( xhttp, 'loadstart', function(){ obj.started(); });
 			}
 			if (typeof obj.aborted === 'function'){
 				addEvent( xhttp, 'abort',     function(){ obj.aborted(obj.href); });
-				addEvent( xhttp, 'timeout',   function(){ obj.aborted(obj.href, timoutTimer); }); 
+				addEvent( xhttp, 'timeout',   function(){ obj.aborted(obj.href, xhttp.timeout); }); 
 			}
 			if (typeof obj.finished === 'function'){
 				addEvent( xhttp, 'loadend',   function(){ obj.finished(); }); 
@@ -190,7 +191,7 @@ wpajax_options = { // things that might change
 				// don't fire on the inital page load
 				// TODO: make back button paginates comments??
 				if (event.state !== null) {
-					var optionsSurrogate = wpajaxGETPage;
+					var optionsSurrogate = wpajax_GETPage;
 					optionsSurrogate.href = location.href;
 					self.load(optionsSurrogate);
 				}
@@ -240,13 +241,24 @@ wpajax_options = { // things that might change
 							isCommentNav = true;
 						}
 					}
+					// if the link is in the comment-navigation
+					var postNav = d.querySelectorAll('.post-navigation'),
+						isPostNav = false;
+					for ( var j = 0, leng = postNav.length; j < leng; ++j) {
+						if(postNav[j].contains(e.target)){
+							isPostNav = true;
+						}
+					}
 					// if (e.target.parentNode.parentNode.className.match(/\bcomment-navigation\b/g)){
-					if (isCommentNav){
-						optionsSurrogate = wpajaxGETCommentsSection;
+					if (isPostNav){
+						optionsSurrogate = wpajax_GETPosts;
 						optionsSurrogate.href = href;
 						self.load(optionsSurrogate);
-					} else {
-						optionsSurrogate = wpajaxGETPage;
+					} else if (isCommentNav){
+						optionsSurrogate = wpajax_GETCommentsSection;
+						optionsSurrogate.href = href;
+						self.load(optionsSurrogate);
+					} else {						optionsSurrogate = wpajax_GETPage;
 						optionsSurrogate.href = href;
 						self.load(optionsSurrogate);
 					}
@@ -274,7 +286,7 @@ wpajax_options = { // things that might change
 		submitComment: function(commentform, statusdiv){
 			// Extract action URL and method from commentform
 			var formurl = commentform.action,
-				method = commentform.method.toUpperCase();
+				method = commentform.method ? commentform.method.toUpperCase() : 'POST' ;
 
 			// Serialize and store form data
 			var formdata = commentform.serialize().replace(/%20/g, '+'); // Apparetly this is helpful - https://stackoverflow.com/questions/4276226/ajax-xmlhttprequest-post/
@@ -299,7 +311,7 @@ wpajax_options = { // things that might change
 				started: function(){
 					statusdiv.innerHTML = commentStatus.placeholder;
 				},
-				failed: function(href, status, statusText, responseText) {
+				failed: function(href, status, statusText) {
 					var errorWrapper = d.createElement('div');
 					errorWrapper.innerHTML = responseText;
 
@@ -357,7 +369,7 @@ wpajax_options = { // things that might change
 		}
 	};
 
-	wpajaxGETPage = {
+	wpajax_GETPage = {
 		httpMethod: 'GET',
 		timeoutTimer: 5000,
 		requestHeaders:[{header:'WP-Request-Type', value: 'GetPage' }],
@@ -371,9 +383,9 @@ wpajax_options = { // things that might change
 			}
 			return false;
 		},
-		failed: function(href, status, statusText, responseText) {
+		failed: function(href, status, statusText) {
 			errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
-			console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
+			console.log( 'ajax load failed with an error code: '+ status +'\n'+ errorStatusText );
 			if (href){
 				location.href = href;
 				return true;
@@ -407,17 +419,6 @@ wpajax_options = { // things that might change
 				this.main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
 			}
 
-			// update post navigation
-			var newNextPosts = workspace.querySelector('.post-navigation .next-posts'),
-				newPrevPosts = workspace.querySelector('.post-navigation .prev-posts'),
-				newPostPages = workspace.querySelector('.post-navigation .page-numbers'),
-				NextPosts = d.querySelectorAll('.post-navigation .next-posts'),
-				PrevPosts = d.querySelectorAll('.post-navigation .prev-posts'),
-				PostPages = d.querySelectorAll('.post-navigation .page-numbers');
-			wpajax.replaceNavLinks(newNextPosts, NextPosts);
-			wpajax.replaceNavLinks(newPrevPosts, PrevPosts);
-			wpajax.replaceNavPageLinks(newPostPages, PostPages);
-
 			// update the the class list of all menu items
 			menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
 			for (var k = 0; k < menuItems.length; ++k) {
@@ -426,6 +427,7 @@ wpajax_options = { // things that might change
 			}
 
 			// TODO: Test this
+			// TODO: add this to the other request objects
 			if (typeof ga === 'function') {	// google universial analytics tracking 
 				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
 			}
@@ -438,13 +440,33 @@ wpajax_options = { // things that might change
 		}
 	};
 
-	wpajaxGETCommentsSection = {
+	wpajax_GETPosts = {
+		timeoutTimer: 5000,
+		requestHeaders: [{header:'WP-Request-Type', value:'GetPosts'}],
+		delivered: function(responseText, statusText) {
+			var workspace = d.createElement('div');
+			workspace.innerHTML = responseText;
+
+			// replace posts section
+			d.getElementsByClassName('post-items')[0].innerHTML = workspace.querySelector('.post-items').innerHTML;
+
+			// replace posts navigation links
+			var newNextPosts = workspace.querySelector('.post-navigation .next-posts'),
+				newPrevPosts = workspace.querySelector('.post-navigation .prev-posts'),
+				newPostPages = workspace.querySelector('.post-navigation .page-numbers'),
+				NextPosts = d.querySelectorAll('.post-navigation .next-posts'),
+				PrevPosts = d.querySelectorAll('.post-navigation .prev-posts'),
+				PostPages = d.querySelectorAll('.post-navigation .page-numbers');
+			wpajax.replaceNavLinks(newNextPosts, NextPosts);
+			wpajax.replaceNavLinks(newPrevPosts, PrevPosts);
+			wpajax.replaceNavPageLinks(newPostPages, PostPages);
+		}
+	};
+
+	wpajax_GETCommentsSection = {
 		httpMethod: 'GET',
 		timeoutTimer: 5000,
 		requestHeaders: [{header:'WP-Request-Type', value:'GetCommentsSection'}],
-		started: function(){
-			// console.log('the comment section has started loading');
-		},
 		delivered: function(responseText, statusText) {
 			var workspace = d.createElement('div');
 			workspace.innerHTML = responseText;
@@ -476,61 +498,59 @@ wpajax_options = { // things that might change
 		}
 	};
 
-	wpajaxGETExample = {
-		httpMethod: 'GET',
-		timeoutTimer: 5000,
-		requestHeaders:[{header:'WP-Request-Type', value: 'GetExample' }],
-		started: function() {
-			// After the XMLHttpRequest object has been created, but before the open() method has been called
-			// console.log('ajax load has not yet been initalized');
+	wpajax_GETExample = {
+		httpMethod: 'GET',   // the request type
+		timeoutTimer: 5000,  // how long till aborting the request (in milliseconds)
+		requestHeaders:[     // an array of objects
+			{header:'WP-Request-Type', value: 'GetExample' },
+			{header:'another-header', value: 'pass this to wordpress backend' }
+		],
+		started: function() { // After the XMLHttpRequest object has been created, but before the open() method has been called
+			console.log('ajax load has not yet been initalized');
 			return true;
 		},
-		connected: function() {
-			// The open method has been invoked successfully
-			// console.log('Connection Established');
+		connected: function() { // The XMLHttpRequest.open method has been invoked successfully
+			console.log('Connection Established');
 			return true;
 		},
-		requested: function() {
-			// The send method has been invoked and the HTTP response headers have been received
-			// console.log('Request Recieved');
+		requested: function() { // The send method has been invoked and the HTTP response headers have been received
+			console.log('Request Recieved');
 			return true;
 		},
-		processing: function() {
-			// HTTP response content begins to load
-			// console.log('Processing Request');
+		processing: function() { // HTTP response content begins to load			
+			console.log('Processing Request');
 			return true;
 		},
-		aborted: function(href, timoutTimer) {
-			// called when ajax aborts due to timeout of other causes
+		aborted: function(href, timoutTimer) { // called when ajax aborts due to timeout or other causes
 			var timoutText = timoutTimer == 'undefined' ? '' : 'The request timed out after '+timoutTimer+' milliseconds.';
-			// console.log( 'ajax load was aborted.\n'+timoutText );
+			console.log( 'ajax load was aborted.\n'+timoutText );
 			if (href){
-				location.href = href;
+				location.href = href; // reroute a regular page load
 				return true;
 			}
 			return false;
 		},
-		finished: function() {
-			// called when ajax is finished, pass or fail.
-			// console.log( 'ajax is done...' );
+		finished: function() { // called when ajax is finished, pass or fail.
+			console.log( 'ajax is done...' );
 			return true;
 		},
-		failed: function(href, status, statusText, responseText) {
-			// called when the response is recieved with an error
+		failed: function(href, status, statusText) { // called when the response is recieved with an error
 			errorStatusText = typeof statusText == 'undefined' ? '' : 'Error Message: '+ statusText ;
-			// console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
-			if (href){
-				location.href = href;
+			console.log( 'ajax load failed with an error code: '+ status +'\n'+errorStatusText);
+			if (href){ 
+				location.href = href; // reroute a regular page load
 				return true;
 			}
 			return false;
 		},
-		delivered: function(responseText, statusText) {
-			// Do this once the ajax request is returned.
+		delivered: function(responseText, statusText) { // Do this once the ajax request is returned.
+			// put the responseText string in a div so we can manipulate it as part of the DOM
 			var workspace       = d.createElement("div");
-			workspace.innerHTML = responseText;
-
-			// console.log('ajax loaded!');
+			workspace.innerHTML = responseText; 
+			console.log('ajax loaded!');
+			if (typeof ga === 'function') {	// google universial analytics tracking 
+				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
+			}
 			return true;
 		}
 	};

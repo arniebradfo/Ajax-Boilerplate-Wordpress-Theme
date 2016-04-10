@@ -8,10 +8,7 @@
 
 </main>
 
-<?php
-	wpajax_post_pagination();
-	if (!$GLOBALS['is_ajax']): // if this is not an ajax call
-?>
+<?php if (!$GLOBALS['is_ajax']): // if this is not an ajax call ?>
 
 <?php get_sidebar(); ?>
 

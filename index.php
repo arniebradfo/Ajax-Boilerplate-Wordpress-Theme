@@ -16,6 +16,8 @@
 			<?php endwhile; ?>
 		</section>
 
+		<?php wpajax_post_pagination(); ?>
+
 	<?php else : ?>
 
 		<h1><?php _e('Nothing Found','wpajax'); ?></h1>
