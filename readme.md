@@ -31,7 +31,6 @@ returned code is placed in the doc using js
 ## TODOs:
 - WP:
     + write documentation
-    + add shortcodes.php template
     + add image sizes
 - JS:
     + rename file

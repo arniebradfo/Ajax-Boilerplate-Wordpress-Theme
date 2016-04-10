@@ -107,7 +107,7 @@
 			wp_enqueue_script( 'comment-reply' );
 
 		// Load Custom Scripts
-		wp_register_script( 'wpajaxjs', get_template_directory_uri()."/_/js/wpajax.js", null, false, true );
+		wp_register_script( 'wpajaxjs', get_template_directory_uri()."/_/js/wpajax.js", false, false, true );
 		wp_enqueue_script( 'wpajaxjs' );
 
 	}
