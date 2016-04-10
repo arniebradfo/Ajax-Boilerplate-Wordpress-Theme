@@ -1,3 +1,5 @@
+#  Documentation Coming soon...
+
 #  Ajax Boilerplate WordPress Theme
 what is this? why not angular or react.
 
@@ -14,7 +16,6 @@ a request header is set by js, read by php into a global
 certain sections are skipped or added based on type of request 
 - speeds up server response time, does less work
 returned code is placed in the doc using js
-
 
 ## Helpful Code
 - If your developing a wordpress theme, you should use the [Theme Checker theme](https://wordpress.org/themes/theme-check/).
@@ -45,7 +46,6 @@ returned code is placed in the doc using js
         * delete the last top level comment if returning a new top level comment? - if there is a second page of comments.
         * comment reply was borked
 - CSS:
-    + add a css framework for animating content in an out
     + add progress bar
 - TEST:
     + Test it with google analytics - use ga plugin?

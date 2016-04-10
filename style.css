@@ -99,10 +99,9 @@ textarea:-moz-placeholder { color:#a9a9a9; }
 	0%  { max-height: 0px;   opacity:0;}
 	100%{ max-height: 300px; opacity:1;}
 }
-.comment.added-by-wpajax{
+.comment.added-by-wpajax, .children.added-by-wpajax,{
 	-webkit-animation: grow-height 1s ease-in; 
 	        animation: grow-height 1s ease-in; 
-	/* do we need forwards? */
 }
 
 

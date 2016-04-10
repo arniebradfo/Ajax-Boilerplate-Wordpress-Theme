@@ -152,7 +152,8 @@ wpajax_options = { // things that might change
 			var i, len;
 			for (i = 0, len = oldPosts.length; i < len; ++i) {
 				var el = oldPosts[i];
-				if( newPosts.firstElementChild.href){
+				el.classList.add(opts.ajaxClass);
+				if (newPosts.firstElementChild.href){
 					el.firstElementChild.href = newPosts.firstElementChild.href;
 				} else {
 					el.firstElementChild.removeAttribute('href');
@@ -168,6 +169,7 @@ wpajax_options = { // things that might change
 			var i, len;
 			for (i = 0, len = oldList.length; i < len; ++i) {
 				var el = oldList[i];
+				el.classList.add(opts.ajaxClass);
 				el.innerHTML = newList.innerHTML;
 			}
 			return true;
@@ -335,8 +337,6 @@ wpajax_options = { // things that might change
 					wrapperUL.innerHTML = commentLI;
 					commentLI = wrapperUL.firstElementChild; 
 
-					console.log(commentLI);
-
 					var wpErrorTitle = wrapperUL.querySelector('title');
 					if ( wpErrorTitle && wpErrorTitle.innerHTML.toLowerCase().match(/error/) ){
 						// in case wordpress sends a formatted error page
@@ -348,7 +348,7 @@ wpajax_options = { // things that might change
 						if ( parentCommentId == '0' ) {
 							var commentlist = d.getElementsByClassName('commentlist')[0];
 							if ( commentlist ){
-								commentLI.className = commentLI.className+' '+opts.ajaxClass;
+								commentLI.classList.add(opts.ajaxClass);
 								commentlist.insertBefore( commentLI, commentlist.firstElementChild ); // prependChild
 							} else {
 								console.log('there is nowhere to put the comment');
@@ -358,8 +358,10 @@ wpajax_options = { // things that might change
 						} else {
 						 	var childrenUL = d.querySelector('#comment-'+parentCommentId+' > ul.children');
 						 	if (childrenUL !== null) {
-						 		childrenUL.appendChild(wrapperUL.children[0]);
+								commentLI.classList.add(opts.ajaxClass);
+						 		childrenUL.appendChild(commentLI);
 						 	} else {
+								wrapperUL.classList.add(opts.ajaxClass);
 						 		d.getElementById('comment-'+parentCommentId).appendChild(wrapperUL);
 					 		}
 						}
@@ -418,14 +420,15 @@ wpajax_options = { // things that might change
 			if (workspace.getElementsByTagName('title')){
 				d.title = workspace.getElementsByTagName('title')[0].innerHTML; // update the doc title
 			}
-			if (this.main && workspace.querySelector('#content').innerHTML){
-				this.main.innerHTML = workspace.querySelector('#content').innerHTML;  // update the content
+			if (this.main && workspace.querySelector(this.main).innerHTML){
+				this.main.classList.add(opts.ajaxClass);
+				this.main.innerHTML = workspace.querySelector(this.main).innerHTML;  // update the content
 			}
 
 			// update the the class list of all menu items
 			menuItems = workspace.querySelector('#wp-all-registered-nav-menus').querySelectorAll('.menu-item');
 			for (var k = 0; k < menuItems.length; ++k) {
-				var item = menuItems[k];  // Calling myNodeList.item(k) isn't necessary in JavaScript
+				var item = menuItems[k];
 				d.getElementById(item.id).className = item.className;
 			}
 
@@ -437,7 +440,7 @@ wpajax_options = { // things that might change
 			// comments section will be new - need to rebind events to new elements
 			wpajax.attachComments(); 
 			attachCtrlEnterSubmitWPComment();
-			console.log('ajax loaded!\n'+statusText);
+			// console.log('ajax loaded!\n'+statusText);
 			return true;
 		}
 	};
@@ -450,6 +453,7 @@ wpajax_options = { // things that might change
 			workspace.innerHTML = responseText;
 
 			// replace posts section
+			d.getElementsByClassName('post-items')[0].classList.add(opts.ajaxClass);
 			d.getElementsByClassName('post-items')[0].innerHTML = workspace.querySelector('.post-items').innerHTML;
 
 			// replace posts navigation links
@@ -481,6 +485,7 @@ wpajax_options = { // things that might change
 			console.log(workspace);
 
 			// replace comments section
+			d.getElementsByClassName('commentlist')[0].classList.add(opts.ajaxClass);
 			d.getElementsByClassName('commentlist')[0].innerHTML = workspace.querySelector('.commentlist').innerHTML;
 
 			// replace response area if nessasary
