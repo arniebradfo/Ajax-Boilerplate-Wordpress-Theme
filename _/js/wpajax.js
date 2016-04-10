@@ -427,7 +427,6 @@ wpajax_options = { // things that might change
 			}
 
 			// TODO: Test this
-			// TODO: add this to the other request objects
 			if (typeof ga === 'function') {	// google universial analytics tracking 
 				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
 			}
@@ -460,6 +459,12 @@ wpajax_options = { // things that might change
 			wpajax.replaceNavLinks(newNextPosts, NextPosts);
 			wpajax.replaceNavLinks(newPrevPosts, PrevPosts);
 			wpajax.replaceNavPageLinks(newPostPages, PostPages);
+
+			if (typeof ga === 'function') {	// google universial analytics tracking 
+				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
+			}
+
+			return true;
 		}
 	};
 
@@ -495,6 +500,12 @@ wpajax_options = { // things that might change
 			wpajax.replaceNavLinks(newNextComments, NextComments);
 			wpajax.replaceNavLinks(newPrevComments, PrevComments);
 			wpajax.replaceNavPageLinks(newCommentPages, CommentPages);
+
+			if (typeof ga === 'function') {	// google universial analytics tracking 
+				ga('send', 'pageview');     // send a pageview connected to anayltics.js loaded in footer.php
+			}
+
+			return true;
 		}
 	};
 

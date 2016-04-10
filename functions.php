@@ -84,7 +84,6 @@
 	}
 	add_action( 'admin_init', 'add_editor_styles' );
 
-
 	if ( ! isset( $content_width ) ) { // this guy sucks - https://codex.wordpress.org/Content_Width
 		$content_width = 2000;
 	}
@@ -108,8 +107,8 @@
 			wp_enqueue_script( 'comment-reply' );
 
 		// Load Custom Scripts
-		wp_register_script( 'ajaxjs', get_template_directory_uri()."/_/js/functions.js", null, false, true );
-		wp_enqueue_script( 'ajaxjs' );
+		wp_register_script( 'wpajaxjs', get_template_directory_uri()."/_/js/wpajax.js", null, false, true );
+		wp_enqueue_script( 'wpajaxjs' );
 
 	}
 	add_action( 'wp_enqueue_scripts', 'load_theme_scripts_and_styles' ); 

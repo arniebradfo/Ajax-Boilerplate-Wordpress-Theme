@@ -32,8 +32,8 @@ returned code is placed in the doc using js
 - WP:
     + write documentation
     + add shortcodes.php template
+    + add image sizes
 - JS:
-    + back button is broken :(
     + rename file
     + add if() checks for everything in js - fail gracefully
     + PAGINATION: 
@@ -44,7 +44,7 @@ returned code is placed in the doc using js
         * save a copy of the last ajax response and use that insted of querying the server?
     + COMMENTS:
         * adding a comment and then paganating might produce wierd results
-        * delete the last top level comment if returning a new top level comment
+        * delete the last top level comment if returning a new top level comment? - if there is a second page of comments.
 - CSS:
     + add a css framework for animating content in an out
     + add progress bar
